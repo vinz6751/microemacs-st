@@ -16,7 +16,9 @@
 
 NOSHARE NBIND	names[] = {
 	{"abort-command",		ctrlg},
+#if ABBREVIATIONS
 	{"add-abbrev",			add_abbrev},
+#endif
 	{"add-global-mode",		setgmode},
 #if UNIX || (VMS && SMG) || MPE
 	{"add-keymap",			addkeymap},
@@ -62,8 +64,10 @@ NOSHARE NBIND	names[] = {
 #endif
 	{"cycle-ring",			cycle_ring},
 	{"cycle-screens",		cycle_screens},
+#if ABBREVIATIONS
 	{"define-abbrevs",		def_abbrevs},
 	{"delete-abbrev",		del_abbrev},
+#endif
 	{"delete-blank-lines",		deblank},
 	{"delete-buffer",		killbuffer},
 	{"delete-global-mode",		delgmode},
@@ -77,7 +81,9 @@ NOSHARE NBIND	names[] = {
 	{"delete-screen",		delete_screen},
 	{"delete-undos",		undo_delete},
 	{"delete-window",		delwind},
+#if ABBREVIATIONS
 	{"describe-abbrevs",		desc_abbrevs},
+#endif
 	{"describe-bindings",		desbind},
 	{"describe-functions",		desfunc},
 	{"describe-key",		deskey},
@@ -120,14 +126,18 @@ NOSHARE NBIND	names[] = {
 	{"incremental-search",		fisearch},
 #endif
 	{"indent-region",		indent_region},
+#if ABBREVIATIONS
 	{"insert-abbrevs",		ins_abbrevs},
+#endif
 #if	WINDOW_MSWIN
 	{"insert-clip", 		insertclip},
 #endif
 	{"insert-file",			insfile},
 	{"insert-space",		insspace},
 	{"insert-string",		istring},
+#if ABBREVIATIONS
 	{"kill-abbrevs",		kill_abbrevs},
+#endif
 	{"kill-paragraph",		killpara},
 	{"kill-region",			killregion},
 	{"kill-to-end-of-line",		killtext},

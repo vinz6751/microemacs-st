@@ -5,39 +5,17 @@
 */
 
 #include        <stdio.h>
+#include	<errno.h>
 #include	"estruct.h"
 #include	"eproto.h"
 #if	TOS
 #include        "edef.h"
 #include	"elang.h"
 #include	"osbind.h"
-#include	"stat.h"	/* DMABUFFER is here */
+//#include	"stat.h"	/* DMABUFFER is here */
 #include	"errno.h"
 
-/****	ST Internals definitions		*****/
-
-/*	BIOS calls */
-
-#define	BCONSTAT	1	/* return input device status */
-#define	CONIN		2	/* read character from device */
-#define	BCONOUT		3	/* write character to device */
-
-/*	XBIOS calls */
-
-#define	INITMOUS	0	/* initialize the mouse */
-#define	GETREZ		4	/* get current resolution */
-#define	SETSCREEN	5	/* set screen resolution */
-#define	SETPALETTE	6	/* set the color pallette */
-#define	SETCOLOR	7	/* set or read a color */
-#define	CURSCONF	21	/* set cursor configuration */
-#define	IKBDWS		25	/* intelligent keyboard send command */
-#define	KBDVBASE	34	/* get keyboard table base */
-
-/*	GEMDOS calls */
-
 #define	EXEC		0x4b	/* Exec off a process */
-
-#define	CON		2	/* CON: Keyboard and screen device */
 
 /*
  * This function is called once to set up the terminal device streams.
@@ -98,7 +76,7 @@ typahead()
 	int rv;	/* return value from BIOS call */
 
 	/* get the status of the console */
-	rv = bios(BCONSTAT, CON);
+	rv = Bconstat(DEV_CONSOLE);
 
 	/* end return the results */
 	if (rv == 0)
@@ -351,14 +329,6 @@ filter(f, n)
 	return(TRUE);
 }
 
-rename(oldname, newname)	/* rename a file */
-
-char *oldname;		/* original file name */
-char *newname;		/* new file name */
-
-{
-	Frename(0, oldname, newname);
-}
 
 /* return a system dependant string with the current time */
 
@@ -376,7 +346,7 @@ char *PASCAL NEAR timeset()
 
 /*	FILE Directory routines		*/
 
-static DMABUFFER info;		/* Info about the file */
+static _DTA info;		/* Info about the file */
 char xpath[NFILEN];		/* path of file to find */
 char rbuf[NFILEN];		/* return file buffer */
 
@@ -420,14 +390,14 @@ char *fspec;	/* file to match */
 
 	/* and call for the first file */
 	Fsetdta(&info);		/* Initialize buffer for our search */
-	if (Fsfirst(fname, 0xF7) != AE_OK)
+	if (Fsfirst(fname, 0xF7))
 		return(NULL);
 
 	/* return the first file name! */
 	strcpy(rbuf, xpath);
-	strcat(rbuf, info.d_fname);
+	strcat(rbuf, info.dta_name);
 	mklower(rbuf);
-	if (info.d_fattr & 0x10)
+	if (info.dta_attribute & 0x10)
 		strcat(rbuf, DIRSEPSTR);
 	return(rbuf);
 }
@@ -437,14 +407,14 @@ char *PASCAL NEAR getnfile()
 {
 
 	/* and call for the first file */
-	if (Fsnext() != AE_OK)
+	if (Fsnext())
 		return(NULL);
 
 	/* return the first file name! */
 	strcpy(rbuf, xpath);
-	strcat(rbuf, info.d_fname);
+	strcat(rbuf, info.dta_name);
 	mklower(rbuf);
-	if (info.d_fattr & 0x10)
+	if (info.dta_attribute & 0x10)
 		strcat(rbuf, DIRSEPSTR);
 	return(rbuf);
 }
@@ -476,6 +446,35 @@ char *cmd;	/* command to execute */
 				(char *)tail,
 				(char *)NULL));
 }
+#elif	GCC
+
+system(cmd)	/* call the system to execute a new program */
+
+char *cmd;	/* command to execute */
+
+{
+	char *pptr;			/* pointer into program name */
+	char pname[NSTRING];		/* name of program to execute */
+	char tail[NSTRING];		/* command tail */
+
+	/* scan off program name.... */
+	pptr = pname;
+	while (*cmd && (*cmd != ' ' && *cmd != '\t'))
+		*pptr++ = *cmd++;
+	*pptr = 0;
+
+	/* create program name length/string */
+	tail[0] = strlen(cmd);
+	strcpy(&tail[1], cmd);
+
+	/* go do it! */
+	return(Pexec(
+				(int)0,
+				(char *)pname,
+				(char *)tail,
+				(char *)NULL));
+}
+
 #endif
 
 #else

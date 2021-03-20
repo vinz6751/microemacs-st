@@ -21,13 +21,13 @@
    undo stack. */
 
 #if	PROTO
-VOID undo_insert(OPTYPE op_type, long count, OBJECT op_erand)
+VOID undo_insert(OPTYPE op_type, long count, UEOBJECT op_erand)
 #else
 VOID undo_insert(op_type, count, op_erand)
 
 OPTYPE op_type;		/* type of operation being recorded */
 long count;		/* operand count */
-OBJECT op_erand;	/* the operand of the operation */
+UEOBJECT op_erand;	/* the operand of the operation */
 #endif
 {
 	int undo_size;	/* size of the undo object */

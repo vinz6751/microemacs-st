@@ -51,7 +51,7 @@ int PASCAL NEAR rmc_list(int f, int n);
 VOID PASCAL NEAR mctype_cat(char pline[], int mc_type);
 #endif
 
-extern VOID undo_insert(OPTYPE op_type, long count, OBJECT op_erand);
+extern VOID undo_insert(OPTYPE op_type, long count, UEOBJECT op_erand);
 extern int undo_op(VOID);
 extern VOID undo_dump(VOID);
 extern VOID undo_zot(BUFFER *bp);
@@ -61,10 +61,12 @@ extern int PASCAL NEAR undo_list(int f, int n);
 extern VOID *room(int);
 extern VOID *reroom(VOID *, int);
 
+#if ABBREVIATIONS
 extern int PASCAL NEAR ab_insert(char *sym, char *expansion);
 extern char *PASCAL NEAR ab_lookup(char *sym);
 extern int PASCAL NEAR ab_delete(char *sym);
 extern int PASCAL NEAR ab_clean(VOID);
+#endif
 extern BUFFER *PASCAL NEAR bfind(char *bname, int cflag, int bflag);
 extern BUFFER *PASCAL NEAR getcbuf(char *prompt, char *defval, int createflag);
 extern BUFFER *PASCAL NEAR getdefb(VOID);

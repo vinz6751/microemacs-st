@@ -118,7 +118,9 @@ char *argv[];			/* argument strings */
 	if (eexitflag)
 		goto abortrun;
 	edinit(mainbuf);	/* Buffers, windows, screens */
+#if ABBREVIATIONS
 	ab_init();		/* initialize the abbreviation behavior */
+#endif
 	varinit();		/* user variables */
 	initchars();		/* character set definitions */
 
@@ -203,8 +205,10 @@ PASCAL NEAR clean()
 		patmatch = NULL;
 	}
 
+#if ABBREVIATIONS
 	/* dump the abbreviation list */
 	ab_clean();
+#endif
 
 	/* dealloc the user variables */
 	varclean(uv_head);
@@ -736,8 +740,10 @@ int n;					/* prefix value */
 	key = getbind(c);
 	if (key != NULL) {
 
+#if ABBREVIATIONS
 		/* before a command, we attempt to expand abbreviations */
 		ab_expand();
+#endif
 
 		/* Don't reset the function type flags on a prefix */
 		if ((key->k_type == BINDFNC) &&
@@ -752,6 +758,7 @@ int n;					/* prefix value */
 		return(status);
 	}
 
+#if ABBREVIATIONS
 	/* since the keystroke is not a command, */
 	if (isinword(c))
 		/* in a word, we save it */
@@ -759,6 +766,7 @@ int n;					/* prefix value */
 	else
 		/* not in a word, we attempt an expansion */
 		ab_expand();
+#endif
 
 	/*
 	 * If a space was typed, fill column is defined, the argument is non-
@@ -838,11 +846,13 @@ int n;					/* prefix value */
 				status = linsert(n, c);
 		}
 
+#if ABBREVIATIONS
 		/* In ABBREV mode, if we are doing aggressive expansion and
 		   the current buffer is a symbol in the abbreviation table */
 		if (((curbp->b_mode & MDABBR) != 0) &&
 			(ab_quick && (ab_lookup(ab_word) != NULL)))
 			ab_expand();
+#endif
 
 		/* check for CMODE fence matching */
 		if ((c == '}' || c == ')' || c == ']') &&

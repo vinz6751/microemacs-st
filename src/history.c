@@ -2355,7 +2355,7 @@
  *	- Added $undoflag variable to enable/disable undo command processing
  *	  (I'm expecting a lot of overhead for these!)
  *	5 Dec 94
- *	- added structurs for OBJECT to be undone (OBJECT) and UNDO_OBJs.
+ *	- added structures for OBJECT to be undone (OBJECT) and UNDO_OBJs.
  *	- added UNDO_OBJ pointer to buffer structure
  *	- wrote code to insert into the undo list (undo_insert()) to new
  *	  source file undo.c
@@ -2532,6 +2532,9 @@
  *	  This had been a problem in the Windows NT driver.......
  *	- some lowercase "void" function declarations in eval.c, screen.c
  *	  and undo.c has to be made "VOID". The SUN showed is this.
+ *  09 Feb 21 Vincent Barrilliot
+ *  - rename OBJECT type to UEOBJECT (UE for µEmacs) to avoid collision
+ *    with ATARI AES OBJECT type.
  */
 
 history()

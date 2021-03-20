@@ -35,7 +35,7 @@
 */
 
 #define PROGNAME	"MicroEMACS"
-#define VERSION 	"4.00"
+#define VERSION 	"4.00MPS"
 
 /*	Machine/OS definitions			*/
 /*	[Set one of these!!]			*/
@@ -56,7 +56,7 @@
 #define OS2	0			/* Microsoft or IBM OS/2	*/
 #define SMOS	0			/* Supermax UNIX System V	*/
 #define SUN	0			/* SUN v4.0			*/
-#define TOS	0			/* ST520, TOS			*/
+#define TOS	1			/* ST520, TOS			*/
 #define USG	0			/* UNIX system V		*/
 #define VMS	0			/* VAX/VMS			*/
 #define WMCS	0			/* Wicat's MCS			*/
@@ -67,7 +67,7 @@
 #define ALCYON	0	/* ALCYON Atari ST compiler */ 
 #define AZTEC	0	/* Aztec C 4.00e ONLY for the amiga now... */
 #define DGC	0	/* Data General AOS/VS C... */
-#define GCC	0	/* the GNU C compiler */
+#define GCC	1	/* the GNU C compiler */
 #define IC	0	/* Rational Systems Instant C */
 #define LATTICE 0	/* Lattice 2.14 through 3.0 compilers */
 #define MSC	0	/* MicroSoft C compile version 3 thru 7 */
@@ -117,7 +117,7 @@
 #define NEC	0			/* NEC-9801VM driver		*/
 #define OS2NPM	0			/* OS/2 non-Presentation Mgr.	*/
 #define SMG	0			/* SMG library on VMS		*/
-#define ST52	0			/* Atari 520/1040ST screen	*/
+#define ST52	1			/* Atari 520/1040ST screen	*/
 #define TERMCAP 0			/* Use TERMCAP			*/
 #define TIPC	0			/* TI Profesional PC driver	*/
 #define VT52	0			/* VT52 terminal (Zenith).	*/
@@ -134,8 +134,8 @@
 
 /*	Language text options	(pick one)				*/
 
-#define ENGLISH 1		/* [default] */
-#define FRENCH	0
+#define ENGLISH 0		/* [default] */
+#define FRENCH	1
 #define SPANISH 0
 #define GERMAN	0
 #define DUTCH	0
@@ -153,18 +153,20 @@
 #define CALLED	0	/* is emacs a called subroutine? or stand alone */
 
 #define REVSTA	1	/* Status line appears in reverse video 	*/
-#define COLOR	1	/* color commands and windows			*/
+#define COLOR	0	/* color commands and windows			*/
 
 #define FILOCK	0	/* file locking under unix BSD 4.2		*/
 #define ISRCH	1	/* Incremental searches like ITS EMACS		*/
 #define FLABEL	0	/* function key label code [HP150]		*/
-#define CRYPT	1	/* file encryption enabled?			*/
+#define CRYPT	0	/* file encryption enabled?			*/
 #define MAGIC	1	/* include regular expression matching? 	*/
 #define MOUSE	1	/* Include routines for mouse actions		*/
-#define NOISY	1	/* Use a fancy BELL if it exists		*/
-#define CTAGS	1	/* include vi-like tagging?			*/
+#define NOISY	0	/* Use a fancy BELL if it exists		*/
+#define CTAGS	0	/* include vi-like tagging?			*/
 #define SPEECH	0	/* spoken EMACS, for the sight impared [not ready] */
 #define VARARG	1	/* use varargs.h for mlwrite()			*/
+
+#define ABBREVIATIONS 0 /* Support of abbreviations                     */
 
 #if	XVT
 #undef	COLOR
@@ -709,13 +711,13 @@ typedef int OPTYPE;	/* type of operation being recorded/played back */
 #define	OP_REPC		6	/* replace a character */
 #define	OP_CPOS		7	/* set the cursor position */
 
-/* object to be undone! */
+/* MicroEmacs object to be undone! */
 
-typedef union OBJECT {
+typedef union UEOBJECT {
 	char obj_char;		/* a character */
 	char obj_string[1];	/* many characters */
 	char *obj_sptr;		/* a ptr to a character */
-} OBJECT;
+} UEOBJECT;
 
 typedef struct UNDO_OBJ {
 	struct UNDO_OBJ *next;	/* ptr to next undo object */
@@ -723,7 +725,7 @@ typedef struct UNDO_OBJ {
 	long line_num;		/* line offset from buffer beginning */
 	int offset;		/* offset into that line */
 	long count;		/* repetitions? */
-	OBJECT undo_obj;	/* object to be undone */
+	UEOBJECT undo_obj;	/* object to be undone */
 } UNDO_OBJ;
 
 /*

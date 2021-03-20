@@ -3,6 +3,8 @@
 	(C)Copyright 1995 by Daniel M. Lawrence
 */
 
+#if ABBREVIATIONS
+
 #include	<stdio.h>
 #include	"estruct.h"
 #include	"eproto.h"
@@ -438,3 +440,5 @@ int PASCAL NEAR ab_clean()
 	ab_head = (ABBREV *)NULL;
 	return(TRUE);
 }
+
+#endif

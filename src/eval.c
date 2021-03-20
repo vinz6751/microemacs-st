@@ -112,7 +112,9 @@ char *fname;		/* name of function to evaluate */
 
 	/* and now evaluate it! */
 	switch (fnum) {
+#if ABBREVIATIONS
 		case UFABBREV:	return(fixnull(ab_lookup(arg1)));
+#endif
 		case UFABS:	return(int_asc(absv(asc_int(arg1))));
 		case UFADD:	return(int_asc(asc_int(arg1) + asc_int(arg2)));
 		case UFAND:	return(ltos(stol(arg1) && stol(arg2)));

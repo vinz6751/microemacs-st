@@ -53,7 +53,7 @@ NOSHARE int DNEAR disinp = TRUE; 	/* display input characters	*/
 NOSHARE int DNEAR modeflag = TRUE;	/* display modelines flag	*/
 NOSHARE int DNEAR timeflag = FALSE;	/* display time			*/
 NOSHARE int DNEAR undoflag = TRUE;	/* processing undo commands	*/
-NOSHARE OBJECT obj;			/* scratch undo object		*/
+NOSHARE UEOBJECT obj;			/* scratch undo object		*/
 NOSHARE int DNEAR undoing = FALSE;	/* currently undoing a command? */
 NOSHARE char DNEAR lasttime[6] = "";	/* last time string displayed	*/
 NOSHARE int DNEAR popflag = TRUE;	/* pop-up windows enabled?	*/
@@ -293,7 +293,7 @@ NOSHARE extern int DNEAR disinp;	/* display input characters	*/
 NOSHARE extern int DNEAR modeflag;	/* display modelines flag	*/
 NOSHARE extern int DNEAR timeflag;	/* display time			*/
 NOSHARE extern int DNEAR undoflag;	/* processing undo commands	*/
-NOSHARE extern OBJECT obj;		/* scratch undo object		*/
+NOSHARE extern UEOBJECT obj;		/* scratch undo object		*/
 NOSHARE extern int DNEAR undoing;	/* currently undoing a command? */
 NOSHARE extern char DNEAR lasttime[DUMMYSZ];/* last time string displayed*/
 NOSHARE extern int DNEAR popflag;	/* pop-up windows enabled?	*/
