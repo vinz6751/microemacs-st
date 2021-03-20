@@ -13,7 +13,9 @@ Comparé au MicroEmacs "officiel", celui ci a les différences fonctionnelles su
 * l'encryption est désactivée, pour réduire la taille de l'exécutable (voir estruct.h pour réactiver)
 * les abbréviations sont désactivées, pour réduire la taille de l'exécutable (voir estruct.h pour réactiver)
 
+----
 (english)
+
 Tweaked port of MicroEmacs for the Atari ST's TOS OS, by the MPS Atari enthousiasts. 
 It is based on MicroEmacs 4.00and has the following features:
 The st52 target is updated to
