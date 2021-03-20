@@ -2,6 +2,8 @@
 English below.
 
 Port de MicroEmacs pour l'Atari ST et son système d'exploitation TOS, par le groupe MPS.
+Pour l'exécutable, voir dans le dossier "atari".
+
 Il est basé sur MicroEmacs 4.00 et a les spécificités suivantes:
 * la cible st52 est mise à jour:
   * utilise la librarie GEM GEMlib du dépôt FreeMiNT car c'est la plus récente et elle est maintenue
@@ -17,6 +19,8 @@ Comparé au MicroEmacs "officiel", celui ci a les différences fonctionnelles su
 (english)
 
 Tweaked port of MicroEmacs for the Atari ST's TOS OS, by the MPS Atari enthousiasts. 
+The executable can be found in the "atari" folder.
+
 It is based on MicroEmacs 4.00and has the following features:
 The st52 target is updated to
 * use GEMlib (from FreeMiNT repo) as GEM library, as it's the most up to date GEM library and is still maintained
