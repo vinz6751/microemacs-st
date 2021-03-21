@@ -1,7 +1,9 @@
-#	ST/MWC makefile for
-#		MicroEMACS 3.12
+#	GCC 4.6.4 makefile for
+#		MicroEMACS 4.00
 #		(C)Copyright 1993 by Daniel Lawrence
 #		all rights reserved
+#		Updated 2021 by Vincent Barrilliot for GCC/GEMlib/libcmini
+
 
 # modify the following lines with the proper relative directories
 
