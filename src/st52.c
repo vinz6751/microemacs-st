@@ -1,5 +1,4 @@
 /*	ST52.C:	Atari ST1040/520 screen support functions
-/*	ST52.C:	Atari ST1040/520 screen support functions
 		written by lots of people (see below)
 	tabsize=8
 
@@ -30,13 +29,21 @@
 	- changed symbols ATARI => ST52 and ST520 => TOS
 	22-feb-21	Vincent Barrilliot modernized for GCC 4.6.4,
 			GEMlib and libcmini
+	12-jan-22   Vincent Barrilliot make plain TOS (non-GEM) version
+		- added WITH_GEM compile switch.
+		- it's not complete, the TOS may be able to handle mouse but we don't
+
 */
 
 #define termdef 1		/* don't define "term" external */
 
 /* These routines provide support for the ATARI 1040ST and 520ST using the virtual VT52 Emulator */
+
+#define WITH_GEM 0
 /* This is for GCC 4.6.4 MiNTlib and GEMlib */
+#if WITH_GEM
 #include	<gem.h>
+#endif
 #include	<osbind.h>
 #include	<stdio.h>
 #include	<stdint.h>
@@ -71,8 +78,17 @@
 
 /*	ST Global definitions		*/
 
-static uint16_t initrez;		/* initial screen resolution */
-static uint16_t currez;			/* current screen resolution */
+typedef struct {
+    uint16_t w;
+    uint16_t h;
+    uint16_t colors;
+	uint8_t  *palette;
+    char     *name;
+} VIDEO_MODE;
+
+
+static VIDEO_MODE initrez;		/* initial screen resolution */
+static VIDEO_MODE currez;			/* current screen resolution */
 static uint16_t gemflag;		/* were we called from the desktop? */
 static uint16_t mouseon;		/* True if mouse is on */
 static char  resolution_name[][8] = {		/* screen resolution names */
@@ -144,6 +160,7 @@ static uint16_t mctrl;		/* current BEG_MOUSE state */
 static struct { char *norm, *shift, *caps; } *kt;	/* Keyboard mapping */
 static uint16_t mousehidden;
 
+#if WITH_GEM
 /*
  *	This object tree is for displaying the desk accessory menu.
  *	Actual positions are written into this structure when the
@@ -167,6 +184,7 @@ OBJECT menu[] = {
     13,-1,-1, G_STRING,   OF_NONE,  OS_NORMAL, (OBSPEC)"", 0, 96, 168, 16,
      5,-1,-1, G_STRING, OF_LASTOB,  OS_NORMAL, (OBSPEC)"", 0,112, 168, 16
 };
+#endif
 
 /* In stmouse.s */
 extern void mymouse(void*);	/* .s file for calling two mouse handlers */
@@ -294,6 +312,23 @@ static int in_get()	/* get an event from the input buffer */
 	return(event);
 }
 
+/* Used by get_video_mode */
+static int colors[] = { 16, 4, 2 };
+static uint8_t* palette_by_res[] = { LOWPAL, MEDPAL, HIGHPAL };
+
+/* Return info about the current video mode */
+static void get_video_mode(VIDEO_MODE *mode)
+{
+    int res;
+    mode->w = V_X_MAX;
+    mode->h = V_Y_MAX;
+    
+    res = Getrez();
+    mode->colors = colors[res];
+    mode->name = (uint8_t*)resolution_name[res];
+	mode->palette = palette_by_res[res];
+}
+
 static int switch_font(__FONT *font)
 {
 	V_CEL_HT = font->size -1;
@@ -335,7 +370,7 @@ int steeop(void)
 static int strev(int status)	/* set the reverse video state */
 /* status: TRUE = reverse video, FALSE = normal video */
 {
-	if (currez > 1) {
+	if (currez.colors > 1) {
 		char buf[] = { ESC, 'q' };
 		if (status)
 			buf[1] = 'p';
@@ -400,15 +435,18 @@ static int stbeep()
 
 static void mouse_on()	/* turn the gem mouse ON */
 {
+#if WITH_GEM
 	if (!mouseon) {
 		graf_mouse(M_ON, 0L);
 		graf_mouse(ARROW, 0L);
 		mouseon = 1;
 	}
+#endif
 }
 
 static void mouse_off()	/* turn the gem mouse OFF */
 {
+#if WITH_GEM
 	if (mouseon) {
 	    graf_mouse(M_OFF, 0L);
 	    mouseon = 0;
@@ -416,6 +454,7 @@ static void mouse_off()	/* turn the gem mouse OFF */
 	
 	if (!mousehidden)
 		;//stbeep();
+#endif
 }
 
 /*
@@ -457,13 +496,16 @@ static void me_mh(void *b)
 
 static int stkopen()	/* open the keyboard (and mouse) */
 {
+
 	/* Set up an interrupt handler for the mouse that performs both
 	 * me_mh() and the default mouse handling.  The .s file "stmouse.s"
 	 * contains some special code for this purpose. */
 	first_mhandler = me_mh;
 	keyboard_vectors = Kbdvbase();
 	mousevec_tos = keyboard_vectors->mousevec;
+#if WITH_GEM
 	keyboard_vectors->mousevec = mymouse;
+#endif
 }
 
 static int stopen()	/* open the screen */
@@ -479,7 +521,7 @@ static int stopen()	/* open the screen */
 	/* save if the current mouse is hidden (ie we are not in GEM) */
 	gemflag = (mousehidden == 0);
 
-
+#if WITH_GEM
 	/* Setup AES and VDI */
 	appl_init();
 	wkid_physical = graf_handle(&g_wchar, &g_hchar, &junk, &junk);
@@ -487,7 +529,7 @@ static int stopen()	/* open the screen */
 	/* We never use the VDI, but if you do, turn this back on */
 	v_opnvwk(worki, &wkid, worko);
 #endif
-
+#endif
 
 	/* In order to have both the mouse cursor and the text cursor on the
 	 * screen at the same time, we have to flash it ourselves, turning
@@ -495,9 +537,9 @@ static int stopen()	/* open the screen */
 	 * The cursors are both off whenever we are not in an input wait. */
 	cursor_blink_off();	/* Stop text cursor from flashing */   
 	cursor_off();		/* Turn off text cursor off */
+#if WITH_GEM
 	mouseon = 1;		/* Assume the mouse is on */
 	mouse_off();		/* to force the turn off */
-
 	/* Set up the menu bar's coordinates to match the font and screen size
 	 * for this screen resolution */
 	wind_get(0, WF_CURRXYWH,	/* Fetch actual screen size for menu */
@@ -525,6 +567,9 @@ static int stopen()	/* open the screen */
 	 * GEM hung whenever we have control. */
 	wind_update(BEG_UPDATE);	/* Shuts off GEM drawing */
 	wind_update(BEG_MCTRL);		/* Shuts off GEM use of mouse */
+#else
+	mouseon = 0;		/* Assume the mouse is off */
+#endif
 
 	mctrl = 0;			/* Flag that we have mouse control */
 	kt = Keytbl( -1L, -1L, -1L);
@@ -537,29 +582,15 @@ static int stopen()	/* open the screen */
 		spalette[i] = Setcolor(i, -1);
 
 	/* and find the current resolution */
-	initrez = currez = Getrez();
-	strcpy(sres, resolution_name[currez]);
+	get_video_mode(&initrez);
+    get_video_mode(&currez);
+	strcpy(sres, currez.name);
 
-	/* set up the screen size and palette */
-	switch (currez) {
-		case 0: term.t_mrow = 25 - 1;
-			term.t_nrow = 25 - 1;
-			term.t_ncol = 40;
-			strcpy(palstr, LOWPAL);
-			break;
-
-		case 1: term.t_mrow = 25 - 1;
-			term.t_nrow = 25 - 1;
-			strcpy(palstr, MEDPAL);
-			break;
-
-		case 2: term.t_mrow = DENSIZE - 1;
-			term.t_nrow = 25 - 1;
-			strcpy(palstr, HIGHPAL);
-	}
+	term.t_mrow = term.t_nrow = V_CEL_MY;
+	term.t_ncol = V_CEL_MX;
 
 	/* and set up the default palette */
-	spal(palstr);
+	spal(currez.palette);
 
 	stputs(ESCS "w", 2); /* automatic overflow off */
 
@@ -588,21 +619,24 @@ static int stclose()
 	stputs(ESCS "v", 2);	/* auto overflow on */
 
 	/* restore the original screen resolution */
+#if 0 // TODO
 	if (currez == 3)
 		switch_font(system_font);
-	strez(resolution_name[initrez]);
-
+	strez(resolution_name[initrez->name]);
+#endif 
 	/* restore the original palette settings */
 	Setpalette(spalette);
 
 	ttclose();
 
+#if WITH_GEM
 	wind_update(END_MCTRL);		/* Return GEM's control of screen */
 	wind_update(END_UPDATE);
-#if	0
+# if	0
 	v_clsvwk(wkid);			/* Clean up GEM */
-#endif
+# endif
 	appl_exit();
+#endif
 }
 
 /*	spal(pstr):	reset the current palette according to a
@@ -615,6 +649,7 @@ static int stclose()
 int spal(char *pstr)
 /* pstr: palette string */
 {
+#if 0
 	int pal;	/* current palette position */
 	int clr;	/* current color value */
 	int i;
@@ -633,6 +668,7 @@ int spal(char *pstr)
 
 	/* and now set it */
 	Setpalette(palette);
+#endif
 }
 
 static void domousekey(int newbut, int special_keys)
@@ -669,11 +705,13 @@ static int stgetc()	/* get a char from the keyboard */
 
 	/* Turn on text cursor, mouse and give control to GEM while we're waiting */
 	cursor_on();
+#if WITH_GEM
 	mouse_on();
 	wind_update(END_UPDATE);
 	if (mctrl)
 		wind_update(END_MCTRL);
-	
+#endif
+
 	flashcounter = 0;
 	
 	for(;;) {
@@ -693,6 +731,7 @@ static int stgetc()	/* get a char from the keyboard */
 			}
 		}
 
+#if WITH_GEM
 		/* Wait for events */
 		ev_which = evnt_multi(
 			MU_TIMER | MU_MESAG | MU_KEYBD | MU_BUTTON | MU_M1,
@@ -733,7 +772,7 @@ static int stgetc()	/* get a char from the keyboard */
 			
 			wind_get(0, WF_TOP, &top, &junk, &junk, &junk);
 			if (top == 0) {
-				/* Desktop is top windo, allow Emacs to continue */
+				/* Desktop is top window, allow Emacs to continue */
 				bexpected = (~bstate) & 1;
 				mousecol = mx / g_wchar;
 				mouserow = my / g_hchar;
@@ -760,6 +799,19 @@ static int stgetc()	/* get a char from the keyboard */
 		} else {
 			/* Most likely is the about message */
 		}
+#else
+		{
+			if (Cconis())
+			{
+				uint32_t in = Crawcin();
+	 	        uint16_t scancode = (in >> 16);
+		        key = in & 0xff;
+				special_keys = (uint16_t)Kbshift(-1L);
+			
+				extcode(special_keys, scancode, key);
+			}
+		}
+#endif
 
 		/* is there now a pending event? */
 		if (in_check()) {
@@ -768,11 +820,13 @@ static int stgetc()	/* get a char from the keyboard */
 		}
 	}
 
+#if WITH_GEM
 	/* Disable input (mouse, cursor) while we're processing it */
 	if (mctrl)
 		wind_update(BEG_MCTRL);
 	wind_update(BEG_UPDATE);
 	mouse_off();
+#endif
 	cursor_off();			/* Turn text cursor off */
 	
 	return(key & 0xFF);
@@ -802,6 +856,9 @@ static int strez(const char *newrez)	/* change screen resolution */
 		return(FALSE);
 	}
 
+#if 1 // TODO
+	return(TRUE);
+#else
 	/* next, make sure this resolution is legal for this monitor */
 	if ((currez < 2 && nrez > 1) || (currez > 1 && nrez < 2)) {
 		mlwrite(TEXT181); /* "%%Resolution illegal for this monitor" */
@@ -850,6 +907,7 @@ static int strez(const char *newrez)	/* change screen resolution */
 
 	stputs(ESCS "w", 2); /* automatic overflow off */
 	return(TRUE);
+#endif
 }
 
 /*	extcode:	resolve Atari-ST extended character codes
@@ -865,12 +923,20 @@ static int extcode(uint16_t special_keys, uint16_t scancode, uint16_t key)
 	uint32_t shift;	/* CAPS LOCK flag doesn't come from EVENT_MULTI */
 	unsigned code;	/* Build up special function code */
 
+#if 0 /* for debug */
+	{
+		char dbgbuf[200];
+		sprintf(dbgbuf, "extcode special_keys:%04x scancode:%04x, key:%04x\n", special_keys, scancode, key);
+		debugmsg(dbgbuf);
+	}
+#endif
 
 	/* Identify any shift-key codes associated with this keystroke */
 	code = 0;
 
 	/* I don't know why, but for some reason the codes for ALT of top row and
 	 * for CTRL of left, right and HOME come up wrong, and this fixes them. */
+	/* VB: The explanation is that these codes emulate mouse mouvement */
 	if (scancode == 0x77) scancode = 0x47;
 	else if (scancode == 0x73) scancode = 0x4b;
 	else if (scancode == 0x74) scancode = 0x4d;
@@ -884,9 +950,9 @@ static int extcode(uint16_t special_keys, uint16_t scancode, uint16_t key)
 		char frkeyb_alts;
 		/* French keyboard uses alt and alt-shift */
 		switch (scancode) {
-			case 0x1a: /* ¨^{[ */
+			case 0x1a: /* ?^{[ */
 			case 0x1b: /* $*}] */
-			case 0x28: /* ù\% */
+			case 0x28: /* ?\% */
 			case 0x2b: /* #|@~ */
 			case 0x29: /* On PC, emulators the backtick ` has alt, but we don't want it on the Atari*/
 				frkeyb_alts = -1;
@@ -953,6 +1019,15 @@ static int extcode(uint16_t special_keys, uint16_t scancode, uint16_t key)
 		else key = kt->norm[ scancode];
 	}
 	if (key == 0) key = '@'; /* Catch junk */
+	
+#if 0 /* for debug */
+	{
+		char dbgbuf[200];
+		sprintf(dbgbuf, "extcode code:%08x, key:%c (0x%02x)\n", code, key, key);
+		debugmsg(dbgbuf);
+	}
+#endif	
+
 	if (code != 0) {
 		/* This is a special key */
 		if (code & SPEC) {
