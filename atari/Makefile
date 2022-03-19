@@ -5,7 +5,8 @@
 
 # modify the following lines with the proper relative directories
 
-LIBCMINI=/home/vincent/Atari/Crossdev/libcmini/build
+LIBCMINIPATH=/home/vincent/Atari/Repos/libcmini
+LIBCMINI=$(LIBCMINIPATH)/build
 
 # object file directory
 OBJD = obj
@@ -19,7 +20,7 @@ STRIP=m68k-atari-mint-strip
 
 # options and arguments to the C compiler
 # do not use -mshort, printf of the MiNTlib will have a problem with that
-CFLAGS=-I$(HDIR) -I/home/vincent/Atari/Crossdev/libcmini/include -DLIBCMINI -fomit-frame-pointer -Os
+CFLAGS=-I$(HDIR) -I$(LIBCMINIPATH)/include -DLIBCMINI -fomit-frame-pointer -Os
 
 # list of header files
 
@@ -112,4 +113,4 @@ $(OBJD)/word.o: $(SRCD)/word.c $(HFILES)
 clean:
 	rm $(OBJD)/*.o
 	rm emacs.prg
-	
+
