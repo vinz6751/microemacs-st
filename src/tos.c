@@ -450,7 +450,7 @@ char *cmd;	/* command to execute */
 
 system(cmd)	/* call the system to execute a new program */
 
-char *cmd;	/* command to execute */
+const char *cmd;	/* command to execute */
 
 {
 	char *pptr;			/* pointer into program name */

@@ -32,7 +32,8 @@
 	12-jan-22   Vincent Barrilliot make plain TOS (non-GEM) version
 		- added WITH_GEM compile switch.
 		- it's not complete, the TOS may be able to handle mouse but we don't
-
+	19-mar-22   Vincent Barrilliot
+		- adapt scancodes for Genxtos (EmuTOS for Foenix Retro Systems A2560U)
 */
 
 #define termdef 1		/* don't define "term" external */
@@ -232,7 +233,7 @@ static int extcode(uint16_t special_keys, uint16_t scancode, uint16_t key);
 #define cursor_blink_on() Cursconf(2, 0)
 #define cursor_blink_off() Cursconf(3, 0)
 
-#if 0
+#if 1
 /* Only use for debugging */
 static void debugmsg(char *msg) {
 	FILE *f = fopen("debug.txt","a");
@@ -379,32 +380,16 @@ static int strev(int status)	/* set the reverse video state */
 }
 
 #if	COLOR
-static int mapcol(int color)	/* medium rez color translation */
-/* clr: emacs color number to translate */
-{
-	static int mctable[] = { 0, 1, 2, 3, 2, 1, 2, 3};
-
-	if (currez != 1)
-		return(color);
-	else
-		return(mctable[color]);
-}
-
 static int stfcol(int color)	/* set the foreground color */
 {
-	if (currez < 2) {
-		char buf[] = { ESC, 'b', mapcol(color) };
-		stputs(buf, sizeof(buf));
-	}
+	char buf[] = { ESC, 'b', color };
+	stputs(buf, sizeof(buf));
 }
 
 static int stbcol(int color)	/* set the background color */
 {
-	if (currez < 2) {
-		stputc(ESC);
-		stputc('c');
-		stputc(mapcol(color));
-	}
+	char buf[] = { ESC, 'c', color };
+	stputs(buf, sizeof(buf));
 }
 #endif
 
@@ -937,14 +922,18 @@ static int extcode(uint16_t special_keys, uint16_t scancode, uint16_t key)
 	/* I don't know why, but for some reason the codes for ALT of top row and
 	 * for CTRL of left, right and HOME come up wrong, and this fixes them. */
 	/* VB: The explanation is that these codes emulate mouse mouvement */
+#if 0
 	if (scancode == 0x77) scancode = 0x47;
 	else if (scancode == 0x73) scancode = 0x4b;
 	else if (scancode == 0x74) scancode = 0x4d;
 	else if (scancode > 0x76) scancode -= 0x76;
+#endif
 
 	/* Bring the shifted function key scan codes back into regular range */
+#if 0
 	if (scancode >= 0x54 && scancode <= 0x5d)
 		scancode -= (0x54-0x3B);
+#endif
 
 	if (special_keys & K_ALT) {
 		char frkeyb_alts;
@@ -954,7 +943,7 @@ static int extcode(uint16_t special_keys, uint16_t scancode, uint16_t key)
 			case 0x1b: /* $*}] */
 			case 0x28: /* ?\% */
 			case 0x2b: /* #|@~ */
-			case 0x29: /* On PC, emulators the backtick ` has alt, but we don't want it on the Atari*/
+			case 0x29: /* On PC, emulators the backtick ` has alt, but we don't want it on the Atari */
 				frkeyb_alts = -1;
 				break;
 			default:
@@ -985,7 +974,7 @@ static int extcode(uint16_t special_keys, uint16_t scancode, uint16_t key)
 				key = kt->norm[scancode];
 		}
 	}
-
+#if 0
 	/* Peel of the numeric keypad keys */
 	if (scancode == 0x72) key = 'E';
 	if (scancode != 0x66 && (scancode >= 0x63 || scancode == 0x4A || scancode == 0x4E)) { 
@@ -1000,14 +989,19 @@ static int extcode(uint16_t special_keys, uint16_t scancode, uint16_t key)
 		key = scancode - 0x3b + '1';
 		if (key == '9'+1) key = '0';
 	}
-	if (scancode == 0x62) { code |= SPEC; key = 'H'; }
-	if (scancode == 0x61) { code |= SPEC; key = 'X'; }
-	if (scancode == 0x52) { code |= SPEC; key = 'C'; }
-	if (scancode == 0x47) { code |= SPEC; key = 'D'; }
-	if (scancode == 0x48) { code |= SPEC; key = 'P'; }
-	if (scancode == 0x4b) { code |= SPEC; key = 'B'; }
-	if (scancode == 0x50) { code |= SPEC; key = 'N'; }
-	if (scancode == 0x4d) { code |= SPEC; key = 'F'; }
+#endif	
+	if (scancode == 0x66) { code |= SPEC; key = '<'; } /* Home */
+	if (scancode == 0x68) { code |= SPEC; key = 'Z'; } /* Page up */
+	if (scancode == 0x6B) { code |= SPEC; key = '>'; } /* End */
+	if (scancode == 0x6D) { code |= SPEC; key = 'V'; } /* Page down */
+	if (scancode == 0x6E) { code |= SPEC; key = 'C'; } /* Insert */
+	if (scancode == 0x6F) { code |= SPEC; key = 'D'; } /* Delete */
+	//if (scancode == 0x61) { code |= SPEC; key = 'X'; } /* Undo */
+	//if (scancode == 0x62) { code |= SPEC; key = 'H'; } /* Help */	
+	if (scancode == 0x67) { code |= SPEC; key = 'P'; } /* Up arrow */
+	if (scancode == 0x69) { code |= SPEC; key = 'B'; } /* Left arrow */
+	if (scancode == 0x6a) { code |= SPEC; key = 'F'; } /* Right arrow */
+	if (scancode == 0x6c) { code |= SPEC; key = 'N'; } /* Down arrow */
 
 	/* translate CTRL-shifted of keys that don't usually CTRL */
 	if ((special_keys & K_CTRL) && (scancode <= 0x0D || key == 0)) {
