@@ -601,6 +601,8 @@ static int stkclose()	/* close the keyboard (and mouse) */
 
 static int stclose()
 {
+	int i;
+
 	stputs(ESCS "v", 2);	/* auto overflow on */
 
 	/* restore the original screen resolution */
@@ -610,7 +612,8 @@ static int stclose()
 	strez(resolution_name[initrez->name]);
 #endif 
 	/* restore the original palette settings */
-	Setpalette(spalette);
+	for (i=0; i<16; i++)
+		 Setcolor(i, spalette[i]);
 
 	ttclose();
 
