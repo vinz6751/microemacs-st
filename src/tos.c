@@ -339,7 +339,7 @@ char *PASCAL NEAR timeset()
 	char buf[16];		/* time data buffer */
 
 	time(buf);
-	sp = ctime(buf);
+	sp = (char*)ctime(buf);
 	sp[strlen(sp)-1] = 0;
 	return(sp);
 }
@@ -449,19 +449,78 @@ char *cmd;	/* command to execute */
 #elif	GCC
 
 system(cmd)	/* call the system to execute a new program */
-
 const char *cmd;	/* command to execute */
-
 {
 	char *pptr;			/* pointer into program name */
 	char pname[NSTRING];		/* name of program to execute */
 	char tail[NSTRING];		/* command tail */
+	char *path;
 
 	/* scan off program name.... */
 	pptr = pname;
 	while (*cmd && (*cmd != ' ' && *cmd != '\t'))
 		*pptr++ = *cmd++;
 	*pptr = 0;
+
+	/* Check if it's an absolute path */
+	pptr = (char*)cmd;
+	if (strlen(cmd) > 2 && (cmd[1] == ':' || cmd[0] == DIRSEPCHAR)) {
+		/* Do nothing */
+	}
+	else {
+#if ENVFUNC
+		if (ffropen(pname) == FIOSUC) {
+			ffclose();
+		}
+		else {
+			// Try find the program in the PATH
+			char *sp;	/* pointer into path spec */
+			int i; 	/* index */
+			static char fspec[NFILEN];	/* full path spec to search */
+			static char path_comp[NFILEN];	/* one of the paths in the PATH environment variable */
+
+			path = getenv("PATH");
+			if (path != NULL) {
+				while (*path) {
+					char *start_of_path_component = path;
+					int path_len;
+					while (*path && *path != PATHCHR)
+						path++;
+				
+					path_len = path - start_of_path_component;
+					if (path_len == 0)
+						goto next_path_component;
+
+					strncpy(path_comp, start_of_path_component, path_len);
+					
+					/* ensure path ends with directory separator */
+					if (path_comp[path_len-1] != DIRSEPCHAR)
+						path_comp[path_len++] = DIRSEPCHAR;
+					
+					path_comp[path_len] = '\0'; /* force end of string */
+
+					const char *exts[] = { "", ".TTP", ".TOS", ".PRG", ".APP", ".GTP" };
+					int i,found = 0;
+					for (i=0; !found && i<5; i++) {
+						strcpy(fspec,path_comp);
+						strcat(fspec,pname); /* TODO: check for length */
+						strcat(fspec,exts[i]);
+						found = (ffropen(fspec) == FIOSUC);
+					}
+					if (found) {
+						ffclose();
+						strcpy(pname,fspec); // TODO: Should check for lengths...
+						break;
+					}
+next_path_component:
+					/* next path component */
+					if (*path == PATHCHR)
+						++path;
+				}
+			}
+		}
+#endif
+	}
 
 	/* create program name length/string */
 	tail[0] = strlen(cmd);
