@@ -35,7 +35,7 @@
 */
 
 #define PROGNAME	"MicroEMACS"
-#define VERSION 	"4.00MPS"
+#define VERSION 	"4.00(FOENIX)"
 
 /*	Machine/OS definitions			*/
 /*	[Set one of these!!]			*/
@@ -465,7 +465,7 @@ union REGS {
 #define MEMMAP	0
 #endif
 
-#if	MSDOS | WINNT | OS2 | USG | AIX | AUX | SMOS | HPUX8 | HPUX9 | BSD | FREEBSD | (TOS & MWC) | WMCS | SUN | MPE
+#if	MSDOS | WINNT | OS2 | USG | AIX | AUX | SMOS | HPUX8 | HPUX9 | BSD | FREEBSD | (TOS & (MWC|GCC)) | WMCS | SUN | MPE
 #define ENVFUNC 1
 #else
 #define ENVFUNC 0
