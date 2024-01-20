@@ -234,18 +234,6 @@ CONST short int dname_len[NUMDIRS] = {2, 4, 5, 4, 6, 4, 5, 7, 5, 5};
 /*	var needed for macro debugging output	*/
 NOSHARE char outline[NSTRING];	/* global string to hold debug line text */
 
-/*
- * System message notification (at the moment, VMS only).
- */
-#if	VMS
-NOSHARE char brdcstbuf[1024];		/* Broadcast messages */
-NOSHARE int pending_msg = FALSE;	/* Flag - have we notified user yet.*/
-#endif
-
-#if	HANDLE_WINCH
-int winch_flag=0;			/* Window size changed flag */
-#endif
-
 #else
 
 /* for all the other .C files */
@@ -447,18 +435,6 @@ CONST extern short int dname_len[NUMDIRS]; /* directive lengths		*/
 
 /*	var needed for macro debugging output	*/
 NOSHARE extern char outline[DUMMYSZ];	/* global string to hold debug line text */
-
-/*
- * System message notification (at the moment, VMS only).
- */
-#if	VMS
-NOSHARE extern char brdcstbuf[1024];		/* Broadcast messages */
-NOSHARE extern int pending_msg;		/* Flag - have we notified user yet.*/
-#endif
-
-#if	HANDLE_WINCH
-NOSHARE extern int winch_flag;		/* Window size changed flag */
-#endif
 
 #endif
 

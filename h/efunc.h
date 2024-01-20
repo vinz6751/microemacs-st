@@ -34,13 +34,7 @@ NOSHARE NBIND	names[] = {
 	{"beginning-of-file",		gotobob},
 	{"beginning-of-line",		gotobol},
 	{"bind-to-key",			bindtokey},
-#if	WINDOW_MSWIN
-	{"bind-to-menu",		bindtomenu},
-#endif
 	{"buffer-position",		showcpos},
-#if	WINDOW_MSWIN
-	{"cascade-screens",		cascadescreens},
-#endif
 	{"case-region-lower",		lowerregion},
 	{"case-region-upper",		upperregion},
 	{"case-word-capitalize",	capword},
@@ -53,15 +47,9 @@ NOSHARE NBIND	names[] = {
 	{"change-screen-width",		newwidth},
 	{"clear-and-redraw",		refresh},
 	{"clear-message-line",		clrmes},
-#if	WINDOW_MSWIN
-	{"clip-region", 		clipregion},
-#endif
 	{"copy-region",			copyregion},
 	{"count-words",			wordcount},
 	{"ctlx-prefix",			cex},
-#if	WINDOW_MSWIN
-	{"cut-region",			cutregion},
-#endif
 	{"cycle-ring",			cycle_ring},
 	{"cycle-screens",		cycle_screens},
 #if ABBREVIATIONS
@@ -116,9 +104,6 @@ NOSHARE NBIND	names[] = {
 	{"grow-window",			enlargewind},
 	{"handle-tab",			tab},
 	{"help",			help},
-#if	WINDOW_MSWIN
-	{"help-engine", 		helpengine},
-#endif
 	{"hunt-backward",		backhunt},
 	{"hunt-forward",		forwhunt},
 	{"i-shell",			spawncli},
@@ -128,9 +113,6 @@ NOSHARE NBIND	names[] = {
 	{"indent-region",		indent_region},
 #if ABBREVIATIONS
 	{"insert-abbrevs",		ins_abbrevs},
-#endif
-#if	WINDOW_MSWIN
-	{"insert-clip", 		insertclip},
 #endif
 	{"insert-file",			insfile},
 	{"insert-space",		insspace},
@@ -152,14 +134,7 @@ NOSHARE NBIND	names[] = {
 	{"list-undos",			undo_list},
 	{"local",			local_var},
 	{"macro-to-key",		macrotokey},
-#if	WINDOW_MSWIN
-	{"macro-to-menu",		macrotomenu},
-	{"maximize-screen",		maximizescreen},
-#endif
 	{"meta-prefix", 		meta},
-#if	WINDOW_MSWIN
-	{"minimize-screen",		minimizescreen},
-#endif
 #if	MOUSE
 	{"mouse-move",			mmove},
 	{"mouse-move-down",		movemd},
@@ -203,9 +178,6 @@ NOSHARE NBIND	names[] = {
 	{"rename-screen",		rename_screen},
 	{"replace-string",		sreplace},
 	{"resize-window",		resize},
-#if	WINDOW_MSWIN
-	{"restore-screen",		restorescreen},
-#endif
 	{"restore-window",		restwnd},
 #if	ISRCH
 	{"reverse-incremental-search",	risearch},
@@ -235,15 +207,9 @@ NOSHARE NBIND	names[] = {
 #if	CTAGS
 	{"tag-word",			tagword},
 #endif
-#if	WINDOW_MSWIN
-	{"tile-screens",		tilescreens},
-#endif
 	{"transpose-characters",	twiddle},
 	{"trim-region",			trim},
 	{"unbind-key",			unbindkey},
-#if	WINDOW_MSWIN
-	{"unbind-menu", 		unbindmenu},
-#endif
 	{"undent-region",		undent_region},
 	{"undo",			undo},
 	{"universal-argument",		unarg},

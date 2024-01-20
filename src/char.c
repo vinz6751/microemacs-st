@@ -98,13 +98,7 @@ unsigned char *cp;	/* ptr to character to lowercase */
 		*cp = upcase[*cp & 255];
 }
 
-#if	PROTO
 int PASCAL NEAR upperc(char ch) /* return the upper case equivalant of a character */
-#else
-int PASCAL NEAR upperc(ch)	/* return the upper case equivalant of a character */
-
-unsigned char ch;	/* character to get uppercase euivalant of */
-#endif
 {
 	if (is_lower(ch))
 		return(lowcase[ch & 255]);
@@ -112,13 +106,7 @@ unsigned char ch;	/* character to get uppercase euivalant of */
 		return(ch);
 }
 
-#if	PROTO
 int PASCAL NEAR lowerc(char ch) /* return the lower case equivalant of a character */
-#else
-int PASCAL NEAR lowerc(ch)	/* return the lower case equivalant of a character */
-
-unsigned char ch;	/* character to get lowercase equivalant of */
-#endif
 {
 	if (is_upper(ch))
 		return(upcase[ch & 255]);
@@ -297,30 +285,5 @@ char *our_str;
 	} while (end_str > beg_str);
 
 	return(our_str);
-}
-#endif
-
-#if	DBCS
-/* is this character a 2 byte character prefix code? */
-
-int PASCAL NEAR is2byte(sp, cp)
-
-char *sp;	/* ptr to beginning of string containing character to test */
-char *cp;	/* ptr to charactor to test */
-
-{
-	register char *cc;	/* pointer to current character */
-
-	cc = sp;
-	while (*cc) {
-		if (cc > cp)
-			return(FALSE);
-		if (cc == cp)
-			return(is2char(*cp));
-		if (is2char(*cc))
-			++cc;
-		++cc;
-	}
-	return(FALSE);
 }
 #endif

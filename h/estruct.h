@@ -7,21 +7,6 @@
 				Steve Wilhite and George Jones
 */
 
-#ifdef	LATTICE
-#undef	LATTICE 	 /* don't use their definitions...use ours	 */
-#endif
-#ifdef	MSDOS
-#undef	MSDOS
-#endif
-#ifdef	WINNT
-#undef	WINNT
-#endif
-#ifdef	AMIGA
-#undef	AMIGA
-#endif
-#ifdef	EGA
-#undef	EGA
-#endif
 #ifdef	CTRLZ
 #undef	CTRLZ
 #endif
@@ -91,7 +76,6 @@
 /*   Special keyboard/network definitions	     */
 
 #define ATKBD	0		/* AT-style keyboard with F11, F12 & grey keys */
-#define WANGPC	0		/* WangPC - mostly escape sequences	*/
 #define VT100	0		/* Handle VT100 style keypad - NOT VMS. */
 #define KEYPAD	0		/* VMS - turn on and off application	*/
 				/* keypad automatically */
@@ -162,15 +146,9 @@
 #define MOUSE	1	/* Include routines for mouse actions		*/
 #define NOISY	0	/* Use a fancy BELL if it exists		*/
 #define CTAGS	0	/* include vi-like tagging?			*/
-#define SPEECH	0	/* spoken EMACS, for the sight impared [not ready] */
 #define VARARG	1	/* use varargs.h for mlwrite()			*/
 
 #define ABBREVIATIONS 0 /* Support of abbreviations                     */
-
-#if	XVT
-#undef	COLOR
-#define	COLOR	1	/* overide this to be TRUE for XVT always	*/
-#endif
 
 /*	Character set options		*/
 /*	[Set one of these!!]		*/
@@ -179,65 +157,11 @@
 
 /* handle constant and voids properly */
 
-#if	VMS
-#define CONST	readonly
-#define VOID	void
-#define NOSHARE noshare
-#else
-#if	AOSVS
-#define CONST $shared $align(1)     /* fake a  const */
-#define VOID
-#define NOSHARE $low32k $align(1)   /* attempt to optimize read/write vars. */
-#else
-
-#if	__STDC__ || MSC || TURBO || GCC || (AMIGA && LATTICE)
 #define CONST	const
 #define VOID	void
 #define NOSHARE
-#else
-#define CONST
-#if	IC
-#define	VOID	void
-#else
-#define VOID
-#endif
-#define NOSHARE
-#endif
-
-#endif
-#endif
 
 /*	System dependant library redefinitions, structures and includes */
-
-/*	multibyte character support?	*/
-
-#if	NEC || FMR || I55
-#define DBCS	1	/* double byte character sets enabled */
-#define INSDEL	1	/* use insert/delete line display optimizations */
-
-/* define DBCS prefix bytes */
-#define is2char(ch) (((ch&0xff) >= 0x81 && (ch&0xff) <= 0x9f) || ((ch&0xff) >=0xe0 && (ch&0xff) <= 0xfc))
-
-#else
-#define DBCS	0
-#define INSDEL	0
-#endif
-
-/*	Can we catch the SIGWINCH (the window size change signal)? */
-
-#if AIX || HPUX9
-#define HANDLE_WINCH	1
-#else
-#define HANDLE_WINCH	0
-#endif
-
-/*	Prototypes in use?	*/
-
-#if	MSC || TURBO || IC || VMS || GCC || ZTC
-#define PROTO	1
-#else
-#define PROTO	0
-#endif
 
 /*	the following define allows me to initialize unions...
 	otherwise we make them structures (like the keybinding table)  */
@@ -248,38 +172,13 @@
 #define ETYPE	struct
 #endif
 
-/* Instant C can't do stat()s. Arrrg. No file locking for you */
-#if	IC && MSDOS
-#undef FILOCK
-#define FILOCK	0
-#endif
 
-/* Mark Williams/Atari has no standard or varargs or directory functions */
-#if	TOS & MWC
-#undef VARARG
-#define	VARARG	0
-#undef	FILOCK
-#define	FILOCK	0
-#endif
 
 /* MS-Windows */
 
 #if     WINNT || WINDOW_MSWIN || WINDOW_MSWIN32
-#if     WINDOW_MSWIN32
-#undef  WINDOW_MSWIN
-#define WINDOW_MSWIN    1
-#endif
-#if     WINDOW_MSWIN && WINNT
-#undef  WINDOW_MSWIN32
-#define WINDOW_MSWIN32  1
-#endif
 #undef  VOID    /* windows.h will wind up defining this */
 #include <windows.h>    /* --------- Huge include file here !!! ---------*/
-#if     NTCON
-#include <wincon.h>
-#include <stdio.h>
-#include <dos.h>
-#endif
 
 #undef NEAR
 #define NEAR
@@ -445,24 +344,7 @@ union REGS {
 #define movmem(a, b, c) 	memcpy(b, a, c)
 #endif
 
-/* this keeps VMS happy */
-#if	VMS
-#define getname xgetname
-#define unlink(a)	delete(a)
-#endif
-
-/* some options for AOS/VS */
-#if	AOSVS
-#define ORMDNI	1
-#endif
-
 /*	define some ability flags */
-
-#if	(IBMPC | Z309 | FMR | TIPC) & !(WINDOW_MSWIN | WINDOW_MSWIN32)
-#define MEMMAP	1
-#else
-#define MEMMAP	0
-#endif
 
 #if	MSDOS | WINNT | OS2 | USG | AIX | AUX | SMOS | HPUX8 | HPUX9 | BSD | FREEBSD | (TOS & (MWC|GCC)) | SUN | MPE
 #define ENVFUNC 1
@@ -781,7 +663,7 @@ typedef struct	VIDEO {
 #endif
 	int	v_left;			/* left edge of reverse video */
 	int	v_right;		/* right right of reverse video */
-#if	INSDEL && MEMMAP == 0
+#if	INSDEL
 	int	v_rline;		/* requested screen line # */
 #endif
 	char	v_text[1];		/* Screen data. */
@@ -958,7 +840,6 @@ typedef struct UTABLE {
  * "termp->t_field" style in the future, to make it possible to run more than
  * one terminal type.
  */
-#if	PROTO
 typedef struct	{
 	short	t_mrow; 		/* max number of rows allowable */
 	short	t_nrow; 		/* current number of rows used	*/
@@ -991,59 +872,7 @@ typedef struct	{
 	int (PASCAL NEAR *t_insline)(int); /* insert a screen line 	*/
 	int (PASCAL NEAR *t_delline)(int); /* delete a screen line 	*/
 #endif
-#if     WINDOW_MSWIN
-        int (PASCAL NEAR *t_sleep)(int);   /* go to sleep for a while	*/
-        int (PASCAL NEAR *t_newscr)(SCREEN *);  /* create new screen display */
-        int (PASCAL NEAR *t_delscr)(SCREEN *);  /* destroy screen display */
-        int (PASCAL NEAR *t_selscr)(SCREEN *);  /* select screen display */
-        int (PASCAL NEAR *t_sizscr)(SCREEN *);  /* resize screen display */
-        int (PASCAL NEAR *t_topscr)(SCREEN *);  /* bring screen to top	*/
-#endif
 }	TERM;
-#else	/* TERM structure, no prototyping.*/
-
-typedef struct	{
-	short	t_mrow; 		/* max number of rows allowable */
-	short	t_nrow; 		/* current number of rows used	*/
-	short	t_mcol; 		/* max Number of columns.	*/
-	short	t_ncol; 		/* current Number of columns.	*/
-	short	t_roworg;		/* origin row (normally zero)	*/
-	short	t_colorg;		/* origin column (normally zero)*/
-	short	t_margin;		/* min margin for extended lines*/
-	short	t_scrsiz;		/* size of scroll region "	*/
-	int	t_pause;		/* # times thru update to pause */
-	int (PASCAL NEAR *t_open)();	/* Open terminal at the start.	*/
-	int (PASCAL NEAR *t_close)();	/* Close terminal at end.	*/
-	int (PASCAL NEAR *t_kopen)();	/* Open keyboard		*/
-	int (PASCAL NEAR *t_kclose)();	/* close keyboard		*/
-	int (PASCAL NEAR *t_getchar)(); /* Get character from keyboard. */
-	int (PASCAL NEAR *t_putchar)(); /* Put character to display.	*/
-	int (PASCAL NEAR *t_flush)();	/* Flush output buffers.	*/
-	int (PASCAL NEAR *t_move)();	/* Move the cursor, origin 0.	*/
-	int (PASCAL NEAR *t_eeol)();	/* Erase to end of line.	*/
-	int (PASCAL NEAR *t_eeop)();	/* Erase to end of page.	*/
-	int (PASCAL NEAR *t_clrdesk)(); /* Clear the page totally	*/
-	int (PASCAL NEAR *t_beep)();	/* Beep.			*/
-	int (PASCAL NEAR *t_rev)();	/* set reverse video state	*/
-	int (PASCAL NEAR *t_rez)();	/* change screen resolution	*/
-#if	COLOR
-	int (PASCAL NEAR *t_setfor)();	/* set forground color		*/
-	int (PASCAL NEAR *t_setback)(); /* set background color 	*/
-#endif
-#if	INSDEL
-	int (PASCAL NEAR *t_insline)(); /* insert a screen line 	*/
-	int (PASCAL NEAR *t_delline)(); /* delete a screen line 	*/
-#endif
-#if     WINDOW_MSWIN
-        int (PASCAL NEAR *t_sleep)();   /* go to sleep for a while	*/
-        int (PASCAL NEAR *t_newscr)();  /* create new screen display	*/
-        int (PASCAL NEAR *t_delscr)();  /* destroy screen display	*/
-        int (PASCAL NEAR *t_selscr)();  /* select screen display	*/
-        int (PASCAL NEAR *t_sizscr)();  /* resize screen display	*/
-        int (PASCAL NEAR *t_topscr)();  /* bring screen to top		*/
-#endif
-}	TERM;
-#endif
 
 
 /*	TEMPORARY macros for terminal I/O  (to be placed in a machine

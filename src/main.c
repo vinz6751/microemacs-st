@@ -61,12 +61,6 @@ extern unsigned int _stklen = 10000;
 #define GOOD	0
 #endif
 
-/*
- * Systems that handle window size changes via signals.
- */
-#if HANDLE_WINCH
-#include <signal.h>
-#endif
 
 /*
 	This is the primary entry point that is used by command line
@@ -99,10 +93,6 @@ char *argv[];			/* argument strings */
 
 {
 	register int status;
-
-#if HANDLE_WINCH
-	signal(SIGWINCH,winch_changed);
-#endif
 
 	/* the room mechanism would deallocate undo info no failure....
 	   its not set up yet, so make sure it doesn't try until the
@@ -532,9 +522,6 @@ loop:
 	/*
 	 * Did our window get resized?
 	 */
-#if HANDLE_WINCH
-	if (winch_flag) winch_new_size();
-#endif
 	/* Fix up the screen	*/
 	update(FALSE);
 
@@ -720,19 +707,7 @@ int n;					/* prefix value */
 {
 	register int status;
 	KEYTAB *key;		/* key entry to execute */
-#if	DBCS
-	int schar;		/* second key in 2 byte sequence */
-#endif
 
-#if	WINDOW_MSWIN
-	/* if it is a menu command, go for it... */
-	if ((c & MENU) == MENU) {
-		thisflag = 0;
-		status = execmenu(f, n);
-		lastflag = thisflag;
-		return(status);
-	}
-#endif
 	/* if the keystroke is a bound function...do it */
 	key = getbind(c);
 	if (key != NULL) {
@@ -782,13 +757,6 @@ int n;					/* prefix value */
 		}
 		thisflag = 0;	/* For the future.	*/
 
-
-#if	DBCS
-		/* Get the second half of a double-byte character.*/
-		if (is2char(c))
-			schar = get_key();
-#endif
-
 		/* replace or overwrite mode, not at the end of a string */
 		if (curwp->w_bufp->b_mode & (MDREPL | MDOVER) &&
 			curwp->w_doto < lused(curwp->w_dotp)) {
@@ -813,11 +781,6 @@ int n;					/* prefix value */
 					status = inspound();
 				else {
 					status = linsert(1, c);
-#if	DBCS
-					/* Insert the second half of a double-byte character.*/
-					if (is2char(c))
-						status = linsert(1, schar);
-#endif
 				}
 			} while (--n > 0 && curwp->w_doto < lused(curwp->w_dotp) && status == TRUE);
 		}
@@ -828,17 +791,6 @@ int n;					/* prefix value */
 				status = insbrace(n, c);
 			else if (c == '#' && (curbp->b_mode & MDCMOD) != 0)
 				status = inspound();
-#if	DBCS
-			else if (is2char(c)) {
-				status = TRUE;
-				while (n--) {
-					if (linsert(1, c) == FALSE)
-						status = FALSE;
-					if (linsert(1, schar) == FALSE)
-						status = FALSE;
-				}
-			}
-#endif	
 			else
 				status = linsert(n, c);
 		}

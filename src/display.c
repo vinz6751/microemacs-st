@@ -19,23 +19,11 @@ static  int     foulcursor = FALSE;     /* see vtscreen() & movecursor() */
 #endif
 
 static VIDEO   **vscreen;		       /* Virtual screen. */
-#if	MEMMAP == 0
 static VIDEO   **pscreen;		       /* Physical screen. */
-#endif
 
 /*	some local function declarations	*/
-
-#if	PROTO
-#if	MEMMAP
-extern VOID PASCAL NEAR update_line(int row, struct VIDEO *vp1);
-#else
 extern VOID PASCAL NEAR update_line(int row, struct VIDEO *vp1, struct VIDEO *vp2);
-#endif
 extern VOID PASCAL NEAR update_hilite(void);
-#else
-extern VOID PASCAL NEAR update_line();
-extern VOID PASCAL NEAR update_hilite();
-#endif
 
 /*
  * Initialize the data structures used by the display code. The edge vectors
@@ -64,17 +52,10 @@ int PASCAL NEAR vtinit()
 		meexit(1);
 #endif
 
-
-#if	MEMMAP == 0
 	/* allocate the physical shadow screen array */
 	pscreen = (VIDEO **)room(term.t_mrow*sizeof(VIDEO *));
 	if (pscreen == NULL)
-#if     WINDOW_MSWIN
-		return(FALSE);
-#else
 		meexit(1);
-#endif
-#endif
 
 	/* for every line in the display */
 	for (i = 0; i < term.t_mrow; ++i) {
@@ -82,11 +63,7 @@ int PASCAL NEAR vtinit()
 		/* allocate a virtual screen line */
 		vp = (VIDEO *)room(sizeof(VIDEO)+term.t_mcol);
 		if (vp == NULL)
-#if     WINDOW_MSWIN
-			return(FALSE);
-#else
 			meexit(1);
-#endif
 
 		vp->v_flag = 0;		/* init change flags */
 		vp->v_left = FARRIGHT;	/* init requested rev video boundries */
@@ -98,15 +75,10 @@ int PASCAL NEAR vtinit()
 		/* connect virtual line to line array */
 		vscreen[i] = vp;
 
-#if	MEMMAP == 0
 		/* allocate and initialize physical shadow screen line */
 		vp = (VIDEO *)room(sizeof(VIDEO)+term.t_mcol);
 		if (vp == NULL)
-#if     WINDOW_MSWIN
-			return(FALSE);
-#else
 			meexit(1);
-#endif
 
 		vp->v_flag = VFNEW;
 		vp->v_left = FARRIGHT;
@@ -115,12 +87,11 @@ int PASCAL NEAR vtinit()
 		vp->v_rline = i;	/* set requested line position */
 #endif
 		pscreen[i] = vp;
-#endif
 	}
 	return(TRUE);
 }
 
-#if	CLEAN || WINDOW_MSWIN
+#if	CLEAN
 /* free up all the dynamically allocated video structures */
 
 VOID PASCAL NEAR vtfree()
@@ -128,14 +99,10 @@ VOID PASCAL NEAR vtfree()
 	int i;
 	for (i = 0; i < term.t_mrow; ++i) {
 		if (vscreen && vscreen[i]) free(vscreen[i]);
-#if	MEMMAP == 0
 		if (pscreen && pscreen[i]) free(pscreen[i]);
-#endif
 	}
 	if (vscreen) free(vscreen);
-#if	MEMMAP == 0
 	if (pscreen) free(pscreen);
-#endif
 }
 #endif
 
@@ -431,18 +398,7 @@ int force;	/* force update past type ahead? */
 					updall(wp);	/* update all lines */
 				if (wp->w_flag & WFMODE)
 					modeline(wp);	/* update modeline */
-#if WINDOW_MSWIN
-				if (wp == sp->s_cur_window) {
-					if (wp != scroll_wp) {
-						/* switched to another window,
-						   force scroll bar updates */
-						scroll_flag = WFHARD;
-						scroll_wp = wp;
-					} else
-						scroll_flag = wp->w_flag & WFHARD;
 
-				}
-#endif
 				wp->w_flag = 0;
 				wp->w_force = 0;
 			}
@@ -452,9 +408,6 @@ int force;	/* force update past type ahead? */
 		}
 
 		/* recalc the current hardware cursor location */
-#if 	WINDOW_MSWIN
-		if (sp == first_screen) {
-#endif
 			updpos();
 
 			/* update the current window if we have to move it around */
@@ -466,15 +419,6 @@ int force;	/* force update past type ahead? */
 
 			/* highlight region in the current window if needed */
 			update_hilite();
-
-#if 	WINDOW_MSWIN
-		}
-#endif
-
-#if	MEMMAP
-		/* update the cursor and flush the buffers */
-		movecursor(currow, curcol - lbound);
-#endif
 
 		/* check for lines to de-extend */
 		upddex();
@@ -488,17 +432,6 @@ int force;	/* force update past type ahead? */
 	
 		/* update the virtual screen to the physical screen */
 		updupd(force);
-#if 	WINDOW_MSWIN
-		if (scroll_fcol != sp->s_cur_window->w_fcol) {
-			scroll_flag |= WFMOVE;
-		}
-		if (scroll_flag)
-			updscrollbars(sp, scroll_flag);
-
-	} while (sp != first_screen);
-
-	sgarbf = FALSE;
-#endif
 
 	/* update the cursor and flush the buffers */
 	movecursor(currow, curcol - lbound);
@@ -928,10 +861,8 @@ VOID PASCAL NEAR updgar()
 
 {
         register int i;
-#if     MEMMAP == 0
         register int j;
         register char *txt;
-#endif
 
         for (i = 0; i < term.t_nrow; ++i) {
                 vscreen[i]->v_flag |= VFCHG;
@@ -939,29 +870,19 @@ VOID PASCAL NEAR updgar()
                 vscreen[i]->v_fcolor = gfcolor;
                 vscreen[i]->v_bcolor = gbcolor;
 #endif
-#if     MEMMAP == 0
                 pscreen[i]->v_left = FARRIGHT;
                 pscreen[i]->v_right = 0;
                 txt = pscreen[i]->v_text;
                 for (j = 0; j < term.t_ncol; ++j)
                         txt[j] = ' ';
                 pscreen[i]->v_flag &= ~VFNEW;
-#endif
         }
 
         movecursor(0, 0);                /* Erase the screen. */
-#if     COLOR && WINDOW_MSWIN
-        TTforg(gfcolor);        /* inform the driver of the colors */
-        TTbacg(gbcolor);        /* to be used for erase to end of page */
-#endif
-#if REVSTA && WINDOW_MSWIN
-        TTrev(FALSE);
-#endif
+
         TTeeop();
-#if     !WINDOW_MSWIN
         sgarbf = FALSE;                  /* Erase-page clears */
         mpresf = FALSE;                  /* the message area. */
-#endif
 #if     COLOR
         mlerase();                      /* needs to be cleared if colored */
 #if     WINDOW_MSWIN
@@ -1001,13 +922,7 @@ VOID PASCAL NEAR update_size()
         later as a command.
 */
 
-#if     PROTO
 int PASCAL NEAR pop(BUFFER *popbuf)
-#else
-int PASCAL NEAR pop(popbuf)
-
-BUFFER *popbuf;
-#endif
 {
         register int index;     /* index into the current output line */
         register int llen;      /* length of the current output line */
@@ -1111,11 +1026,7 @@ int force;      /* forced update flag */
                         if (force == FALSE && typahead())
                                 return;
 #endif
-#if     MEMMAP
-                        update_line(i, vp1);
-#else
                         update_line(i, vp1, pscreen[i]);
-#endif
                 }
         }
         return;
@@ -1159,31 +1070,6 @@ VOID PASCAL NEAR updext()
  * character sequences; we are using VT52 functionality. Update the physical
  * row and column variables. It does try an exploit erase to end of line.
  */
-#if     MEMMAP
-/*      UPDATE_LINE:    specific code for memory mapped displays */
-
-VOID PASCAL NEAR update_line(row, vp)
-
-int row;                /* row of screen to update */
-struct VIDEO *vp;       /* virtual screen image */
-
-{
-#if     COLOR
-        /* update the color request */
-        vp->v_fcolor = vp->v_rfcolor;
-        vp->v_bcolor = vp->v_rbcolor;
-
-        /* write the line to the display */
-        scwrite(row, vp->v_text, vp->v_fcolor, vp->v_bcolor,
-                vp->v_left, vp->v_right);
-#else
-        /* write the line to the display */
-        scwrite(row, vp->v_text, 7, 0, vp->v_left, vp->v_right);
-#endif
-        /* flag this line as changed */
-        vp->v_flag &= ~(VFCHG | VFCOL);
-}
-#else
 VOID PASCAL NEAR update_line(row, vp, pp)
 
 int row;                /* row of screen to update */
@@ -1224,15 +1110,6 @@ struct VIDEO *pp;       /* physical screen image */
                         ++update_column;
                         ++phy_left;
                 }
-        
-#if     DBCS
-                /* don't optimize on the left in the middle of a 2 byte char */
-                if ((vir_left > &vp->v_text[0]) && is2byte(vp->v_text, vir_left - 1)) {
-                        --vir_left;
-                        --update_column;
-                        --phy_left;
-                }
-#endif
                 
                 /* advance past any common chars at the right */
                 non_blanks = FALSE;
@@ -1245,14 +1122,6 @@ struct VIDEO *pp;       /* physical screen image */
                         if (vir_right[0] != ' ')
                                 non_blanks = TRUE;
                 }
-        
-#if     DBCS
-                /* don't stop in the middle of a 2 byte char */
-                if (is2byte(vp->v_text, vir_right-1) || is2byte(pp->v_text, phy_right-1)) {
-                        ++vir_right;
-                        ++phy_right;
-                }
-#endif
         }
 
 #if     COLOR
@@ -1383,7 +1252,6 @@ struct VIDEO *pp;       /* physical screen image */
 		TTrev(FALSE);
 	return;
 }
-#endif
 
 /*
  * Redisplay the mode line for the window pointed to by the "wp". This is the
@@ -1851,13 +1719,8 @@ va_dcl		/* variable argument list
 	va_end(ap);
 }
 #else
-#if PROTO
 VOID CDECL NEAR mlwrite(char *fmt, ...)
 /* char * fmt;*/
-#else
-VOID CDECL NEAR mlwrite()
-char *fmt;
-#endif
 
 		/* variable argument list
 			arg1 = format string
@@ -2160,67 +2023,4 @@ int s;	/* scaled integer to output */
 	mlout((f % 10) + '0');
 	ttcol += 3;
 }
-
-#if HANDLE_WINCH
-winch_vtresize(rows, cols)
-     int rows, cols;
-{
-  int i;
-  register VIDEO *vp;
-
-  for (i = 0; i < term.t_mrow; ++i) {
-    free(vscreen[i]);
-    free(pscreen[i]);
-  }
-  free(vscreen);
-  free(pscreen);
-
-  term.t_mrow=term.t_nrow=rows-1;
-  term.t_mcol=term.t_ncol=cols;
-
-  vscreen = (VIDEO **)room(term.t_mrow*sizeof(VIDEO *));
-  
-  if (vscreen == NULL)
-    meexit(1);
-  
-  pscreen = (VIDEO **)room(term.t_mrow*sizeof(VIDEO *));
-  
-  if (pscreen == NULL)
-    meexit(1);
-  
-  for (i = 0; i < term.t_mrow; ++i)
-    {
-      vp = (VIDEO *)room(sizeof(VIDEO)+term.t_mcol);
-      
-      if (vp == NULL)
-	meexit(1);
-      
-      vp->v_flag = 0;
-      vp->v_left = FARRIGHT;
-      vp->v_right = 0;
-      vp->v_flag = VFNEW;
-#if	COLOR
-      vp->v_rfcolor = 7;
-      vp->v_rbcolor = 0;
-#endif
-#if	INSDEL
-      vp->v_rline = i;
-#endif
-      vscreen[i] = vp;
-      vp = (VIDEO *)room(sizeof(VIDEO)+term.t_mcol);
-      
-      if (vp == NULL)
-	meexit(1);
-      
-      vp->v_flag = VFNEW;
-      vp->v_left = FARRIGHT;
-      vp->v_right = 0;
-#if	INSDEL
-      vp->v_rline = i;	/* set requested line position */
-#endif
-      
-      pscreen[i] = vp;
-    }
-}
-#endif
 

@@ -193,12 +193,6 @@ NOSHARE KEYTAB	keytab[NBINDS] = {
 	{SPEC|CTRL|'Z', 	BINDFNC,	gotobop},	/* ctrl PgUp */
 	{SPEC|CTRL|'V', 	BINDFNC,	gotoeop},	/* ctrl PgDn */
 
-#if	WINDOW_MSWIN	/* IBM-CUA clipboard bindings */
-	{SPEC|CTRL|'C', 	BINDFNC,	clipregion},	/* ctrl Ins */
-	{SPEC|SHFT|'C', 	BINDFNC,	insertclip},	/* shift Ins */
-	{SPEC|SHFT|'D', 	BINDFNC,	cutregion},	/* shift Del */
-#endif
-
 #if ATKBD | OS2
 
 /* The following keys are some of the extra ones that can be returned by an
@@ -228,117 +222,8 @@ NOSHARE KEYTAB	keytab[NBINDS] = {
 
 #endif
 
-#if	HP150
-	{SPEC|32,		BINDFNC,	backline},
-	{SPEC|33,		BINDFNC,	forwline},
-	{SPEC|35,		BINDFNC,	backchar},
-	{SPEC|34,		BINDFNC,	forwchar},
-	{SPEC|44,		BINDFNC,	gotobob},
-	{SPEC|46,		BINDFNC,	forwpage},
-	{SPEC|47,		BINDFNC,	backpage},
-	{SPEC|82,		BINDFNC,	nextwind},
-	{SPEC|68,		BINDFNC,	openline},
-	{SPEC|69,		BINDFNC,	killtext},
-	{SPEC|65,		BINDFNC,	forwdel},
-	{SPEC|64,		BINDFNC,	ctlxe},
-	{SPEC|67,		BINDFNC,	refresh},
-	{SPEC|66,		BINDFNC,	reposition},
-	{SPEC|83,		BINDFNC,	help},
-	{SPEC|81,		BINDFNC,	deskey},
-#endif
-
-#if	HP110
-	{SPEC|0x4b,		BINDFNC,	backchar},
-	{SPEC|0x4d,		BINDFNC,	forwchar},
-	{SPEC|0x48,		BINDFNC,	backline},
-	{SPEC|0x50,		BINDFNC,	forwline},
-	{SPEC|0x43,		BINDFNC,	help},
-	{SPEC|0x73,		BINDFNC,	backword},
-	{SPEC|0x74,		BINDFNC,	forwword},
-	{SPEC|0x49,		BINDFNC,	backpage},
-	{SPEC|0x51,		BINDFNC,	forwpage},
-#endif
-
-#if	AMIGA
-	{SPEC|'?',		BINDFNC,	help},
-	{SPEC|'A',		BINDFNC,	backline},
-	{SPEC|'B',		BINDFNC,	forwline},
-	{SPEC|'C',		BINDFNC,	forwchar},
-	{SPEC|'D',		BINDFNC,	backchar},
-	{SPEC|'T',		BINDFNC,	backpage},
-	{SPEC|'S',		BINDFNC,	forwpage},
-	{SPEC|'a',		BINDFNC,	backword},
-	{SPEC|'`',		BINDFNC,	forwword},
-	{127,			BINDFNC,	forwdel},
-#endif
-
 #if	TOS
 	{SPEC|CTRL|'5',		BINDFNC,	help},
-#endif
-
-#if  WANGPC
-	SPEC|0xE0,		BINDFNC,	quit,		/* Cancel */
-	SPEC|0xE1,		BINDFNC,	help,		/* Help */
-	SPEC|0xF1,		BINDFNC,	help,		/* ^Help */
-	SPEC|0xE3,		BINDFNC,	ctrlg,		/* Print */
-	SPEC|0xF3,		BINDFNC,	ctrlg,		/* ^Print */
-	SPEC|0xC0,		BINDFNC,	backline,	/* North */
-	SPEC|0xD0,		BINDFNC,	gotobob,	/* ^North */
-	SPEC|0xC1,		BINDFNC,	forwchar,	/* East */
-	SPEC|0xD1,		BINDFNC,	gotoeol,	/* ^East */
-	SPEC|0xC2,		BINDFNC,	forwline,	/* South */
-	SPEC|0xD2,		BINDFNC,	gotobop,	/* ^South */
-	SPEC|0xC3,		BINDFNC,	backchar,	/* West */
-	SPEC|0xD3,		BINDFNC,	gotobol,	/* ^West */
-	SPEC|0xC4,		BINDFNC,	ctrlg,		/* Home */
-	SPEC|0xD4,		BINDFNC,	gotobob,	/* ^Home */
-	SPEC|0xC5,		BINDFNC,	filesave,	/* Execute */
-	SPEC|0xD5,		BINDFNC,	ctrlg,		/* ^Execute */
-	SPEC|0xC6,		BINDFNC,	insfile,	/* Insert */
-	SPEC|0xD6,		BINDFNC,	ctrlg,		/* ^Insert */
-	SPEC|0xC7,		BINDFNC,	forwdel,	/* Delete */
-	SPEC|0xD7,		BINDFNC,	killregion,	/* ^Delete */
-	SPEC|0xC8,		BINDFNC,	backpage,	/* Previous */
-	SPEC|0xD8,		BINDFNC,	prevwind,	/* ^Previous */
-	SPEC|0xC9,		BINDFNC,	forwpage,	/* Next */
-	SPEC|0xD9,		BINDFNC,	nextwind,	/* ^Next */
-	SPEC|0xCB,		BINDFNC,	ctrlg,		/* Erase */
-	SPEC|0xDB,		BINDFNC,	ctrlg,		/* ^Erase */
-	SPEC|0xDC,		BINDFNC,	ctrlg,		/* ^Tab */
-	SPEC|0xCD,		BINDFNC,	ctrlg,		/* BackTab */
-	SPEC|0xDD,		BINDFNC,	ctrlg,		/* ^BackTab */
-	SPEC|0x80,		BINDFNC,	ctrlg,		/* Indent */
-	SPEC|0x90,		BINDFNC,	ctrlg,		/* ^Indent */
-	SPEC|0x81,		BINDFNC,	ctrlg,		/* Page */
-	SPEC|0x91,		BINDFNC,	ctrlg,		/* ^Page */
-	SPEC|0x82,		BINDFNC,	ctrlg,		/* Center */
-	SPEC|0x92,		BINDFNC,	ctrlg,		/* ^Center */
-	SPEC|0x83,		BINDFNC,	ctrlg,		/* DecTab */
-	SPEC|0x93,		BINDFNC,	ctrlg,		/* ^DecTab */
-	SPEC|0x84,		BINDFNC,	ctrlg,		/* Format */
-	SPEC|0x94,		BINDFNC,	ctrlg,		/* ^Format */
-	SPEC|0x85,		BINDFNC,	ctrlg,		/* Merge */
-	SPEC|0x95,		BINDFNC,	ctrlg,		/* ^Merge */
-	SPEC|0x86,		BINDFNC,	setmark,	/* Note */
-	SPEC|0x96,		BINDFNC,	ctrlg,		/* ^Note */
-	SPEC|0x87,		BINDFNC,	ctrlg,		/* Stop */
-	SPEC|0x97,		BINDFNC,	ctrlg,		/* ^Stop */
-	SPEC|0x88,		BINDFNC,	forwsearch,	/* Srch */
-	SPEC|0x98,		BINDFNC,	backsearch,	/* ^Srch */
-	SPEC|0x89,		BINDFNC,	sreplace,	/* Replac */
-	SPEC|0x99,		BINDFNC,	qreplace,	/* ^Replac */
-	SPEC|0x8A,		BINDFNC,	ctrlg,		/* Copy */
-	SPEC|0x9A,		BINDFNC,	ctrlg,		/* ^Copy */
-	SPEC|0x8B,		BINDFNC,	ctrlg,		/* Move */
-	SPEC|0x9B,		BINDFNC,	ctrlg,		/* ^Move */
-	SPEC|0x8C,		BINDFNC,	namedcmd,	/* Command */
-	SPEC|0x9C,		BINDFNC,	spawn,		/* ^Command */
-	SPEC|0x8D,		BINDFNC,	ctrlg,		/* ^ */
-	SPEC|0x9D,		BINDFNC,	ctrlg,		/* ^^ */
-	SPEC|0x8E,		BINDFNC,	ctrlg,		/* Blank */
-	SPEC|0x9E,		BINDFNC,	ctrlg,		/* ^Blank */
-	SPEC|0x8F,		BINDFNC,	gotoline,	/* GoTo */
-	SPEC|0x9F,		BINDFNC,	usebuffer,	/* ^GoTo */
 #endif
  
 	{CTRL|'?',		BINDFNC,	backdel},

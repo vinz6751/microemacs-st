@@ -76,17 +76,6 @@ int f, n;				/* prefix flag and argument */
 		ratio = (100L * predchars) / numchars;
 
 	/* summarize and report the info */
-#if	DBCS
-	if (is2byte(ltext(curwp->w_dotp),
-	    ltext(curwp->w_dotp) + curwp->w_doto)) {
-		mlwrite(TEXT220,
-/*		"Line %D/%D Col %d/%d Char %D/%D (%d%%) char = 0x%x%x" */
-			predlines+1, numlines+1, col, ecol,
-			predchars, numchars, ratio, (unsigned char)curchar,
-			(unsigned char)(lgetc(curwp->w_dotp, curwp->w_doto+1)));
-		return(TRUE);
-	}
-#endif
 	mlwrite(TEXT60,
 /*		"Line %D/%D Col %d/%d Char %D/%D (%d%%) char = 0x%x" */
 		predlines + 1, numlines + 1, col, ecol,
@@ -1241,15 +1230,8 @@ int f, n;				/* not used */
 /*	Close fences are matched against their partners, and if
 	on screen the cursor briefly lights there		*/
 
-#if	PROTO
 PASCAL NEAR fmatch(char ch)
-#else
-PASCAL NEAR fmatch(ch)
-
-char ch;	/* fence type to match against */
-#endif
-
-	{
+{
 	register LINE *oldlp;	/* original line pointer */
 	register int oldoff;	/* and offset */
 	register LINE *toplp;	/* top line in current window */

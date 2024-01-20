@@ -174,12 +174,7 @@ int f, n;	/* default flag and numeric argument */
  * linstr -- Insert a string at the current point
  */
 
-#if PROTO
 int PASCAL NEAR linstr(char *instr)
-#else
-int PASCAL NEAR linstr( instr)
-char *instr;
-#endif
 {
 	register int status;
 	register int saved_undo;	/* saved undo flag */
@@ -219,15 +214,7 @@ char *instr;
  * well, and FALSE on errors.
  */
 
-#if	PROTO
 PASCAL NEAR linsert(int n, char c)
-#else
-PASCAL NEAR linsert(n, c)
-
-int	n;
-char	c;
-#endif
-
 {
 	register char	*cp1;
 	register char	*cp2;
@@ -340,14 +327,7 @@ char	c;
  *
  */
 
-#if	PROTO
 PASCAL NEAR lowrite(char c)
-#else
-PASCAL NEAR lowrite(c)
-
-char c;		/* character to overwrite on current position */
-#endif
-
 {
 	if (curwp->w_doto < curwp->w_dotp->l_used &&
 		((lgetc(curwp->w_dotp, curwp->w_doto) != '\t' || tabsize == 0) ||
@@ -491,14 +471,6 @@ int kflag;	/* put killed text in kill buffer flag */
 	if (n >= 0) {
 
 		while (n > 0) {
-#if	DBCS
-			/* never start forward on a 2 byte char */
-			if (curwp->w_doto > 0 && is2byte(curwp->w_dotp->l_text,
-			    &curwp->w_dotp->l_text[curwp->w_doto - 1])) {
-				curwp->w_doto--;
-				n++;
-			}
-#endif
 			/* record the current point */
 			dotp = curwp->w_dotp;
 			doto = curwp->w_doto;
@@ -531,14 +503,6 @@ int kflag;	/* put killed text in kill buffer flag */
 			/* find the limits of the kill */
 			cp1 = &dotp->l_text[doto];
 			cp2 = cp1 + chunk;
-#if	DBCS
-			/* never leave half a character */
-			if (is2byte(dotp->l_text, cp2 - 1)) {
-				++chunk;
-				++cp2;
-				++n;
-			}
-#endif
 
 			/* save deleted characters for an undo... */
 			if (undoflag == TRUE) {
@@ -590,15 +554,6 @@ int kflag;	/* put killed text in kill buffer flag */
 		}
 	} else {
 		while (n < 0) {
-#if	DBCS
-			/* never start backwards on the
-			   1st of a 2 byte character */
-			if (curwp->w_doto > 1 && is2byte(curwp->w_dotp->l_text,
-			    &curwp->w_dotp->l_text[curwp->w_doto-1])) {
-				curwp->w_doto++;
-				n--;
-			}
-#endif
 			/* record the current point */
 			dotp = curwp->w_dotp;
 			doto = curwp->w_doto;
@@ -632,13 +587,6 @@ int kflag;	/* put killed text in kill buffer flag */
 			/* find the limits of the kill */
 			cp1 = &dotp->l_text[doto];
 			cp2 = cp1 - chunk;
-#if	DBCS
-			if (is2byte(dotp->l_text, cp2 - 1)) {
-				++chunk;
-				--cp2;
-				++n;
-			}
-#endif
 	
 			/* save deleted characters for an undo... */
 			if (undoflag == TRUE) {
@@ -698,13 +646,7 @@ int kflag;	/* put killed text in kill buffer flag */
 		the current line
 */
 
-#if PROTO
 char *PASCAL NEAR getctext(char *rline)
-#else
-char *PASCAL NEAR getctext( rline)
-char *rline;
-#endif
-
 {
 	register LINE *lp;	/* line to copy */
 	register int size;	/* length of line to return */
@@ -872,14 +814,7 @@ int PASCAL NEAR ldelnewline()
 	note that this works on non-displayed buffers as well!
 */
 
-#if	PROTO
 int PASCAL NEAR addline(BUFFER *bp, char *text)
-#else
-int PASCAL NEAR addline(bp, text)
-
-BUFFER *bp;	/* buffer to add text to */
-char *text;	/* line to add */
-#endif
 {
 	register LINE	*lp;
 	register int	i;
@@ -967,15 +902,7 @@ VOID PASCAL NEAR next_kill()
  * Return TRUE if all is well, and FALSE on errors.
  */
 
-#if	PROTO
 int PASCAL NEAR kinsert(int direct, char c)
-#else
-int PASCAL NEAR kinsert(direct, c)
-
-int direct;	/* direction (FORWARD/REVERSE) to insert characters */
-char c;		/* character to insert in the kill buffer */
-#endif
-
 {
 	KILL *nchunk;	/* ptr to newly roomed chunk */
 

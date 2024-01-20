@@ -20,15 +20,7 @@
 /* insert an editing operation at the top of the current buffer's
    undo stack. */
 
-#if	PROTO
 VOID undo_insert(OPTYPE op_type, long count, UEOBJECT op_erand)
-#else
-VOID undo_insert(op_type, count, op_erand)
-
-OPTYPE op_type;		/* type of operation being recorded */
-long count;		/* operand count */
-UEOBJECT op_erand;	/* the operand of the operation */
-#endif
 {
 	int undo_size;	/* size of the undo object */
 	UNDO_OBJ *up;	/* ptr to a newly allocated undo object */
@@ -106,11 +98,7 @@ UEOBJECT op_erand;	/* the operand of the operation */
 /* reverse the editing operation at the top of the current buffer's
    undo stack. */
 
-#if	PROTO
 int undo_op(void)
-#else
-int undo_op()
-#endif
 {
 	OPTYPE op_type;		/* type of operation being recorded */
 	UNDO_OBJ *up;		/* ptr to the undo object */
@@ -380,11 +368,7 @@ PASCAL NEAR undolist()
 
 /* clear ALL the undo stacks */
 
-#if	PROTO
 VOID undo_dump(void)
-#else
-VOID undo_dump()
-#endif
 {
 	BUFFER *bp;
 
@@ -401,13 +385,7 @@ VOID undo_dump()
 		and retry
 */
 
-#if	PROTO
 VOID *room(int nbytes)
-#else
-VOID *room(nbytes)
-
-int nbytes;	/* number of bytes to malloc() */
-#endif
 {
 	void *ptr;	/* temporary pointer */
 	BUFFER *bp;	/* buffer to dealloc memory from */
@@ -455,14 +433,7 @@ nextbuf:	bp = getoldb();
 		and retry
 */
 
-#if	PROTO
 VOID *reroom(void *orig_ptr, int nbytes)
-#else
-VOID *reroom(orig_ptr, nbytes)
-
-int nbytes;	/* number of bytes to malloc() */
-void *orig_ptr;
-#endif
 {
 	void *ptr;	/* temporary pointer */
 	BUFFER *bp;	/* buffer to dealloc memory from */
