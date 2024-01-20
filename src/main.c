@@ -269,11 +269,8 @@ int firstflag;			/* is this the first time in? */
 	for (carg = 1;  carg < argc;  ++carg) {
 
 		/* Process Switches */
-#if WMCS
-		if (argv[carg][0] == ':') {
-#else
 		if (argv[carg][0] == '-') {
-#endif
+
 			/* Process Startup macroes */
 			switch (argv[carg][1]) {
 

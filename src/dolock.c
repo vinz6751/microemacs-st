@@ -8,51 +8,6 @@
 #include	"eproto.h"
 #include	"elang.h"
 
-#if	WMCS
-/*	file locking for WMCS */
-
-#include "sys$disk/sysincl.sys/sysequ.h"
-#include <stdio.h>
-#include <ctype.h>
-
-char msg[] = TEXT35;
-/*           "another user" */
-
-char *dolock(fname)
-char *fname;
-{
-	int lun,status;
-	status = _open(fname,OPREADACC|OPWRITEACC|OPWRITELOCK,-1,&lun);
-	if(status == 133 || status == 0 ) return(NULL);
-	return(msg);
-}
-
-char *undolock(fname)
-char *fname;
-{
-	int i,j,k,lun,status;
-	char xname[95],c;
-	
-	for(lun=4; _getfnam(lun,xname) == 0; lun++) {
-		for(i=0;i<strlen(xname);i++)	{
-			k = i;
-			for(j=0;j<strlen(fname);j++)  {
-				c = fname[j];
-				if(is_lower(c)) c = toupper(c);
-				if(c == xname[k]) { ++k; continue; }
-				if(c == '\0') break;
-				break;
-				}
-			if(j == strlen(fname)) {
-				_close(lun,0);
-				return(NULL);
-				}
-			}
-	}
-	return(NULL);
-}
-#endif
-
 #if	FILOCK && (MSDOS || WINNT || OS2 || SUN || USG || AIX || AUX || AVIION || BSD || FREEBSD || HPUX8 || HPUX9 || AMIGA)
 #if	OS2 || ((MSDOS || WINNT) && MSC) || BSD || FREEBSD
 #include	<sys/types.h>

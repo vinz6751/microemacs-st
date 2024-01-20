@@ -84,15 +84,6 @@ NOSHARE CONST char *pathname[] =
 };
 #endif
 
-#if WMCS
-{
-	"emacs.rc",
-	"emacs.hlp",
-	"",
-	"sys$disk/syslib.users/"
-};
-#endif
-
 #if AOSVS
 /*
     NOTE: you must use the Unix style pathnames here!

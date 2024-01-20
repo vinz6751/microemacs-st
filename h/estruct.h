@@ -59,7 +59,6 @@
 #define TOS	1			/* ST520, TOS			*/
 #define USG	0			/* UNIX system V		*/
 #define VMS	0			/* VAX/VMS			*/
-#define WMCS	0			/* Wicat's MCS			*/
 #define XENIX	0			/* IBM-PC SCO XENIX		*/
 
 /*	Compiler definitions			*/
@@ -465,7 +464,7 @@ union REGS {
 #define MEMMAP	0
 #endif
 
-#if	MSDOS | WINNT | OS2 | USG | AIX | AUX | SMOS | HPUX8 | HPUX9 | BSD | FREEBSD | (TOS & (MWC|GCC)) | WMCS | SUN | MPE
+#if	MSDOS | WINNT | OS2 | USG | AIX | AUX | SMOS | HPUX8 | HPUX9 | BSD | FREEBSD | (TOS & (MWC|GCC)) | SUN | MPE
 #define ENVFUNC 1
 #else
 #define ENVFUNC 0
@@ -628,7 +627,7 @@ union REGS {
 #if	USG | AIX | AUX | SMOS | HPUX8 | HPUX9 | BSD | FREEBSD | SUN | XENIX | AVIION
 #define PATHCHR ':'
 #else
-#if	WMCS || MPE
+#if	MPE
 #define PATHCHR ','
 #else
 #define PATHCHR ';'

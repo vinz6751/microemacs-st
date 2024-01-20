@@ -53,11 +53,7 @@ int f,n;	/* prefix flag and argument */
                 } else
                         curwp->w_doto--;
         }
-#if	DBCS
-	return(stopback());
-#else
-        return(TRUE);
-#endif
+    return(TRUE);
 }
 
 /*
@@ -95,11 +91,7 @@ int f,n;	/* prefix flag and argument */
                 } else
                         curwp->w_doto++;
         }
-#if	DBCS
-	return(stopforw());
-#else
-        return(TRUE);
-#endif
+    return(TRUE);
 }
 
 PASCAL NEAR gotoline(f, n)	/* move to a particular line.
@@ -201,11 +193,7 @@ int f,n;	/* argument flag and num */
         curwp->w_dotp  = dlp;
         curwp->w_doto  = getgoal(dlp);
         curwp->w_flag |= WFMOVE;
-#if	DBCS
-	return(stopback());
-#else
-        return(TRUE);
-#endif
+    return(TRUE);
 }
 
 /*
@@ -246,11 +234,7 @@ int f,n;	/* argument flag and num */
         curwp->w_dotp  = dlp;
         curwp->w_doto  = getgoal(dlp);
         curwp->w_flag |= WFMOVE;
-#if	DBCS
-	return(stopback());
-#else
-        return(TRUE);
-#endif
+    return(TRUE);
 }
 
 PASCAL NEAR gotobop(f, n) /* go back to the beginning of the current paragraph
@@ -567,7 +551,7 @@ int f,n;	/* argument flag and num */
         curwp->w_markp[n] = odotp;
         curwp->w_marko[n] = odoto;
         curwp->w_flag |= WFMOVE;
-        return(TRUE);
+    return(TRUE);
 }
 
 /*
@@ -595,30 +579,3 @@ int f, n;	/* default and numeric args */
         curwp->w_flag |= WFMOVE;
         return(TRUE);
 }
-
-#if	DBCS
-/* advance a char if we are on the second byte of a DBCS character */
-
-int PASCAL NEAR stopforw()
-
-{
-	/* don't stop on the second byte of a 2 byte character */
-	if (curwp->w_doto > 0 && is2byte(ltext(curwp->w_dotp),
-	    ltext(curwp->w_dotp) + curwp->w_doto - 1))
-	    	return(forwchar(TRUE, 1));
-	return(TRUE);
-}
-
-/* retreat a char if we are on the second byte of a DBCS character */
-
-int PASCAL NEAR stopback()
-
-{
-	/* don't stop on the second byte of a 2 byte character */
-	if (curwp->w_doto > 0 && is2byte(ltext(curwp->w_dotp),
-	    ltext(curwp->w_dotp) + curwp->w_doto - 1))
-	    	return(backchar(TRUE, 1));
-	return(TRUE);
-}
-#endif
-

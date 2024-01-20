@@ -651,20 +651,12 @@ int hflag;	/* Look in the HOME environment variable first? */
 #if	ENVFUNC
 
 	if (hflag) {
-#if WMCS
-		home = getenv("SYS$HOME");
-#else
 		home = getenv("HOME");
-#endif
 		if (home != NULL) {
 			/* build home dir file spec */
 			strcpy(fspec, home);
-#if WMCS
-			strcat(fspec,fname);
-#else
 			strcat(fspec, DIRSEPSTR);
 			strcat(fspec, fname);
-#endif
 
 			/* and try it out */
 			if (ffropen(fspec) == FIOSUC) {
@@ -683,14 +675,10 @@ int hflag;	/* Look in the HOME environment variable first? */
 
 #if	ENVFUNC
 	/* get the PATH variable */
-#if WMCS
-	path = getenv("OPT$PATH");
-#else
 #if OS2
 	path = getenv("DPATH");
 #else
 	path = getenv("PATH");
-#endif
 #endif
 	if (path != NULL)
 		while (*path) {

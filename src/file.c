@@ -432,10 +432,7 @@ char *fname;
 	while (cp1!=&fname[0] && cp1[-1]!='/')
 		--cp1;
 #endif
-#if WMCS
-	while (cp1!=&fname[0] && cp1[-1]!='_' && cp1[-1]!='/')
-		--cp1;
-#endif
+
 	/* cp1 is pointing to the first real filename char */
 	pathp = cp1;
 
