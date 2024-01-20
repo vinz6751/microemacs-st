@@ -11,7 +11,7 @@
 #include	"edef.h"
 #include	"elang.h"
 
-VOID PASCAL NEAR ab_save(c)
+void ab_save(c)
 
 char c;		/* character to add to current word buffer */
 
@@ -38,7 +38,7 @@ char c;		/* character to add to current word buffer */
 	*ab_pos = 0;
 }
 
-VOID PASCAL NEAR ab_expand()
+void ab_expand()
 
 {
 	char *exp;	/* expansion of current symbol */
@@ -85,7 +85,7 @@ VOID PASCAL NEAR ab_expand()
 
 /* add a new abbreviation */
 
-int PASCAL NEAR add_abbrev(f, n)
+int add_abbrev(f, n)
 
 int f, n;	/* numeric flag and argument */
 
@@ -116,7 +116,7 @@ int f, n;	/* numeric flag and argument */
 
 /* Delete a single abbreviation */
 
-int PASCAL NEAR del_abbrev(f, n)
+int del_abbrev(f, n)
 
 int f, n;	/* numeric flag and argument */
 
@@ -136,7 +136,7 @@ int f, n;	/* numeric flag and argument */
 
 /* Kill all abbreviations */
 
-int PASCAL NEAR kill_abbrevs(f, n)
+int kill_abbrevs(f, n)
 
 int f, n;	/* numeric flag and argument */
 
@@ -145,7 +145,7 @@ int f, n;	/* numeric flag and argument */
 	return(ab_clean());
 }
 
-int PASCAL NEAR desc_abbrevs(f, n)
+int desc_abbrevs(f, n)
 
 int f, n;	/* numeric flag and argument */
 
@@ -194,7 +194,7 @@ int f, n;	/* numeric flag and argument */
 
 /* insert a list of all the current abbreviations into the current buffer */
 
-int PASCAL NEAR ins_abbrevs(f, n)
+int ins_abbrevs(f, n)
 
 int f, n;	/* numeric flag and argument */
 
@@ -219,7 +219,7 @@ int f, n;	/* numeric flag and argument */
 	return(TRUE);
 }
 
-int PASCAL NEAR def_abbrevs(f, n)
+int def_abbrevs(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -268,7 +268,7 @@ int f,n;	/* prefix flag and argument */
 	}
 }
 
-VOID PASCAL NEAR ab_init()
+void ab_init()
 
 {
 	ab_head = (ABBREV *)NULL; /* abbreviation list empty */
@@ -283,7 +283,7 @@ VOID PASCAL NEAR ab_init()
 		<expansion>
 */
 
-int PASCAL NEAR ab_insert(sym, expansion)
+int ab_insert(sym, expansion)
 
 char *sym;		/* symbol to expand */
 char *expansion;	/* string to expand to */
@@ -355,7 +355,7 @@ char *expansion;	/* string to expand to */
 		Return a NULL if it is not in the list
 */
 
-char *PASCAL NEAR ab_lookup(sym)
+char *ab_lookup(sym)
 
 char *sym;	/* name of the symbol to look up */
 
@@ -380,7 +380,7 @@ char *sym;	/* name of the symbol to look up */
 
 /* ab_delete:	Delete <sym> from the abbreviation list */
 
-int PASCAL NEAR ab_delete(sym)
+int ab_delete(sym)
 
 char *sym;
 
@@ -419,7 +419,7 @@ char *sym;
 	return(FALSE);
 }
 
-int PASCAL NEAR ab_clean()
+int ab_clean()
 
 {
 

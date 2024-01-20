@@ -15,7 +15,7 @@
 			used by the trim/entab/detab-region commands
 */
 
-int PASCAL NEAR reglines()
+int reglines()
 
 {
 	register LINE *linep;	/* position while scanning */
@@ -51,7 +51,7 @@ int PASCAL NEAR reglines()
  * Move "." to the start, and kill the characters.
  * Bound to "C-W".
  */
-PASCAL NEAR killregion(f, n)
+killregion(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -87,7 +87,7 @@ int f,n;	/* prefix flag and argument */
  * at all. This is a bit like a kill region followed
  * by a yank. Bound to "M-W".
  */
-PASCAL NEAR copyregion(f, n)
+copyregion(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -129,7 +129,7 @@ int f,n;	/* prefix flag and argument */
  * redisplay is done in all buffers. Bound to
  * "C-X C-L".
  */
-PASCAL NEAR lowerregion(f, n)
+lowerregion(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -194,7 +194,7 @@ int f,n;	/* prefix flag and argument */
  * redisplay is done in all buffers. Bound to
  * "C-X C-L".
  */
-PASCAL NEAR upperregion(f, n)
+upperregion(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -255,7 +255,7 @@ int f,n;	/* prefix flag and argument */
 	the current buffer invisable and unchangable
 */
 
-PASCAL NEAR narrow(f, n)
+narrow(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -345,7 +345,7 @@ int f,n;	/* prefix flag and argument */
 
 /*	widen-from-region (^X->) restores a narrowed region	*/
 
-PASCAL NEAR widen(f, n)
+widen(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -438,7 +438,7 @@ int f,n;	/* prefix flag and argument */
  * "ABORT" status; we might make this have the confirm thing later.
  */
 
-PASCAL NEAR getregion(rp)
+getregion(rp)
 
 register REGION *rp;
 
@@ -500,7 +500,7 @@ register REGION *rp;
  * It is assumed that the buffer size is at least one plus the
  * region size.
  */
-char *PASCAL NEAR regtostr(buf, region)
+char *regtostr(buf, region)
 
 char *buf;
 REGION *region;
@@ -530,7 +530,7 @@ REGION *region;
 	return buf;
 }
 
-char *PASCAL NEAR getreg(value) /* return some of the contents of the current region */
+char *getreg(value) /* return some of the contents of the current region */
 
 char *value;
 
@@ -548,7 +548,7 @@ char *value;
 }
 
 
-PASCAL NEAR indent_region(f, n) /* indent a region n tab-stops */
+indent_region(f, n) /* indent a region n tab-stops */
 
 int f,n;	/* default flag and numeric repeat count */
 
@@ -587,7 +587,7 @@ int f,n;	/* default flag and numeric repeat count */
 	return(TRUE);
 }
 
-PASCAL NEAR undent_region(f, n) /* undent a region n tab-stops */
+undent_region(f, n) /* undent a region n tab-stops */
 
 int f,n;	/* default flag and numeric repeat count */
 

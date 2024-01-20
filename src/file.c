@@ -23,7 +23,7 @@
  * "read a file into the current buffer" code.
  * Bound to "C-X C-R".
  */
-PASCAL NEAR fileread(f, n)
+fileread(f, n)
 
 int f, n;	/* defualt and numeric arguments (unused) */
 
@@ -46,7 +46,7 @@ int f, n;	/* defualt and numeric arguments (unused) */
  * "insert a file into the current buffer" code.
  * Bound to "C-X C-I".
  */
-PASCAL NEAR insfile(f, n)
+insfile(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -89,7 +89,7 @@ int f,n;	/* prefix flag and argument */
  * text, and switch to the new buffer.
  * Bound to C-X C-F.
  */
-PASCAL NEAR filefind(f, n)
+filefind(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -105,7 +105,7 @@ int f,n;	/* prefix flag and argument */
 	return(getfile(fname, TRUE));
 }
 
-PASCAL NEAR viewfile(f, n)	/* visit a file in VIEW mode */
+viewfile(f, n)	/* visit a file in VIEW mode */
 
 int f,n;	/* prefix flag and argument */
 
@@ -128,7 +128,7 @@ int f,n;	/* prefix flag and argument */
 }
 
 #if	CRYPT
-PASCAL NEAR resetkey()	/* reset the encryption key if needed */
+resetkey()	/* reset the encryption key if needed */
 
 {
 	register int s; /* return status */
@@ -161,7 +161,7 @@ PASCAL NEAR resetkey()	/* reset the encryption key if needed */
 }
 #endif
 
-PASCAL NEAR getfile(fname, lockfl)
+getfile(fname, lockfl)
 
 char fname[];		/* file name to find */
 int lockfl;		/* check the file for locks? */
@@ -252,7 +252,7 @@ int lockfl;		/* check the file for locks? */
 	and before it is read. 
 */
 
-PASCAL NEAR readin(fname, lockfl)
+readin(fname, lockfl)
 
 char	fname[];	/* name of file to read */
 int	lockfl;		/* check for file locks? */
@@ -386,7 +386,7 @@ out:
  * Returns a pointer into fname indicating the end of the file path; i.e.,
  * 1 character BEYOND the path name.
  */
-char *PASCAL NEAR makename(bname, fname)
+char *makename(bname, fname)
 
 char *bname;
 char *fname;
@@ -444,7 +444,7 @@ char *fname;
 	return(pathp);
 }
 
-VOID PASCAL NEAR unqname(name)	/* make sure a buffer name is unique */
+void unqname(name)	/* make sure a buffer name is unique */
 
 char *name;	/* name to check on */
 
@@ -477,7 +477,7 @@ char *name;	/* name to check on */
  * and ^X^A for appending.
  */
 
-PASCAL NEAR filewrite(f, n)
+filewrite(f, n)
 
 int f, n;	/* emacs arguments */
 
@@ -500,7 +500,7 @@ int f, n;	/* emacs arguments */
 	return(s);
 }
 
-PASCAL NEAR fileapp(f, n)	/* append file */
+fileapp(f, n)	/* append file */
 
 int f, n;	/* emacs arguments */
 
@@ -529,7 +529,7 @@ int f, n;	/* emacs arguments */
  * name for the buffer. Bound to "C-X C-S". May
  * get called by "C-Z".
  */
-PASCAL NEAR filesave(f, n)
+filesave(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -585,7 +585,7 @@ int f,n;	/* prefix flag and argument */
  * a user specifyable routine (in $writehook) can be run.
  */
 
-PASCAL NEAR writeout(fn, mode)
+writeout(fn, mode)
 
 char *fn;	/* name of file to write current buffer to */
 char *mode;	/* mode to open file (w = write a = append) */
@@ -716,7 +716,7 @@ char *mode;	/* mode to open file (w = write a = append) */
  * prompt if you wish.
  */
 
-PASCAL NEAR filename(f, n)
+filename(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -744,7 +744,7 @@ int f,n;	/* prefix flag and argument */
  * buffer, Called by insert file command. Return the final
  * status of the read.
  */
-PASCAL NEAR ifile(fname)
+ifile(fname)
 char	fname[];
 {
 	register LINE *lp0;
@@ -856,7 +856,7 @@ out:
 			names of all the files in a given directory
 */
 
-PASCAL NEAR showfiles(f, n)
+showfiles(f, n)
 
 int f,n;	/* prefix flag and argument */
 

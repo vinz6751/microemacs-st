@@ -275,7 +275,7 @@ complex and triple layered....).
  *	  to make sure the physical cursor is updated to the logical cursor.
  *	  This had been a problem in the Windows NT driver.......
  *	- some lowercase "void" function declarations in eval.c, screen.c
- *	  and undo.c has to be made "VOID". The SUN showed is this.
+ *	  and undo.c has to be made "void". The SUN showed is this.
 
 ********** Major New Features since 3.12 *********
 
@@ -345,7 +345,7 @@ release.
 ********** Future Directions ***************
 
 	I am continuing work on MicroEMACS, and look forward to a number
-of improvements in the near to farther future. Ranked in approximate
+of improvements in the to farther future. Ranked in approximate
 order are:
 
 	- Macintosh Support

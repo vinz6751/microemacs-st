@@ -153,13 +153,7 @@
 /*	Character set options		*/
 /*	[Set one of these!!]		*/
 #define ASCII	1	/* always using ASCII char sequences for now	*/
-#define EBCDIC	0	/* later IBM mainfraim versions will use EBCDIC */
 
-/* handle constant and voids properly */
-
-#define CONST	const
-#define VOID	void
-#define NOSHARE
 
 /*	System dependant library redefinitions, structures and includes */
 
@@ -173,99 +167,17 @@
 #endif
 
 
-
 /* MS-Windows */
 
-#if     WINNT || WINDOW_MSWIN || WINDOW_MSWIN32
-#undef  VOID    /* windows.h will wind up defining this */
-#include <windows.h>    /* --------- Huge include file here !!! ---------*/
-
-#undef NEAR
-#define NEAR
-#define DNEAR
-#if     MSC || IC
-#undef CDECL
-#define CDECL   __cdecl
-#define DUMMYSZ 1    /* dummy size for unsized extern arrays to avoid
-                        silly DGROUP fixup */
-#else
-#if	TURBO
-#define DUMMYSZ     /* nothing */
-#else
-#define CDECL   _cdecl  /* ZTC */
-#define DUMMYSZ     /* nothing */
-#endif
-#endif
-
-#if	WINNT
-#define	EXPORT	/* Windows NT doesn't like this */
-#endif
-
-#if     WINDOW_MSWIN
-#undef  TYPEAH
-#define TYPEAH  0   /* typeahead is handled at the term driver level */
-#undef  CALLED
-#define CALLED  1   /* under MS Windows, "main" resides in the sys driver */
-#if     MSC
-#define EXPORT  __export
-#else
-#define EXPORT  _export	/* Fine for TURBO and ZTC */
-#endif
-#endif
-#else
-
-/* neither Windows NT nor MS-Windows */
-
 #define DUMMYSZ     /* nothing */
 
-#if MSDOS & (TURBO | MSC | TIPC)
-#define	NEAR
-#define	DNEAR
-#define	PASCAL pascal
-#define	CDECL cdecl
-#else
-#if MSDOS & ZTC
-#define	NEAR
-#define	DNEAR
-#define	PASCAL _pascal
-#define	CDECL _cdecl
-#else
-#define NEAR
-#define	DNEAR
-#define	PASCAL
-#define	CDECL
-#endif
-#endif
-
-#endif
-
-#if	TURBO
-#include      <dos.h>
-#include      <mem.h>
-#undef peek
-#undef poke
 #define       peek(a,b,c,d)   movedata(a,b,FP_SEG(c),FP_OFF(c),d)
 #define       poke(a,b,c,d)   movedata(FP_SEG(c),FP_OFF(c),a,b,d)
-#endif
-
-#if	IC
-#include      <dos.h>
-#undef peek
-#undef poke
-#define       peek(a,b,c,d)   movedata(a,b,FP_SEG(c),FP_OFF(c),d)
-#define       poke(a,b,c,d)   movedata(FP_SEG(c),FP_OFF(c),a,b,d)
-#endif
 
 #if	LATTICE & MSDOS
 /* you may have to remove this one definition with LATTICE version
    3.2 and above						  */
 #define unsigned
-#endif
-
-#if	IC
-#define inp	inportb
-#define outp	outportb
-#define intdos(a, b)	int86(33, a, b)
 #endif
 
 #if	AZTEC
@@ -850,27 +762,27 @@ typedef struct	{
 	short	t_margin;		/* min margin for extended lines*/
 	short	t_scrsiz;		/* size of scroll region "	*/
 	int	t_pause;		/* # times thru update to pause */
-	int (PASCAL NEAR *t_open)(void);    /* Open terminal at the start.*/
-	int (PASCAL NEAR *t_close)(void);   /* Close terminal at end.	*/
-	int (PASCAL NEAR *t_kopen)(void);   /* Open keyboard		*/
-	int (PASCAL NEAR *t_kclose)(void);  /* Close keyboard		*/
-	int (PASCAL NEAR *t_getchar)(void); /* Get character from keyboard. */
-	int (PASCAL NEAR *t_putchar)(int);  /* Put character to display.*/
-	int (PASCAL NEAR *t_flush)(void);   /* Flush output buffers.	*/
-	int (PASCAL NEAR *t_move)(int, int);/* Move the cursor, origin 0.*/
-	int (PASCAL NEAR *t_eeol)(void);    /* Erase to end of line.	*/
-	int (PASCAL NEAR *t_eeop)(void);    /* Erase to end of page.	*/
-	int (PASCAL NEAR *t_clrdesk)(void); /* Clear the page totally	*/
-	int (PASCAL NEAR *t_beep)(void);    /* Beep.			*/
-	int (PASCAL NEAR *t_rev)(int);      /* set reverse video state	*/
-	int (PASCAL NEAR *t_rez)(char *);   /* change screen resolution	*/
+	int (*t_open)(void);    /* Open terminal at the start.*/
+	int (*t_close)(void);   /* Close terminal at end.	*/
+	int (*t_kopen)(void);   /* Open keyboard		*/
+	int (*t_kclose)(void);  /* Close keyboard		*/
+	int (*t_getchar)(void); /* Get character from keyboard. */
+	int (*t_putchar)(int);  /* Put character to display.*/
+	int (*t_flush)(void);   /* Flush output buffers.	*/
+	int (*t_move)(int, int);/* Move the cursor, origin 0.*/
+	int (*t_eeol)(void);    /* Erase to end of line.	*/
+	int (*t_eeop)(void);    /* Erase to end of page.	*/
+	int (*t_clrdesk)(void); /* Clear the page totally	*/
+	int (*t_beep)(void);    /* Beep.			*/
+	int (*t_rev)(int);      /* set reverse video state	*/
+	int (*t_rez)(char *);   /* change screen resolution	*/
 #if	COLOR
-	int (PASCAL NEAR *t_setfor)(int);   /* set forground color	*/
-	int (PASCAL NEAR *t_setback)(int);  /* set background color 	*/
+	int (*t_setfor)(int);   /* set forground color	*/
+	int (*t_setback)(int);  /* set background color 	*/
 #endif
 #if	INSDEL
-	int (PASCAL NEAR *t_insline)(int); /* insert a screen line 	*/
-	int (PASCAL NEAR *t_delline)(int); /* delete a screen line 	*/
+	int (*t_insline)(int); /* insert a screen line 	*/
+	int (*t_delline)(int); /* delete a screen line 	*/
 #endif
 }	TERM;
 
@@ -900,7 +812,7 @@ typedef struct	{
 /*	Structure for the table of current key bindings 	*/
 
 ETYPE EPOINTER {
-	int (PASCAL NEAR *fp)();	/* C routine to invoke */
+	int (*fp)();	/* C routine to invoke */
 	BUFFER *buf;			/* buffer to execute */
 };
 
@@ -914,7 +826,7 @@ typedef struct	{
 
 typedef struct {
 	char *n_name;			/* name of function key */
-	int (PASCAL NEAR *n_func)();	/* function name is bound to */
+	int (*n_func)();	/* function name is bound to */
 }	NBIND;
 
 /*	The editor holds deleted text chunks in the KILL buffer. The

@@ -22,8 +22,8 @@ static VIDEO   **vscreen;		       /* Virtual screen. */
 static VIDEO   **pscreen;		       /* Physical screen. */
 
 /*	some local function declarations	*/
-extern VOID PASCAL NEAR update_line(int row, struct VIDEO *vp1, struct VIDEO *vp2);
-extern VOID PASCAL NEAR update_hilite(void);
+extern void update_line(int row, struct VIDEO *vp1, struct VIDEO *vp2);
+extern void update_hilite(void);
 
 /*
  * Initialize the data structures used by the display code. The edge vectors
@@ -33,7 +33,7 @@ extern VOID PASCAL NEAR update_hilite(void);
  * redrawn on the first call to "update".
  */
 
-int PASCAL NEAR vtinit()
+int vtinit()
 {
 	register int i;
 	register VIDEO *vp;
@@ -94,7 +94,7 @@ int PASCAL NEAR vtinit()
 #if	CLEAN
 /* free up all the dynamically allocated video structures */
 
-VOID PASCAL NEAR vtfree()
+void vtfree()
 {
 	int i;
 	for (i = 0; i < term.t_mrow; ++i) {
@@ -110,7 +110,7 @@ VOID PASCAL NEAR vtfree()
 /* vtscreen:	map a screen into the Virtual Terminal system */
 /* ======== 						      */
 
-VOID PASCAL NEAR vtscreen(SCREEN *sp)
+void vtscreen(SCREEN *sp)
 {
 	TTflush();
 	term.t_roworg = sp->s_roworg;
@@ -127,7 +127,7 @@ VOID PASCAL NEAR vtscreen(SCREEN *sp)
 /* vtinitscr: build a virtual terminal resource for a new screen */
 /* =========													 */
 
-int PASCAL NEAR vtinitscr(SCREEN *sp, int nrow, int ncol)
+int vtinitscr(SCREEN *sp, int nrow, int ncol)
 
 /* returns TRUE if successful */
 {
@@ -157,7 +157,7 @@ int PASCAL NEAR vtinitscr(SCREEN *sp, int nrow, int ncol)
 /* vtfreescr:  delete a virtual terminal resource for a dying screen */
 /* =========														 */
 
-PASCAL NEAR vtfreescr(SCREEN *sp)
+vtfreescr(SCREEN *sp)
 {
 	vtscreen(sp);
 	vtfree();
@@ -167,7 +167,7 @@ PASCAL NEAR vtfreescr(SCREEN *sp)
 /* vtsizescr:	resize the virtual terminal resources */
 /* =========										  */
 
-int PASCAL NEAR vtsizescr(SCREEN *sp, int nrow, int ncol)
+int vtsizescr(SCREEN *sp, int nrow, int ncol)
 
 /* returns TRUE if successful. Otherwise, the old VIDEO structures are
    preserved. */
@@ -217,7 +217,7 @@ int PASCAL NEAR vtsizescr(SCREEN *sp, int nrow, int ncol)
  * system prompt will be written in the line). Shut down the channel to the
  * terminal.
  */
-PASCAL NEAR vttidy()
+vttidy()
 {
     mlerase();
     movecursor(term.t_nrow, 0);
@@ -231,7 +231,7 @@ PASCAL NEAR vttidy()
  * screen. There is no checking for nonsense values; this might be a good
  * idea during the early stages.
  */
-PASCAL NEAR vtmove(row, col)
+vtmove(row, col)
 
 int row, col;
 
@@ -247,7 +247,7 @@ int row, col;
    terminal buffers. Only column overflow is checked.
 */
 
-PASCAL NEAR vtputc(c)
+vtputc(c)
 
 int c;
 
@@ -305,7 +305,7 @@ int c;
  * Erase from the end of the software cursor to the end of the line on which
  * the software cursor is located.
  */
-PASCAL NEAR vteeol()
+vteeol()
 {
     register VIDEO	*vp;
 
@@ -320,7 +320,7 @@ PASCAL NEAR vteeol()
 /* upscreen:	user routine to force a screen update
 		always finishes complete update 	*/
 
-int PASCAL NEAR upscreen(f, n)
+int upscreen(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -336,7 +336,7 @@ int f,n;	/* prefix flag and argument */
  * correct for the current window. Third, make the virtual and physical
  * screens the same.
  */
-VOID PASCAL NEAR update(force)
+void update(force)
 
 int force;	/* force update past type ahead? */
 
@@ -443,7 +443,7 @@ int force;	/* force update past type ahead? */
 /*	reframe:	check to see if the cursor is on in the window
 			and re-frame it if needed or wanted		*/
 
-VOID PASCAL NEAR reframe(wp)
+void reframe(wp)
 
 EWINDOW *wp;
 
@@ -545,7 +545,7 @@ EWINDOW *wp;
 /*	hilite:	in the current window, marks 10 and 11 are set and the
 		area between them is on screen, hilite that area	*/
 
-VOID PASCAL NEAR update_hilite()
+void update_hilite()
 
 {
 	int first_line;		/* first screen line to highlight */
@@ -679,7 +679,7 @@ VOID PASCAL NEAR update_hilite()
 
 /*      updone: update the current line to the virtual screen           */
 
-VOID PASCAL NEAR updone(wp)
+void updone(wp)
 
 EWINDOW *wp;     /* window to update current line in */
 
@@ -714,7 +714,7 @@ EWINDOW *wp;     /* window to update current line in */
 
 /*      updall: update all the lines in a window on the virtual screen */
 
-VOID PASCAL NEAR updall(wp)
+void updall(wp)
 
 EWINDOW *wp;     /* window to update lines in */
 
@@ -763,7 +763,7 @@ EWINDOW *wp;     /* window to update lines in */
 /*      updpos: update the position of the hardware cursor and handle extended
                 lines. This is the only update for simple moves.        */
 
-VOID PASCAL NEAR updpos()
+void updpos()
 
 {
         register LINE *lp;
@@ -813,7 +813,7 @@ VOID PASCAL NEAR updpos()
 
 /*      upddex: de-extend any line that derserves it            */
 
-VOID PASCAL NEAR upddex()
+void upddex()
 
 {
         register EWINDOW *wp;
@@ -857,7 +857,7 @@ VOID PASCAL NEAR upddex()
 /*      updgar: if the screen is garbage, clear the physical screen and
                 the virtual screen and force a full update              */
 
-VOID PASCAL NEAR updgar()
+void updgar()
 
 {
         register int i;
@@ -896,7 +896,7 @@ VOID PASCAL NEAR updgar()
         do the following things
 */
 
-VOID PASCAL NEAR update_size()
+void update_size()
 
 {
         /* if we need the size update */
@@ -922,7 +922,7 @@ VOID PASCAL NEAR update_size()
         later as a command.
 */
 
-int PASCAL NEAR pop(BUFFER *popbuf)
+int pop(BUFFER *popbuf)
 {
         register int index;     /* index into the current output line */
         register int llen;      /* length of the current output line */
@@ -1009,7 +1009,7 @@ int PASCAL NEAR pop(BUFFER *popbuf)
 
 /*      updupd: update the physical screen from the virtual screen      */
 
-VOID PASCAL NEAR updupd(force)
+void updupd(force)
 
 int force;      /* forced update flag */
 
@@ -1037,7 +1037,7 @@ int force;      /* forced update flag */
                 will be scrolled right or left to let the user see where
                 the cursor is
                                                                 */
-VOID PASCAL NEAR updext()
+void updext()
 
 {
         register int rcursor;   /* real cursor location */
@@ -1070,7 +1070,7 @@ VOID PASCAL NEAR updext()
  * character sequences; we are using VT52 functionality. Update the physical
  * row and column variables. It does try an exploit erase to end of line.
  */
-VOID PASCAL NEAR update_line(row, vp, pp)
+void update_line(row, vp, pp)
 
 int row;                /* row of screen to update */
 struct VIDEO *vp;       /* virtual screen image */
@@ -1259,7 +1259,7 @@ struct VIDEO *pp;       /* physical screen image */
  * change the modeline format by hacking at this routine. Called by "update"
  * any time there is a dirty window.
  */
-VOID PASCAL NEAR modeline(wp)
+void modeline(wp)
 
 EWINDOW *wp;	/* window to update modeline for */
 
@@ -1449,7 +1449,7 @@ EWINDOW *wp;	/* window to update modeline for */
 	}
 }
 
-VOID PASCAL NEAR getdtime(ts)	/* get the current display time string */
+void getdtime(ts)	/* get the current display time string */
 
 char *ts;
 
@@ -1467,7 +1467,7 @@ char *ts;
 	return;
 }
 
-VOID PASCAL NEAR upmode()	/* update all the mode lines */
+void upmode()	/* update all the mode lines */
 
 {
 	register EWINDOW *wp;
@@ -1494,7 +1494,7 @@ VOID PASCAL NEAR upmode()	/* update all the mode lines */
 #endif
 }
 
-VOID PASCAL NEAR upwind()	/* force hard updates on all windows */
+void upwind()	/* force hard updates on all windows */
 
 {
 	register EWINDOW *wp;
@@ -1526,7 +1526,7 @@ VOID PASCAL NEAR upwind()	/* force hard updates on all windows */
  * and column "col". The row and column arguments are origin 0. Optimize out
  * random calls. Update "ttrow" and "ttcol".
  */
-VOID PASCAL NEAR movecursor(row, col)
+void movecursor(row, col)
 
 int row, col;
 
@@ -1563,7 +1563,7 @@ int row, col;
  * immediately; the terminal buffer is flushed via a call to the flusher.
  */
 
-VOID PASCAL NEAR mlferase()
+void mlferase()
 
 {
 	register int save_discmd;
@@ -1574,7 +1574,7 @@ VOID PASCAL NEAR mlferase()
 	discmd = save_discmd;;
 }
 
-VOID PASCAL NEAR mlerase()
+void mlerase()
 
 {
 	int i;
@@ -1611,7 +1611,7 @@ VOID PASCAL NEAR mlerase()
  *  flag TRUE.  Don't write beyond the end of the current terminal width.
  */
 
-VOID PASCAL NEAR mlout(c)
+void mlout(c)
 
 int c;	/* character to write */
 
@@ -1630,7 +1630,7 @@ int c;	/* character to write */
 
 #if	VARARG
 #if	VARG
-VOID CDECL NEAR mlwrite(va_alist)
+void mlwrite(va_alist)
 
 va_dcl		/* variable argument list
 			arg1 = format string
@@ -1719,7 +1719,7 @@ va_dcl		/* variable argument list
 	va_end(ap);
 }
 #else
-VOID CDECL NEAR mlwrite(char *fmt, ...)
+void mlwrite(char *fmt, ...)
 /* char * fmt;*/
 
 		/* variable argument list
@@ -1815,7 +1815,7 @@ VOID CDECL NEAR mlwrite(char *fmt, ...)
 #define	ADJUST(ptr, dtype)	ptr += sizeof(dtype)
 #endif
 
-VOID CDECL NEAR mlwrite(fmt)
+void mlwrite(fmt)
 
 char *fmt;	/* format string for output */
 
@@ -1902,7 +1902,7 @@ char *fmt;	/* format string for output */
 	and for the write-message and clear-message-line commands
 */
 
-VOID PASCAL NEAR mlforce(s)
+void mlforce(s)
 
 char *s;	/* string to force out */
 
@@ -1921,7 +1921,7 @@ char *s;	/* string to force out */
    that does not like these kind of errors is used, so that the user can
    be offered to abort the application */
 
-VOID PASCAL NEAR mlabort(s)
+void mlabort(s)
 char *s;
 {
     mlforce(s);
@@ -1934,7 +1934,7 @@ char *s;
  * things will get screwed up a little.
  */
 
-VOID PASCAL NEAR mlputs(s)
+void mlputs(s)
 
 char *s;
 
@@ -1951,7 +1951,7 @@ char *s;
  * Write out an integer, in the specified radix. Update the physical cursor
  * position.
  */
-VOID PASCAL NEAR mlputi(i, r)
+void mlputi(i, r)
 
 int i, r;
 
@@ -1977,7 +1977,7 @@ int i, r;
 /*
  * do the same except as a long integer.
  */
-VOID PASCAL NEAR mlputli(l, r)
+void mlputli(l, r)
 
 long l;
 int r;
@@ -2004,7 +2004,7 @@ int r;
  *	write out a scaled integer with two decimal places
  */
 
-VOID PASCAL NEAR mlputf(s)
+void mlputf(s)
 
 int s;	/* scaled integer to output */
 

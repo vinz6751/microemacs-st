@@ -195,11 +195,11 @@ bind-to-key exit-emacs			FN0
 
 	1 split-current-window
 	1 select-buffer "Function Keys"
-	insert-string "f1 search-> f2 <-search Û    MicroEMACS:  Text Editor~n"
-	insert-string "f3 hunt->   f4 <-hunt   Û ~n"
-	insert-string "f5 fkeys    f6 help     Û  Available function key Pages include:~n"
-	insert-string "f7 nxt wind f8 pg[    ] Û    Word  Box  Emacs  Pascal  C  cObol Lisp~n"
-	insert-string "f9 save     f10 exit    Û  [use the f8 key to load Pages]~n"
+	insert-string "f1 search-> f2 <-search ï¿½    MicroEMACS:  Text Editor~n"
+	insert-string "f3 hunt->   f4 <-hunt   ï¿½ ~n"
+	insert-string "f5 fkeys    f6 help     ï¿½  Available function key Pages include:~n"
+	insert-string "f7 nxt wind f8 pg[    ] ï¿½    Word  Box  Emacsl  C  cObol Lisp~n"
+	insert-string "f9 save     f10 exit    ï¿½  [use the f8 key to load Pages]~n"
 	unmark-buffer
 	delete-window
 	set %rcfkeys FALSE

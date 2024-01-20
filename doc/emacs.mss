@@ -291,7 +291,7 @@ is doing.
 f1 search-> f2 <-search |    MicroEMACS:  Text Editor
 f3 hunt->   f4 <-hunt	| 
 f5 fkeys    f6 help	|  Available function key Pages include:
-f7 nxt wind f8 pg[    ] |    WORD  BOX	EMACS  PASCAL  C  cObal  Lisp
+f7 nxt wind f8 pg[    ] |    WORD  BOX	EMACS   C  cObal  Lisp
 f9 save     f10 exit	|  [use the f8 key to load Pages]
 ===============================================================================
    MicroEMACS 4.0 ()	   Function Keys

@@ -11,24 +11,15 @@
 #include        "edef.h"
 #include	"elang.h"
 
-#if	AOSVS
-#define	fopen	xxfopen
-#endif
-
-NOSHARE FILE *ffp;		/* File pointer, all functions. */
+ FILE *ffp;		/* File pointer, all functions. */
 static int eofflag;		/* end-of-file flag */
-
-#if	(MSC || TURBO || IC) && MSDOS
-#define	FILE_BUFSIZE	4096
-char file_buffer[FILE_BUFSIZE];
-#endif
 
 /*
  * Open a file for reading.
  */
 #if !(VMS & RMSIO)	/* if using RMS under VMS, the code */
 			/* is in VMS.C */
-PASCAL NEAR ffropen(fn)
+ffropen(fn)
 char    *fn;
 {
 	if ((ffp=fopen(fn, "r")) == NULL)
@@ -39,9 +30,6 @@ char    *fn;
 	setvbuf(ffp, file_buffer, _IOFBF, FILE_BUFSIZE);
 #endif
 
-#if	WINDOW_MSWIN
-	fbusy = FREADING;
-#endif
 	eofflag = FALSE;
 	return(FIOSUC);
 }
@@ -51,7 +39,7 @@ char    *fn;
  * (cannot create).
  */
 #if	AOSVS == 0
-PASCAL NEAR ffwopen(fn, mode)
+ffwopen(fn, mode)
 char    *fn;
 char *mode;	/* mode to open file for */
 {
@@ -81,9 +69,6 @@ char *mode;	/* mode to open file for */
 	setvbuf(ffp, file_buffer, _IOFBF, FILE_BUFSIZE);
 #endif
 
-#if	WINDOW_MSWIN
-	fbusy = FWRITING;
-#endif
 	return(FIOSUC);
 }
 #endif
@@ -91,7 +76,7 @@ char *mode;	/* mode to open file for */
 /*
  * Close a file. Should look at the status in all systems.
  */
-PASCAL NEAR ffclose()
+ffclose()
 {
 	/* free this since we do not need it anymore */
 	if (fline) {
@@ -99,9 +84,6 @@ PASCAL NEAR ffclose()
 		fline = NULL;
 	}
 
-#if	WINDOW_MSWIN
-	fbusy = FALSE;
-#endif
 #if	MSDOS & CTRLZ
 	putc(26, ffp);		/* add a ^Z at the end of the file */
 #endif
@@ -124,7 +106,7 @@ PASCAL NEAR ffclose()
  * and the "nbuf" is its length, less the free newline. Return the status.
  * Check only at the newline.
  */
-PASCAL NEAR ffputline(buf, nbuf)
+ffputline(buf, nbuf)
 
 char    buf[];
 int nbuf;
@@ -165,15 +147,6 @@ int nbuf;
                 return(FIOERR);
         }
 
-#if	WINDOW_MSWIN
-	{
-	    static int	o = 0;
-	    if (--o < 0) {
-		longop(TRUE);
-		o = 10;    /* to lower overhead, only 10% calls to longop */
-	    }
-	}
-#endif
         return(FIOSUC);
 }
 
@@ -183,7 +156,7 @@ int nbuf;
  * at the end of the file that don't have a newline present. Check for I/O
  * errors too. Return status.
  */
-PASCAL NEAR ffgetline(nbytes)
+ffgetline(nbytes)
 
 int *nbytes;
 
@@ -256,7 +229,7 @@ int *nbytes;
 }
 #endif
 
-int PASCAL NEAR fexist(fname)	/* does <fname> exist on disk? */
+int fexist(fname)	/* does <fname> exist on disk? */
 
 char *fname;		/* file to check for existance */
 

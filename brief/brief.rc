@@ -516,7 +516,7 @@ macro-to-key brief-line-to-top ^T		; line to top (of window)
 ;
 ;     Alt-U Undo  Not currently supported by 3.12
 ;
-;     But comming to a new version of MicroEMACS near you soon......
+;     But comming to a new version of MicroEMACS you soon......
 ;     Just needs some BETA testers.  Contact Jim Kissel jlk@sni.co.uk
 ;
 unbind-key M-U

@@ -32,7 +32,7 @@ char *msg;
 #if	WINDOW_TEXT
 /* Redraw given screen and all screens behind it */
 
-VOID PASCAL NEAR refresh_screen(sp)
+void refresh_screen(sp)
 
 SCREEN *sp;	/* screen image to refresh */
 
@@ -66,7 +66,7 @@ SCREEN *sp;	/* screen image to refresh */
 	to A-N on machines with an ALT key
 */
 
-PASCAL NEAR cycle_screens(f, n)
+cycle_screens(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -82,7 +82,7 @@ int f,n;	/* prefix flag and argument */
 	return(select_screen(sp, TRUE));
 }
 
-PASCAL NEAR find_screen(f, n)
+find_screen(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -113,7 +113,7 @@ int f,n;	/* prefix flag and argument */
 	return(select_screen(sp, TRUE));
 }
 
-PASCAL NEAR free_screen(sp)	/* free all resouces associated with a screen */
+free_screen(sp)	/* free all resouces associated with a screen */
 
 SCREEN *sp;	/* screen to dump */
 
@@ -141,15 +141,12 @@ SCREEN *sp;	/* screen to dump */
 		wp = tp;
 	}
 
-#if	WINDOW_MSWIN
-	term.t_delscr(sp);
-#endif
 	/* and now, free the screen struct itself */
 	free(sp->s_screen_name);
 	free((char *) sp);
 }
 
-int PASCAL NEAR unlist_screen(sp)
+int unlist_screen(sp)
 
 SCREEN *sp;         /* screen to remove from the list */
 {
@@ -164,7 +161,7 @@ SCREEN *sp;         /* screen to remove from the list */
 	last_scr->s_next_screen = sp->s_next_screen;
 }
 
-PASCAL NEAR delete_screen(f, n)
+delete_screen(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -202,7 +199,7 @@ int f,n;	/* prefix flag and argument */
 
 /* this function initializes a new screen.... */
 
-SCREEN *PASCAL NEAR init_screen(scr_name, scr_buf)
+SCREEN *init_screen(scr_name, scr_buf)
 
 char *scr_name;		/* screen name */
 BUFFER *scr_buf;	/* buffer to place in first window of screen */
@@ -221,24 +218,11 @@ BUFFER *scr_buf;	/* buffer to place in first window of screen */
 	/* set up this new screens fields! */
 	sp->s_next_screen = (SCREEN *)NULL;
 	sp->s_screen_name = copystr(scr_name);
-#if     WINDOW_MSWIN
-	if (term.t_newscr (sp) != TRUE) {       /* failed */
-	    free ((void *)sp);
-	    return ((SCREEN *)NULL);
-	}
-	/* ... in MSWIN, the s_nrow/ncol etc... values are kept up to
-	   date by vtinitscr; besides, term entries may actually match
-	   the first_screen instead of the new screen */
-	term.t_roworg = sp->s_roworg;
-	term.t_colorg = sp->s_colorg;
-	term.t_nrow = sp->s_nrow;
-	term.t_ncol = sp->s_ncol;
-#else
+
 	sp->s_roworg = term.t_roworg;
 	sp->s_colorg = term.t_colorg;
 	sp->s_nrow = term.t_nrow;
 	sp->s_ncol = term.t_ncol;
-#endif
 
 	/* allocate its first window */
 	wp = (EWINDOW *)room(sizeof(EWINDOW));
@@ -294,7 +278,7 @@ BUFFER *scr_buf;	/* buffer to place in first window of screen */
 	return(sp);
 }
 
-SCREEN *PASCAL NEAR lookup_screen(scr_name)
+SCREEN *lookup_screen(scr_name)
 
 char *scr_name;		/* named screen to find */
 
@@ -317,7 +301,7 @@ char *scr_name;		/* named screen to find */
 	return((SCREEN *)NULL);
 }
 
-int PASCAL NEAR select_screen(sp, announce)
+int select_screen(sp, announce)
 
 SCREEN *sp;	/* ptr to screen to switch to */
 int announce;	/* announce the selection? */
@@ -396,7 +380,7 @@ int announce;	/* announce the selection? */
 	Bound to "A-B".
 */
 
-PASCAL NEAR list_screens(f, n)
+list_screens(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -418,7 +402,7 @@ int f,n;	/* prefix flag and argument */
  * is an error (if there is no memory). Iflag
  * indicates whether to list hidden screens.
  */
-PASCAL NEAR screenlist(iflag)
+screenlist(iflag)
 
 int iflag;	/* list hidden screen flag */
 
@@ -492,7 +476,7 @@ int iflag;	/* list hidden screen flag */
 
 /* rename_screen:    change the current screen's name	*/
 
-int PASCAL NEAR rename_screen(f, n)
+int rename_screen(f, n)
 
 int f, n;	/* default number and arguments */
 
@@ -515,11 +499,7 @@ int f, n;	/* default number and arguments */
 	/* replace the old screen name with the new */
 	free(first_screen->s_screen_name);
 	first_screen->s_screen_name = copystr(scr_name);
-#if	WINDOW_MSWIN
-	SetWindowText(first_screen->s_drvhandle, scr_name);
-#endif
 	return(TRUE);
-
 }
 
 

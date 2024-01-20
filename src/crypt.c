@@ -10,9 +10,9 @@
 
 #if	CRYPT
 
-static int PASCAL NEAR mod95(int);
+static int mod95(int);
 
-PASCAL NEAR setekey(f, n)	/* reset encryption key of current buffer */
+setekey(f, n)	/* reset encryption key of current buffer */
 
 int f;		/* default flag */
 int n;		/* numeric argument */
@@ -136,7 +136,7 @@ int n;		/* numeric argument */
  *
  **********/
 
-VOID PASCAL NEAR ecrypt(bptr, len)
+void ecrypt(bptr, len)
 register char *bptr;	/* buffer of characters to be encrypted */
 register unsigned len;	/* number of characters in the buffer */
 {
@@ -198,7 +198,7 @@ register unsigned len;	/* number of characters in the buffer */
 	return;
 }
 
-static int PASCAL NEAR mod95(val)
+static int mod95(val)
 
 register int val;
 

@@ -9,7 +9,7 @@
  * keystrokes and the &bind function. Thus I am placing more frequent
  * keys at the top . . .
  */
-NOSHARE KEYTAB	keytab[NBINDS] = {
+ KEYTAB	keytab[NBINDS] = {
 
 #if	MOUSE
 	{MOUS|'m',		BINDFNC,	mmove},

@@ -14,7 +14,7 @@
 	function.
 */
 
-NOSHARE NBIND	names[] = {
+ NBIND	names[] = {
 	{"abort-command",		ctrlg},
 #if ABBREVIATIONS
 	{"add-abbrev",			add_abbrev},

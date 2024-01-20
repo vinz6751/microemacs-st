@@ -153,51 +153,51 @@ void in_put (int event);
 int  in_get (void);
 
 /* Windows-implementation specific functions */
-LONG EXPORT FAR PASCAL ScrWndProc (HWND hWnd, UINT wMsg, UINT wParam,
+LONG EXPORT FAR ScrWndProc (HWND hWnd, UINT wMsg, UINT wParam,
 				   LONG lParam);
-LONG EXPORT FAR PASCAL FrameWndProc (HWND hWnd, UINT wMsg, UINT wParam,
+LONG EXPORT FAR FrameWndProc (HWND hWnd, UINT wMsg, UINT wParam,
 				     LONG lParam);
-int FAR PASCAL GetInput (void);
-int FAR PASCAL TakeANap (int t);
+int FAR GetInput (void);
+int FAR TakeANap (int t);
 
-void FAR PASCAL GenerateMenuSeq (UINT ID);
-KEYTAB * FAR PASCAL FindKeyBinding (void *Func);
-void FAR PASCAL InitMenuPopup (HMENU hMenu, LONG lParam);
-BOOL FAR PASCAL MenuCommand (UINT wParam, LONG lParam);
-HMENU FAR PASCAL GetScreenMenuHandle (void);
+void FAR GenerateMenuSeq (UINT ID);
+KEYTAB * FAR FindKeyBinding (void *Func);
+void FAR InitMenuPopup (HMENU hMenu, LONG lParam);
+BOOL FAR MenuCommand (UINT wParam, LONG lParam);
+HMENU FAR GetScreenMenuHandle (void);
 
-BOOL FAR PASCAL EatKey (UINT MsgCode, UINT wParam, LONG lParam);
-void FAR PASCAL MouseMessage (HWND hWnd, UINT wMsg, UINT wParam, LONG lParam);
-void FAR PASCAL DropMessage (HWND hWnd, HANDLE hDrop);
+BOOL FAR EatKey (UINT MsgCode, UINT wParam, LONG lParam);
+void FAR MouseMessage (HWND hWnd, UINT wMsg, UINT wParam, LONG lParam);
+void FAR DropMessage (HWND hWnd, HANDLE hDrop);
 
-void FAR PASCAL BuildCellMetrics (CellMetrics *cm, HFONT hFont);
-void FAR PASCAL InvalidateCells (HWND hWnd, int leftcol, int toprow,
+void FAR BuildCellMetrics (CellMetrics *cm, HFONT hFont);
+void FAR InvalidateCells (HWND hWnd, int leftcol, int toprow,
                                  int rightcol, int bottomrow);
-void FAR PASCAL MinimumClientSize (HWND hWnd, int NCols, int NRows,
+void FAR MinimumClientSize (HWND hWnd, int NCols, int NRows,
 				   int *Width, int *Height);
-int FAR PASCAL DisplayableRows (HWND hWnd, int Height, CellMetrics *cm);
-int FAR PASCAL DisplayableColumns (HWND hWnd, int Width, CellMetrics *cm);
-void FAR PASCAL EmacsCaret (BOOL Show);
-void FAR PASCAL MoveEmacsCaret (HWND hWnd, int col, int row);
-void FAR PASCAL ShowEmacsCaret (BOOL Show);
-void FAR PASCAL CellToClient (HWND hWnd, POINT Cell, LPPOINT Client);
-void FAR PASCAL ClientToCell (HWND hWnd, POINT Client, LPPOINT Cell);
-void FAR PASCAL GetMinMaxInfo (HWND hWnd, LPPOINT rgpt);
-BOOL FAR PASCAL ScrReSize (HWND hWnd, UINT wParam, WORD cx, WORD cy);
-void FAR PASCAL ScrPaint (HWND hWnd);
-void FAR PASCAL MLPaint (void);
+int FAR DisplayableRows (HWND hWnd, int Height, CellMetrics *cm);
+int FAR DisplayableColumns (HWND hWnd, int Width, CellMetrics *cm);
+void FAR EmacsCaret (BOOL Show);
+void FAR MoveEmacsCaret (HWND hWnd, int col, int row);
+void FAR ShowEmacsCaret (BOOL Show);
+void FAR CellToClient (HWND hWnd, POINT Cell, LPPOINT Client);
+void FAR ClientToCell (HWND hWnd, POINT Client, LPPOINT Cell);
+void FAR GetMinMaxInfo (HWND hWnd, LPPOINT rgpt);
+BOOL FAR ScrReSize (HWND hWnd, UINT wParam, WORD cx, WORD cy);
+void FAR ScrPaint (HWND hWnd);
+void FAR MLPaint (void);
 
-BOOL FAR PASCAL InMessageLine (void);
+BOOL FAR InMessageLine (void);
 
-void FAR PASCAL ClipboardCleanup (void);
-void FAR PASCAL ScrollMessage (HWND hWnd, UINT wMsg, WORD ScrlCode, int Pos);
-void FAR PASCAL ScrollBars (void);
+void FAR ClipboardCleanup (void);
+void FAR ScrollMessage (HWND hWnd, UINT wMsg, WORD ScrlCode, int Pos);
+void FAR ScrollBars (void);
 
-int FAR PASCAL SetWorkingDir (void);
+int FAR SetWorkingDir (void);
 
-void FAR PASCAL InitializeFarStorage (void);
-void FAR PASCAL JettisonFarStorage (void);
+void FAR InitializeFarStorage (void);
+void FAR JettisonFarStorage (void);
 
-HFONT FAR PASCAL SelectFont (HDC hDC, HFONT hFont);
-BOOL FAR PASCAL PickEmacsFont (void);
-void FAR PASCAL FontInit (void);
+HFONT FAR SelectFont (HDC hDC, HFONT hFont);
+BOOL FAR PickEmacsFont (void);
+void FAR FontInit (void);

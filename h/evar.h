@@ -8,7 +8,7 @@
 
 /*	list of recognized environment variables	*/
 
-NOSHARE char *envars[] = {
+ char *envars[] = {
 	"abbell",		/* ring bell on abbreviation expansion? */
 	"abcap",		/* match capitolization in expansions */
 	"abquick",		/* quick, aggressive expansions enabled? */
@@ -212,7 +212,7 @@ typedef struct UFUNC {
 #define DYNAMIC 	2
 #define TRINAMIC	3
 
-NOSHARE UFUNC funcs[] = {
+ UFUNC funcs[] = {
 	"abbrev", MONAMIC,	/* look up abbreviation */
 	"abs", MONAMIC, 	/* absolute value of a number */
 	"add", DYNAMIC,		/* add two numbers together */

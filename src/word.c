@@ -18,7 +18,7 @@
  * left edge of the current window
  * Returns TRUE on success, FALSE on errors.
  */
-PASCAL NEAR wrapword(f, n)
+wrapword(f, n)
 
 int f;		/* default flag */
 int n;		/* numeric argument */
@@ -74,7 +74,7 @@ int n;		/* numeric argument */
  * performed by the "backchar" and "forwchar" routines. Error if you try to
  * move beyond the buffers.
  */
-PASCAL NEAR backword(f, n)
+backword(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -100,7 +100,7 @@ int f,n;	/* prefix flag and argument */
  * Move the cursor forward by the specified number of words. All of the motion
  * is done by "forwchar". Error if you try and move beyond the buffer's end.
  */
-PASCAL NEAR forwword(f, n)
+forwword(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -127,7 +127,7 @@ int f,n;	/* prefix flag and argument */
  * Move forward to the end of the nth next word. Error if you move past
  * the end of the buffer.
  */
-PASCAL NEAR endword(f, n)
+endword(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -155,7 +155,7 @@ int f,n;	/* prefix flag and argument */
  * convert any characters to upper case. Error if you try and move beyond the
  * end of the buffer. Bound to "M-U".
  */
-PASCAL NEAR upperword(f, n)
+upperword(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -192,7 +192,7 @@ int f,n;	/* prefix flag and argument */
  * convert characters to lower case. Error if you try and move over the end of
  * the buffer. Bound to "M-L".
  */
-PASCAL NEAR lowerword(f, n)
+lowerword(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -230,7 +230,7 @@ int f,n;	/* prefix flag and argument */
  * characters to lower case. Error if you try and move past the end of the
  * buffer. Bound to "M-C".
  */
-PASCAL NEAR capword(f, n)
+capword(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -280,7 +280,7 @@ int f,n;	/* prefix flag and argument */
  * command for the right number of characters. With a zero argument, just
  * kill one word and no whitespace. Bound to "M-D".
  */
-PASCAL NEAR delfword(f, n)
+delfword(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -372,7 +372,7 @@ int f,n;	/* prefix flag and argument */
  * counting the characters. When dot is finally moved to its resting place,
  * fire off the kill command. Bound to "M-Rubout" and to "M-Backspace".
  */
-PASCAL NEAR delbword(f, n)
+delbword(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -424,7 +424,7 @@ bckdel:	if (forwchar(FALSE, size) == FALSE)
  * has been set by the user, use that instead
  */
 
-int PASCAL NEAR inword()
+int inword()
 
 {
 	/* the end of a line is never in a word */
@@ -435,7 +435,7 @@ int PASCAL NEAR inword()
 	return(isinword(lgetc(curwp->w_dotp, curwp->w_doto)));
 }
 
-int PASCAL NEAR isinword(c)
+int isinword(c)
 
 char c;
 
@@ -454,7 +454,7 @@ char c;
 	return(FALSE);
 }
 
-PASCAL NEAR fillpara(f, n)	/* Fill the current paragraph according to the
+fillpara(f, n)	/* Fill the current paragraph according to the
 			   current fill column */
 
 int f, n;	/* Default flag and Numeric argument */
@@ -552,7 +552,7 @@ int f, n;	/* Default flag and Numeric argument */
 	return(status);
 }
 
-VOID PASCAL NEAR reform(para)	/* reformat a paragraph as stored in a string */
+void reform(para)	/* reformat a paragraph as stored in a string */
 
 char *para;	/* string buffer containing paragraph */
 
@@ -600,7 +600,7 @@ char *para;	/* string buffer containing paragraph */
 	}
 }
 
-PASCAL NEAR killpara(f, n)	/* delete n paragraphs starting with the current one */
+killpara(f, n)	/* delete n paragraphs starting with the current one */
 
 int f;	/* default flag */
 int n;	/* # of paras to delete */
@@ -635,7 +635,7 @@ int n;	/* # of paras to delete */
 			along with average word sizes, # of chars, etc,
 			and report on them.			*/
 
-PASCAL NEAR wordcount(f, n)
+wordcount(f, n)
 
 int f, n;	/* ignored numeric arguments */
 

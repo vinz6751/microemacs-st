@@ -17,7 +17,7 @@
  * Normally this is bound to "C-X =".
  */
 
-PASCAL NEAR showcpos(f, n)
+showcpos(f, n)
 
 int f, n;				/* prefix flag and argument */
 
@@ -83,7 +83,7 @@ int f, n;				/* prefix flag and argument */
 	return(TRUE);
 }
 
-long PASCAL NEAR getlinenum(bp, sline)	/* get the a line number */
+long getlinenum(bp, sline)	/* get the a line number */
 
 BUFFER *bp;				/* buffer to get current line from */
 LINE *sline;			/* line to search for */
@@ -113,7 +113,7 @@ LINE *sline;			/* line to search for */
  * Return current column.  Stop at first non-blank given TRUE argument.
  */
 
-PASCAL NEAR getccol(bflg)
+getccol(bflg)
 int bflg;
 
 {
@@ -142,7 +142,7 @@ int bflg;
 
 /*	findcol: Return display column in line at char position	*/
 
-int PASCAL NEAR findcol(lp, pos)
+int findcol(lp, pos)
 
 LINE * lp;				/* line to scan */
 int pos;				/* character offset */
@@ -171,7 +171,7 @@ int pos;				/* character offset */
  * Set current column.
  */
 
-PASCAL NEAR setccol(pos)
+setccol(pos)
 
 int pos;				/* position to set cursor */
 {
@@ -221,7 +221,7 @@ int pos;				/* position to set cursor */
  * to keep this working as it always has.
  */
 
-PASCAL NEAR twiddle(f, n)
+twiddle(f, n)
 
 int f, n;				/* prefix flag and argument */
 
@@ -276,7 +276,7 @@ int f, n;				/* prefix flag and argument */
  * function key is pressed, its symbolic MicroEMACS name gets inserted!
  */
 
-PASCAL NEAR quote(f, n)
+quote(f, n)
 
 int f, n;				/* prefix flag and argument */
 {
@@ -323,7 +323,7 @@ int f, n;				/* prefix flag and argument */
  * into "C-I" (in 10 bit code) already. Bound to "C-I".
  */
 
-PASCAL NEAR tab(f, n)
+tab(f, n)
 
 int f, n;				/* prefix flag and argument */
 	{
@@ -339,7 +339,7 @@ int f, n;				/* prefix flag and argument */
 	return(linsert(stabsize - (getccol(FALSE) % stabsize), ' '));
 	}
 
-PASCAL NEAR detab(f, n) 	/* change tabs to spaces */
+detab(f, n) 	/* change tabs to spaces */
 
 int f, n;				/* default flag and numeric repeat count */
 	{
@@ -384,7 +384,7 @@ int f, n;				/* default flag and numeric repeat count */
 	}
 
 
-PASCAL NEAR entab(f, n) 	/* change spaces to tabs where posible */
+entab(f, n) 	/* change spaces to tabs where posible */
 
 int f, n;				/* default flag and numeric repeat count */
 	{
@@ -461,7 +461,7 @@ int f, n;				/* default flag and numeric repeat count */
 		with no arguments, it trims the current region
 */
 
-PASCAL NEAR trim(f, n)
+trim(f, n)
 
 int f, n;				/* default flag and numeric repeat count */
 	{
@@ -509,7 +509,7 @@ int f, n;				/* default flag and numeric repeat count */
  * procerssors. They even handle the looping. Normally this is bound to "C-O".
  */
 
-PASCAL NEAR openline(f, n)
+openline(f, n)
 
 int f, n;				/* prefix flag and argument */
 	{
@@ -537,7 +537,7 @@ int f, n;				/* prefix flag and argument */
  * indentation as specified.
  */
 
-PASCAL NEAR newline(f, n)
+newline(f, n)
 
 int f, n;				/* prefix flag and argument */
 	{
@@ -572,7 +572,7 @@ int f, n;				/* prefix flag and argument */
 	return(TRUE);
 	}
 
-PASCAL NEAR cinsert()	/* insert a newline and indentation for C */
+cinsert()	/* insert a newline and indentation for C */
 
 	{
 	register char *cptr;	/* string pointer into text to copy */
@@ -634,7 +634,7 @@ PASCAL NEAR cinsert()	/* insert a newline and indentation for C */
 	return(TRUE);
 	}
 
-PASCAL NEAR insbrace(n, c)	/* insert a brace into the text here...we are in CMODE */
+insbrace(n, c)	/* insert a brace into the text here...we are in CMODE */
 
 int n;					/* repeat count */
 int c;					/* brace to insert (always } for now) */
@@ -730,7 +730,7 @@ int c;					/* brace to insert (always } for now) */
 	return(linsert(n, c));
 	}
 
-PASCAL NEAR inspound()	/* insert a # into the text here...we are in CMODE */
+inspound()	/* insert a # into the text here...we are in CMODE */
 
 	{
 	register int ch;	/* last character before input */
@@ -765,7 +765,7 @@ PASCAL NEAR inspound()	/* insert a # into the text here...we are in CMODE */
  * ignored.
  */
 
-PASCAL NEAR deblank(f, n)
+deblank(f, n)
 
 int f, n;				/* prefix flag and argument */
 	{
@@ -798,7 +798,7 @@ int f, n;				/* prefix flag and argument */
  * subcomands failed. Normally bound to "C-J".
  */
 
-PASCAL NEAR indent(f, n)
+indent(f, n)
 
 int f, n;				/* prefix flag and argument */
 	{
@@ -846,7 +846,7 @@ int f, n;				/* prefix flag and argument */
  * of text if typed with a big argument. Normally bound to "C-D".
  */
 
-PASCAL NEAR forwdel(f, n)
+forwdel(f, n)
 
 int f, n;				/* prefix flag and argument */
 
@@ -875,7 +875,7 @@ int f, n;				/* prefix flag and argument */
  * both "RUBOUT" and "C-H".
  */
 
-PASCAL NEAR backdel(f, n)
+backdel(f, n)
 
 int f, n;	/* prefix flag and argument */
 
@@ -915,7 +915,7 @@ int f, n;	/* prefix flag and argument */
  * that number of newlines. Normally bound to "C-K".
  */
 
-PASCAL NEAR killtext(f, n)
+killtext(f, n)
 
 int f, n;	/* prefix flag and argument */
 
@@ -963,35 +963,35 @@ int f, n;	/* prefix flag and argument */
 	return(ldelete(chunk, TRUE));
 }
 
-PASCAL NEAR setmod(f, n)	/* prompt and set an editor mode */
+setmod(f, n)	/* prompt and set an editor mode */
 
 int f, n;				/* default and argument */
 	{
 	return(adjustmode(TRUE, FALSE));
 	}
 
-PASCAL NEAR delmode(f, n)	/* prompt and delete an editor mode */
+delmode(f, n)	/* prompt and delete an editor mode */
 
 int f, n;				/* default and argument */
 	{
 	return(adjustmode(FALSE, FALSE));
 	}
 
-PASCAL NEAR setgmode(f, n)	/* prompt and set a global editor mode */
+setgmode(f, n)	/* prompt and set a global editor mode */
 
 int f, n;				/* default and argument */
 	{
 	return(adjustmode(TRUE, TRUE));
 	}
 
-PASCAL NEAR delgmode(f, n)	/* prompt and delete a global editor mode */
+delgmode(f, n)	/* prompt and delete a global editor mode */
 
 int f, n;				/* default and argument */
 	{
 	return(adjustmode(FALSE, TRUE));
 	}
 
-PASCAL NEAR adjustmode(kind, global)	/* change the editor mode status */
+adjustmode(kind, global)	/* change the editor mode status */
 
 int kind;				/* true = set,		false = delete */
 int global;				/* true = global flag,	false = current buffer flag */
@@ -1107,7 +1107,7 @@ int global;				/* true = global flag,	false = current buffer flag */
 /*	This function simply clears the message line,
 		mainly for macro usage			*/
 
-PASCAL NEAR clrmes(f, n)
+clrmes(f, n)
 
 int f, n;				/* arguments ignored */
 	{
@@ -1118,7 +1118,7 @@ int f, n;				/* arguments ignored */
 /*	This function writes a string on the message line
 		mainly for macro usage			*/
 
-PASCAL NEAR writemsg(f, n)
+writemsg(f, n)
 
 int f, n;				/* arguments ignored */
 	{
@@ -1136,7 +1136,7 @@ int f, n;				/* arguments ignored */
 
 /*	the cursor is moved to a matching fence */
 
-PASCAL NEAR getfence(f, n)
+getfence(f, n)
 
 int f, n;				/* not used */
 	{
@@ -1230,7 +1230,7 @@ int f, n;				/* not used */
 /*	Close fences are matched against their partners, and if
 	on screen the cursor briefly lights there		*/
 
-PASCAL NEAR fmatch(char ch)
+fmatch(char ch)
 {
 	register LINE *oldlp;	/* original line pointer */
 	register int oldoff;	/* and offset */
@@ -1282,13 +1282,8 @@ PASCAL NEAR fmatch(char ch)
 	   yet to solve......... */
 	if (count == 0)
 		{
-#if	WINDOW_MSWIN
-		update(FALSE);
-		term.t_sleep (term.t_pause);
-#else
 		for (i = 0;  i < term.t_pause;  i++)
 			update(FALSE);
-#endif
 		}
 
 	/* restore the current position */
@@ -1300,7 +1295,7 @@ PASCAL NEAR fmatch(char ch)
 /* ask for and insert a string into the current
    buffer at the current point */
 
-PASCAL NEAR istring(f, n)	
+istring(f, n)	
 
 int f, n;				/* ignored arguments */
 
@@ -1326,7 +1321,7 @@ int f, n;				/* ignored arguments */
 	return(status);
 	}
 
-PASCAL NEAR ovstring(f, n) 	/* ask for and overwite a string into the current
+ovstring(f, n) 	/* ask for and overwite a string into the current
 		   buffer at the current point */
 
 int f, n;				/* ignored arguments */
@@ -1352,7 +1347,7 @@ int f, n;				/* ignored arguments */
 	return(status);
 	}
 
-int PASCAL NEAR lookup_color(sp)
+int lookup_color(sp)
 
 char *sp;				/* name to look up */
 	{

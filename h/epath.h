@@ -5,7 +5,7 @@
 
 /*	possible names and paths of help files under different OSs	*/
 
-NOSHARE CONST char *pathname[] =
+ const char *pathname[] =
 
 #if	TOS
 {

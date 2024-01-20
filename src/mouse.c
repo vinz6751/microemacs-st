@@ -18,9 +18,9 @@
 #define MDELETE	5
 
 #if	MOUSE
-NOSHARE int	lastypos = HUGE;	/* Last mouse event row.	*/
-NOSHARE int	lastxpos = HUGE;	/* Last mouse event column.	*/
-NOSHARE int	lastmcmd = MNONE;	/* Last mouse command.		*/
+ int	lastypos = HUGE;	/* Last mouse event row.	*/
+ int	lastxpos = HUGE;	/* Last mouse event column.	*/
+ int	lastmcmd = MNONE;	/* Last mouse command.		*/
 
 /*
  * Move mouse button, down. The window that the
@@ -29,7 +29,7 @@ NOSHARE int	lastmcmd = MNONE;	/* Last mouse command.		*/
  * of the text). If the mouse points at text then dot is
  * moved to that location.
  */
-PASCAL NEAR movemd(f, n)
+movemd(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -86,7 +86,7 @@ int f,n;	/* prefix flag and argument */
 			only if we are holding down the proper button
 */
 
-PASCAL NEAR mmove(f, n)
+mmove(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -146,7 +146,7 @@ int f,n;	/* prefix flag and argument */
 			kill-region
 */
 
-PASCAL NEAR mregdown(f, n)
+mregdown(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -254,7 +254,7 @@ int f,n;	/* prefix flag and argument */
 		  3:	reset nclicks to 0
 */
 
-PASCAL NEAR mregup(f, n)
+mregup(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -372,7 +372,7 @@ int f,n;	/* prefix flag and argument */
  * window scrolls. The code in this function is just
  * too complex!
  */
-PASCAL NEAR movemu(f, n)
+movemu(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -507,7 +507,7 @@ int f,n;	/* prefix flag and argument */
  * considered to be part of the window.
  */
 
-EWINDOW *PASCAL NEAR mousewindow(row)
+EWINDOW *mousewindow(row)
 
 register int	row;
 
@@ -542,7 +542,7 @@ register int	row;
  * text in the buffer.
  */
 
-LINE *PASCAL NEAR mouseline(wp, row)
+LINE *mouseline(wp, row)
 
 register EWINDOW *wp;
 register int	row;
@@ -568,7 +568,7 @@ register int	row;
  * LINE structure is pointed to by "lp".
  */
 
-PASCAL NEAR mouseoffset(wp, lp, col)
+mouseoffset(wp, lp, col)
 
 register EWINDOW *wp;
 register LINE	*lp;
@@ -604,7 +604,7 @@ register int	col;
 	return(offset);
 }
 
-PASCAL NEAR mouse_screen()
+mouse_screen()
 
 {
 	register SCREEN *screen_ptr;	/* screen to test mouse in */
@@ -637,7 +637,7 @@ PASCAL NEAR mouse_screen()
 	}
 }
 
-PASCAL NEAR ismodeline(wp, row)
+ismodeline(wp, row)
 
 EWINDOW *wp;
 int row;
@@ -659,7 +659,7 @@ int row;
    let emacs know about the newsize, and have him force a re-draw
 */
 
-PASCAL NEAR resizm(f, n)
+resizm(f, n)
 
 int f, n;	/* these are ignored... we get the new size info from
 		   the mouse driver */

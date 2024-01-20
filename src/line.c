@@ -28,7 +28,7 @@ static long last_size = -1L;	/* last # of bytes yanked */
  * line if no space.
  */
 
-LINE *PASCAL NEAR lalloc(used)
+LINE *lalloc(used)
 
 register int used;
 
@@ -42,15 +42,6 @@ register int used;
 	}
 	lp->l_size = used;
 	lp->l_used = used;
-#if	WINDOW_MSWIN
-	{
-		static int o = 0;
-		if (--o < 0) {
-			longop(TRUE);
-			o = 10;     /* to lower overhead, only 10% calls to longop */
-		}
-	}
-#endif
 	return(lp);
 }
 
@@ -60,7 +51,7 @@ register int used;
  * might be in. Release the memory. The buffers are updated too; the magic
  * conditions described in the above comments don't hold here.
  */
-PASCAL NEAR lfree(lp)
+lfree(lp)
 register LINE	*lp;
 {
 	register BUFFER *bp;
@@ -111,15 +102,6 @@ register LINE	*lp;
 	lp->l_bp->l_fp = lp->l_fp;
 	lp->l_fp->l_bp = lp->l_bp;
 	free((char *) lp);
-#if	WINDOW_MSWIN
-	{
-		static int o = 0;
-		if (--o < 0) {
-			longop(TRUE);
-			o = 10;     /* to lower overhead, only 10% calls to longop */
-		}
-	}
-#endif
 }
 
 /*
@@ -129,7 +111,7 @@ register LINE	*lp;
  * displayed in more than 1 window we change EDIT t HARD. Set MODE if the
  * mode line needs to be updated (the "*" has to be set).
  */
-PASCAL NEAR lchange(flag)
+lchange(flag)
 register int	flag;
 {
 	register EWINDOW *wp;
@@ -158,7 +140,7 @@ register int	flag;
 	}
 }
 
-PASCAL NEAR insspace(f, n)	/* insert spaces forward into text */
+insspace(f, n)	/* insert spaces forward into text */
 
 int f, n;	/* default flag and numeric argument */
 
@@ -174,7 +156,7 @@ int f, n;	/* default flag and numeric argument */
  * linstr -- Insert a string at the current point
  */
 
-int PASCAL NEAR linstr(char *instr)
+int linstr(char *instr)
 {
 	register int status;
 	register int saved_undo;	/* saved undo flag */
@@ -214,7 +196,7 @@ int PASCAL NEAR linstr(char *instr)
  * well, and FALSE on errors.
  */
 
-PASCAL NEAR linsert(int n, char c)
+linsert(int n, char c)
 {
 	register char	*cp1;
 	register char	*cp2;
@@ -327,7 +309,7 @@ PASCAL NEAR linsert(int n, char c)
  *
  */
 
-PASCAL NEAR lowrite(char c)
+lowrite(char c)
 {
 	if (curwp->w_doto < curwp->w_dotp->l_used &&
 		((lgetc(curwp->w_dotp, curwp->w_doto) != '\t' || tabsize == 0) ||
@@ -340,7 +322,7 @@ PASCAL NEAR lowrite(char c)
  * lover -- Overwrite a string at the current point
  */
 
-int PASCAL NEAR lover(ostr)
+int lover(ostr)
 
 char	*ostr;
 
@@ -370,7 +352,7 @@ char	*ostr;
  * update of dot and mark is a bit easier then in the above case, because the
  * split forces more updating.
  */
-int PASCAL NEAR lnewline()
+int lnewline()
 {
 	register char	*cp1;
 	register char	*cp2;
@@ -450,7 +432,7 @@ should be put in the kill buffer.
 
 */
 
-PASCAL NEAR ldelete(n, kflag)
+ldelete(n, kflag)
 
 long n; 	/* # of chars to delete */
 int kflag;	/* put killed text in kill buffer flag */
@@ -646,7 +628,7 @@ int kflag;	/* put killed text in kill buffer flag */
 		the current line
 */
 
-char *PASCAL NEAR getctext(char *rline)
+char *getctext(char *rline)
 {
 	register LINE *lp;	/* line to copy */
 	register int size;	/* length of line to return */
@@ -670,7 +652,7 @@ char *PASCAL NEAR getctext(char *rline)
 
 /* putctext:	replace the current line with the passed in text	*/
 
-PASCAL NEAR putctext(iline)
+putctext(iline)
 
 char *iline;	/* contents of new line */
 
@@ -699,7 +681,7 @@ char *iline;	/* contents of new line */
  * about in memory. Return FALSE on error and TRUE if all looks ok. Called by
  * "ldelete" only.
  */
-int PASCAL NEAR ldelnewline()
+int ldelnewline()
 {
 	register char	*cp1;
 	register char	*cp2;
@@ -814,7 +796,7 @@ int PASCAL NEAR ldelnewline()
 	note that this works on non-displayed buffers as well!
 */
 
-int PASCAL NEAR addline(BUFFER *bp, char *text)
+int addline(BUFFER *bp, char *text)
 {
 	register LINE	*lp;
 	register int	i;
@@ -848,7 +830,7 @@ int PASCAL NEAR addline(BUFFER *bp, char *text)
  * in case the buffer has grown to immense size. No errors.
  */
 
-VOID PASCAL NEAR kdelete()
+void kdelete()
 
 {
 	KILL *kp;	/* ptr to scan kill buffer chunk list */
@@ -861,16 +843,6 @@ VOID PASCAL NEAR kdelete()
 			kp = kbufp[kill_index]->d_next;
 			free((char *)kbufp[kill_index]);
 			kbufp[kill_index] = kp;
-#if	WINDOW_MSWIN
-			{
-				static int o = 0;
-				if (--o < 0) {
-					longop(TRUE);
-					o = 10;     /* to lower overhead,
-						only 10% calls to longop */
-				}
-			}
-#endif
 		}
 
 		/* and reset all the kill buffer pointers */
@@ -885,7 +857,7 @@ VOID PASCAL NEAR kdelete()
 			what will be the new kill buffer
 */
 
-VOID PASCAL NEAR next_kill()
+void next_kill()
 
 {
 	/* advance to the next kill ring entry */
@@ -902,7 +874,7 @@ VOID PASCAL NEAR next_kill()
  * Return TRUE if all is well, and FALSE on errors.
  */
 
-int PASCAL NEAR kinsert(int direct, char c)
+int kinsert(int direct, char c)
 {
 	KILL *nchunk;	/* ptr to newly roomed chunk */
 
@@ -922,16 +894,6 @@ int PASCAL NEAR kinsert(int direct, char c)
 			kbufp[kill_index] = nchunk;
 			kbufp[kill_index]->d_next = NULL;
 			kused[kill_index] = 0;
-#if	WINDOW_MSWIN
-			{
-				static int o = 0;
-				if (--o < 0) {
-					longop(TRUE);
-					o = 10;     /* to lower overhead,
-						only 10% calls to longop */
-				}
-			}
-#endif
 		}
 	
 		/* and now insert the character */
@@ -956,16 +918,6 @@ int PASCAL NEAR kinsert(int direct, char c)
 				kbufh[kill_index] = nchunk;
 				kskip[kill_index] = KBLOCK;
 			}
-#if	WINDOW_MSWIN
-			{
-				static int o = 0;
-				if (--o < 0) {
-					longop(TRUE);
-					o = 10;     /* to lower overhead,
-						only 10% calls to longop */
-				}
-			}
-#endif
 		}
 	
 		/* and now insert the character */
@@ -982,7 +934,7 @@ int PASCAL NEAR kinsert(int direct, char c)
 
 #define	Char_insert(a)	(a == '\r' ? lnewline() : linsert(1, a))
 
-int PASCAL NEAR yank(f, n)
+int yank(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -1064,7 +1016,7 @@ int f,n;	/* prefix flag and argument */
 	return(TRUE);
 }
 
-int PASCAL NEAR cycle_ring(f, n)
+int cycle_ring(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -1087,7 +1039,7 @@ int f,n;	/* prefix flag and argument */
 	return TRUE;
 }
 
-int PASCAL NEAR yank_pop(f, n)
+int yank_pop(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -1109,7 +1061,7 @@ int f,n;	/* prefix flag and argument */
 	return(yank(FALSE, 1));
 }
 
-int PASCAL NEAR clear_ring(f, n)
+int clear_ring(f, n)
 
 int f,n;	/* prefix flag and argument */
 

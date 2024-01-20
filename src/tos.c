@@ -332,7 +332,7 @@ filter(f, n)
 
 /* return a system dependant string with the current time */
 
-char *PASCAL NEAR timeset()
+char *timeset()
 
 {
 	register char *sp;	/* temp string pointer */
@@ -352,7 +352,7 @@ char rbuf[NFILEN];		/* return file buffer */
 
 /*	do a wild card directory search (for file name completion) */
 
-char *PASCAL NEAR getffile(fspec)
+char *getffile(fspec)
 
 char *fspec;	/* file to match */
 
@@ -402,7 +402,7 @@ char *fspec;	/* file to match */
 	return(rbuf);
 }
 
-char *PASCAL NEAR getnfile()
+char *getnfile()
 
 {
 

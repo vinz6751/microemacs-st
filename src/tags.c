@@ -150,7 +150,7 @@ lookup()
  * tagged words as our index index.
  */
 
-VOID fix_index()
+void fix_index()
 
 {
 	register int	i = -1;
@@ -268,7 +268,7 @@ static int tagvalid = FALSE;	/* TRUE if last tag was a succes*/
  * allways succeeds.
  */
 
-VOID add_path(filename)
+void add_path(filename)
 char *filename;
 {
 	char temp[NFILEN];
@@ -400,7 +400,7 @@ int  retag;
  * '.' is preserved, and return information (= current filename) is saved.
  */
 
-extern int PASCAL NEAR tagword(f, n)
+extern int tagword(f, n)
 
 int f, n;
 
@@ -452,7 +452,7 @@ int f, n;
  * Note, retagword  do not mess up the return information (tagf).
  */
 
-extern int PASCAL NEAR retagword(f, n)
+extern int retagword(f, n)
 
 int f, n;
 
@@ -473,7 +473,7 @@ int f, n;
  * we just swap mark with '.' .
  */
 
-extern int PASCAL NEAR backtagword(f, n)
+extern int backtagword(f, n)
 
 int f, n;
 

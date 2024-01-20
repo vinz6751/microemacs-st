@@ -20,7 +20,7 @@
 /* insert an editing operation at the top of the current buffer's
    undo stack. */
 
-VOID undo_insert(OPTYPE op_type, long count, UEOBJECT op_erand)
+void undo_insert(OPTYPE op_type, long count, UEOBJECT op_erand)
 {
 	int undo_size;	/* size of the undo object */
 	UNDO_OBJ *up;	/* ptr to a newly allocated undo object */
@@ -164,7 +164,7 @@ int undo_op(void)
 
 /* clear and deallocate the contents of a buffer's undo stack */
 
-VOID undo_zot(bp)
+void undo_zot(bp)
 
 BUFFER *bp;
 
@@ -190,7 +190,7 @@ BUFFER *bp;
 
 /* Undo last done command */
 
-int PASCAL NEAR undo(f, n)
+int undo(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -227,7 +227,7 @@ int f,n;	/* prefix flag and argument */
 
 /* delete current buffer's undo stack */
 
-int PASCAL NEAR undo_delete(f, n)
+int undo_delete(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -239,7 +239,7 @@ int f,n;	/* prefix flag and argument */
 
 /* pop up a list of the current buffer's undo stack */
 
-int PASCAL NEAR undo_list(f, n)
+int undo_list(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -251,7 +251,7 @@ int f,n;	/* prefix flag and argument */
 	return(wpopup(ulistp));
 }
 
-PASCAL NEAR undolist()
+undolist()
 
 {
 	register char *cp1;	/* scanning pointer into line to build */
@@ -368,7 +368,7 @@ PASCAL NEAR undolist()
 
 /* clear ALL the undo stacks */
 
-VOID undo_dump(void)
+void undo_dump(void)
 {
 	BUFFER *bp;
 
@@ -385,7 +385,7 @@ VOID undo_dump(void)
 		and retry
 */
 
-VOID *room(int nbytes)
+void *room(int nbytes)
 {
 	void *ptr;	/* temporary pointer */
 	BUFFER *bp;	/* buffer to dealloc memory from */
@@ -433,7 +433,7 @@ nextbuf:	bp = getoldb();
 		and retry
 */
 
-VOID *reroom(void *orig_ptr, int nbytes)
+void *reroom(void *orig_ptr, int nbytes)
 {
 	void *ptr;	/* temporary pointer */
 	BUFFER *bp;	/* buffer to dealloc memory from */

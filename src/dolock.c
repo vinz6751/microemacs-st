@@ -144,7 +144,7 @@ char *filespec;
 	return("");
 }
 
-VOID term_trim(buf)	/* trim line terminators and whitespace from end of string */
+void term_trim(buf)	/* trim line terminators and whitespace from end of string */
 
 char *buf;
 

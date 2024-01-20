@@ -59,7 +59,7 @@ extern struct passwd *getpwnam();
  */
 
 #if	!WINDOW_MSWIN	/* for MS Windows, mlyesno is defined in mswsys.c */
-PASCAL NEAR mlyesno(prompt)
+mlyesno(prompt)
 
 char *prompt;
 
@@ -106,7 +106,7 @@ char *prompt;
  * return. Handle erase, kill, and abort keys.
  */
 
-PASCAL NEAR mlreply(prompt, buf, nbuf)
+mlreply(prompt, buf, nbuf)
 
 char *prompt;
 char *buf;
@@ -119,7 +119,7 @@ int nbuf;
 /*	ectoc:	expanded character to character
 		collapse the CTRL and SPEC flags back into an ascii code   */
 
-PASCAL NEAR ectoc(c)
+ectoc(c)
 
 int c;
 
@@ -136,7 +136,7 @@ int c;
 /*	ctoec:	character to extended character
 		pull out the CTRL and SPEC prefixes (if possible)	*/
 
-PASCAL NEAR ctoec(c)
+ctoec(c)
 
 int c;
 
@@ -154,9 +154,9 @@ int c;
 */
 
 #if	MSC
-int (PASCAL NEAR *PASCAL NEAR getname(char *prompt))(void)
+int (*getname(char *prompt))(void)
 #else
-int (PASCAL NEAR *PASCAL NEAR getname(prompt))()
+int (*getname(prompt))()
 
 char *prompt;	/* string to prompt with */
 #endif
@@ -177,7 +177,7 @@ char *prompt;	/* string to prompt with */
 			completion code.
 */
 
-BUFFER *PASCAL NEAR getcbuf(prompt, defval, createflag)
+BUFFER *getcbuf(prompt, defval, createflag)
 
 char *prompt;		/* prompt to user on command line */
 char *defval;		/* default value to display to user */
@@ -193,20 +193,9 @@ int createflag;		/* should this create a new buffer? */
 	return(bfind(sp, createflag, 0));
 }
 
-char *PASCAL NEAR gtfilename(prompt)
-
+char *gtfilename(prompt)
 char *prompt;		/* prompt to user on command line */
-
 {
-#if	MSDOS | OS2
-	char *scan;
-#endif
-#if	WINDOW_MSWIN
-	static char sp[NFILEN];
-
-	if (!FILENAMEREPLY(prompt, sp, NFILEN))
-		return NULL;
-#else
 	char *sp;	/* ptr to the returned string */
 
 	/* get a file name, default to current buffer's */
@@ -214,7 +203,6 @@ char *prompt;		/* prompt to user on command line */
 		sp = complete(prompt, curbp->b_fname, CMP_FILENAME, NFILEN);
 	else
 		sp = complete(prompt, NULL, CMP_FILENAME, NFILEN);
-#endif
 #if	MSDOS | OS2
 	/* change forward slashes to back */
 	if (sp) {
@@ -229,7 +217,7 @@ char *prompt;		/* prompt to user on command line */
 	return(sp);
 }
 
-char *PASCAL NEAR complete(prompt, defval, type, maxlen)
+char *complete(prompt, defval, type, maxlen)
 
 char *prompt;		/* prompt to user on command line */
 char *defval;		/* default value to display to user */
@@ -492,7 +480,7 @@ clist:			/* make a completion list! */
 
 /*	comp_command:	Attempt a completion on a command name	*/
 
-VOID PASCAL NEAR comp_command(name, cpos)
+void comp_command(name, cpos)
 
 char *name;	/* command containing the current name to complete */
 int *cpos;	/* ptr to position of next character to insert */
@@ -572,7 +560,7 @@ int *cpos;	/* ptr to position of next character to insert */
 
 /*	clist_command:	Make a completion list based on a partial name */
 
-VOID PASCAL NEAR clist_command(name, cpos)
+void clist_command(name, cpos)
 
 char *name;	/* command containing the current name to complete */
 int *cpos;	/* ptr to position of next character to insert */
@@ -608,7 +596,7 @@ int *cpos;	/* ptr to position of next character to insert */
 
 /*	comp_buffer:	Attempt a completion on a buffer name	*/
 
-VOID PASCAL NEAR comp_buffer(name, cpos)
+void comp_buffer(name, cpos)
 
 char *name;	/* buffer containing the current name to complete */
 int *cpos;	/* ptr to position of next character to insert */
@@ -685,7 +673,7 @@ int *cpos;	/* ptr to position of next character to insert */
 
 /*	clist_buffer:	Make a completion list based on a partial buffer name */
 
-VOID PASCAL NEAR clist_buffer(name, cpos)
+void clist_buffer(name, cpos)
 
 char *name;	/* command containing the current name to complete */
 int *cpos;	/* ptr to position of next character to insert */
@@ -724,7 +712,7 @@ int *cpos;	/* ptr to position of next character to insert */
 #if	!WINDOW_MSWIN
 /*	comp_file:	Attempt a completion on a file name	*/
 
-VOID PASCAL NEAR comp_file(name, cpos)
+void comp_file(name, cpos)
 
 char *name;	/* file containing the current name to complete */
 int *cpos;	/* ptr to position of next character to insert */
@@ -803,7 +791,7 @@ int *cpos;	/* ptr to position of next character to insert */
 
 /*	clist_file:	Make a completion list based on a partial file name */
 
-VOID PASCAL NEAR clist_file(name, cpos)
+void clist_file(name, cpos)
 
 char *name;	/* command containing the current name to complete */
 int *cpos;	/* ptr to position of next character to insert */
@@ -845,7 +833,7 @@ int *cpos;	/* ptr to position of next character to insert */
 /*	tgetc:	Get a key from the terminal driver, resolve any keyboard
 		macro action					*/
 
-int PASCAL NEAR tgetc()
+int tgetc()
 
 {
 	int c;	/* fetched character */
@@ -907,7 +895,7 @@ int PASCAL NEAR tgetc()
 			are the SPEC, MOUS and CTRL prefixes.
 */
 
-int PASCAL NEAR get_key()
+int get_key()
 
 {
 	int c;		/* next input character */
@@ -947,7 +935,7 @@ int PASCAL NEAR get_key()
 /*	GETCMD:	Get a command from the keyboard. Process all applicable
 		prefix keys
 							*/
-int PASCAL NEAR getcmd()
+int getcmd()
 
 {
 	int c;		/* fetched keystroke */
@@ -986,7 +974,7 @@ int PASCAL NEAR getcmd()
 	to specify the proper terminator. If the terminator is not
 	a return('\r'), return will echo as "<NL>"
 							*/
-int PASCAL NEAR getstring(buf, nbuf, eolchar)
+int getstring(buf, nbuf, eolchar)
 
 unsigned char *buf;
 int nbuf;
@@ -1136,7 +1124,7 @@ int eolchar;
 	}
 }
 
-PASCAL NEAR outstring(s) /* output a string of input characters */
+outstring(s) /* output a string of input characters */
 
 char *s;	/* string to output */
 
@@ -1146,7 +1134,7 @@ char *s;	/* string to output */
 			mlout(*s++);
 }
 
-PASCAL NEAR ostring(s)	/* output a string of output characters */
+ostring(s)	/* output a string of output characters */
 
 char *s;	/* string to output */
 
@@ -1160,7 +1148,7 @@ char *s;	/* string to output */
  * mlprompt -- Display a prompt [with optional default] and the
  *	input terminator.
  */
-int PASCAL NEAR mlprompt(prompt, dflt, iterm)
+int mlprompt(prompt, dflt, iterm)
 char *prompt;
 char *dflt;
 int iterm;
@@ -1203,7 +1191,7 @@ int iterm;
 /*
  * echostring -- Use echochar() to put out a string.  Checks for NULL.
  */
-int PASCAL NEAR echostring(str, tcol, uptocol)
+int echostring(str, tcol, uptocol)
 char *str;	/* characters to be echoed */
 int tcol;	/* column to be echoed in */
 int uptocol;	/* last column to be echoed in */
@@ -1226,7 +1214,7 @@ int uptocol;	/* last column to be echoed in */
 /*
  * Routine to echo i-search and message-prompting characters.
  */
-int PASCAL NEAR echochar(c)
+int echochar(c)
 
 unsigned char c;	/* character to be echoed */
 

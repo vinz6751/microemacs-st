@@ -236,7 +236,7 @@ typedef struct keyent {			/* Key mapping entry		*/
 } KEYENT;
 
 /* Needed Prototype */
-extern int PASCAL NEAR rec_seq(char *buf, char *bufstart, KEYENT *node);
+extern int rec_seq(char *buf, char *bufstart, KEYENT *node);
 
 /* some globals needed here */
 static unsigned char keyseq[256];	/* Prefix escape sequence table	*/
@@ -247,7 +247,7 @@ static BUFFER *seqbuf;			/* For the pop-up buffer	*/
 /*
  * add-keymap "escape sequence" keyname
  */
-int PASCAL NEAR addkeymap(int f, int n)
+int addkeymap(int f, int n)
 {
 	int c, ec;
 	int idx, col;
@@ -299,7 +299,7 @@ int PASCAL NEAR addkeymap(int f, int n)
 /*
  * list-keymappings
  */
-int PASCAL NEAR listkeymaps(int f, int n)
+int listkeymaps(int f, int n)
 {
 	char outseq[NSTRING];	/* output buffer for key sequence */
 
@@ -331,7 +331,7 @@ int PASCAL NEAR listkeymaps(int f, int n)
  * recursively track through the tree, finding the escape sequences
  * and their function name equivalents.
  */
-int PASCAL NEAR rec_seq(char *buf, char *bufstart, KEYENT *node)
+int rec_seq(char *buf, char *bufstart, KEYENT *node)
 {
 	if (node == NULL)
 		return TRUE;
@@ -369,7 +369,7 @@ int PASCAL NEAR rec_seq(char *buf, char *bufstart, KEYENT *node)
  *  seq - character sequence
  *  fn  - Resulting keycode
  */
-int PASCAL NEAR addkey(unsigned char * seq, int fn)
+int addkey(unsigned char * seq, int fn)
 {
 	int first;
 	KEYENT *cur, *nxtcur;
@@ -449,7 +449,7 @@ int PASCAL NEAR addkey(unsigned char * seq, int fn)
  * To use, we need a grabwait(), grabnowait(), qin() and qrep() function.
  */
 #define TIMEOUT	255
-VOID cook()
+void cook()
 {
 	register unsigned char ch;
 	KEYENT *cur;

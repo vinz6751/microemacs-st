@@ -18,19 +18,15 @@
 static int	group_count;
 static int	group_len[MAXGROUPS];
 static REGION	group_reg[MAXGROUPS];
-
 #endif
 
-#if     WINDOW_MSWIN
-static int  o = 0;	/* For longop() calls.*/
-#endif
 
 /*
  * forwsearch -- Search forward.  Get a search string from the user, and
  *	search for the string.  If found, reset the "." to be just after
  *	the match string, and (perhaps) repaint the display.
  */
-int PASCAL NEAR forwsearch(int f, int n)
+int forwsearch(int f, int n)
 {
 	register int	status;
 
@@ -57,7 +53,7 @@ int PASCAL NEAR forwsearch(int f, int n)
  *	If found, reset the "." to be just after the match string,
  *	and (perhaps) repaint the display.
  */
-int PASCAL NEAR forwhunt(int f, int n)
+int forwhunt(int f, int n)
 {
 	register int	spoint = PTEND;
 	register int	status;
@@ -122,7 +118,7 @@ int PASCAL NEAR forwhunt(int f, int n)
  *	If found "." is left pointing at the first character of the pattern
  *	(the last character that was matched).
  */
-int PASCAL NEAR backsearch(int f, int n)
+int backsearch(int f, int n)
 {
 	register int	status;
 
@@ -150,7 +146,7 @@ int PASCAL NEAR backsearch(int f, int n)
  *	If found "." is left pointing at the first character of the pattern
  *	(the last character that was matched).
  */
-int PASCAL NEAR backhunt(int f, int n)
+int backhunt(int f, int n)
 {
 	register int	spoint = PTBEG;
 	register int	status;
@@ -215,7 +211,7 @@ int PASCAL NEAR backhunt(int f, int n)
  *	reset the "." to be at the start or just after the match string,
  *	and (perhaps) repaint the display.
  */
-int PASCAL NEAR mcscanner(MC *mcpatrn, int direct, int beg_or_end, int repeats)
+int mcscanner(MC *mcpatrn, int direct, int beg_or_end, int repeats)
 {
 	LINE	*curline;	/* current line during scan */
 	int	curoff;		/* position within current line */
@@ -345,7 +341,7 @@ int PASCAL NEAR mcscanner(MC *mcpatrn, int direct, int beg_or_end, int repeats)
  *	Based on the recursive routine amatch() (for "anchored match")
  *	in Kernighan & Plauger's "Software Tools".
  */
-int PASCAL NEAR	amatch(MC *mcptr, int direct, LINE **pcwline, int *pcwoff)
+int amatch(MC *mcptr, int direct, LINE **pcwline, int *pcwoff)
 {
 	LINE	*curline;	/* current line during scan */
 	int	curoff;		/* position within current line */
@@ -485,7 +481,7 @@ success:
  *	Fast version using simplified version of Boyer and Moore
  *	Software-Practice and Experience, vol 10, 501-506 (1980)
  */
-int PASCAL NEAR scanner(int direct, int beg_or_end, int repeats)
+int scanner(int direct, int beg_or_end, int repeats)
 {
 	DELTA	*tbl;			/* structure holding the jump info */
 	char	*patrn;			/* string to scan for */
@@ -599,7 +595,7 @@ fail:;			/* continue to search */
  *	of the search string has been found.  See boundry() for search
  *	restrictions.
  */
-int PASCAL NEAR	fbound(DELTA *tbl, int jump, LINE **pcurline, int *pcuroff, int dir)
+int fbound(DELTA *tbl, int jump, LINE **pcurline, int *pcuroff, int dir)
 {
 	int	curoff;
 	LINE	*curline;
@@ -642,7 +638,7 @@ int PASCAL NEAR	fbound(DELTA *tbl, int jump, LINE **pcurline, int *pcuroff, int 
  *	adjust them by n characters.  If boundry is hit, leave the pointers
  *	alone and return TRUE.  Otherwise all went well, and return FALSE.
  */
-int PASCAL NEAR movelocalpoint(int n, int *pcuroff, LINE **pcurline)
+int movelocalpoint(int n, int *pcuroff, LINE **pcurline)
 {
 	register int spare;
 	register int curoff;
@@ -678,7 +674,7 @@ int PASCAL NEAR movelocalpoint(int n, int *pcuroff, LINE **pcurline)
 /*
  * make_delta -- Create the delta tables.
  */
-VOID make_delta(char *pstring, DELTA *tbl)
+void make_delta(char *pstring, DELTA *tbl)
 {
 	int	j, jump_by, ch;
 
@@ -722,7 +718,7 @@ VOID make_delta(char *pstring, DELTA *tbl)
  *	purposes.  The default for any character to jump is the
  *	pattern length.
  */
-VOID PASCAL NEAR setjtable()
+void setjtable()
 {
 	make_delta(pat, &deltapat);
 	make_delta(strrev(strcpy((char *)tap, (char *)pat)), &tapatled);
@@ -732,7 +728,7 @@ VOID PASCAL NEAR setjtable()
  * eq -- Compare two characters.  The "bc" comes from the buffer, "pc"
  *	from the pattern.  If we are not in EXACT mode, fold out the case.
  */
-int PASCAL NEAR eq(bc, pc)
+int eq(bc, pc)
 register unsigned char bc;
 register unsigned char pc;
 {
@@ -760,7 +756,7 @@ register unsigned char pc;
  *	<META> to delimit the end-of-pattern to allow <NL>s in the search
  *	string.
  */
-int PASCAL NEAR readpattern(char *prompt, char apat[], int srch)
+int readpattern(char *prompt, char apat[], int srch)
 {
 	register int	status;
 	char		tpat[NPAT+20];
@@ -800,7 +796,7 @@ int PASCAL NEAR readpattern(char *prompt, char apat[], int srch)
 /*
  * savematch -- We found the pattern?  Let's save it away.
  */
-int PASCAL NEAR savematch()
+int savematch()
 {
 	register int	j;
 	REGION		tmpreg;
@@ -845,7 +841,7 @@ int PASCAL NEAR savematch()
  *	in future, a' la VMS EDT.  At the moment, just return (TRUE) or
  *	FALSE depending on if a boundry is hit (ouch).
  */
-int PASCAL NEAR boundry(LINE *curline, int curoff, int dir)
+int boundry(LINE *curline, int curoff, int dir)
 {
 	register int	border;
 
@@ -869,7 +865,7 @@ int PASCAL NEAR boundry(LINE *curline, int curoff, int dir)
  *	the current character and move, reverse searches move and
  *	look at the character.
  */
-int PASCAL NEAR nextch(LINE **pcurline, int *pcuroff, int dir)
+int nextch(LINE **pcurline, int *pcuroff, int dir)
 {
 	register LINE	*curline;
 	register int	curoff;
@@ -908,7 +904,7 @@ int PASCAL NEAR nextch(LINE **pcurline, int *pcuroff, int dir)
  * liteq -- compare the string versus the current characters in the line.
  *	Returns 0 (no match) or the number of characters matched.
  */
-int PASCAL NEAR liteq(LINE **curline, int *curpos, int direct, char *lstring)
+int liteq(LINE **curline, int *curpos, int direct, char *lstring)
 {
 	LINE	*scanline = *curline;
 	int	scanpos = *curpos;
@@ -940,7 +936,7 @@ int PASCAL NEAR liteq(LINE **curline, int *curpos, int direct, char *lstring)
  *	within the 64K limit.  C compilers actually do very little
  *	in the way of optimizing - they expect you to do that.
  */
-int PASCAL NEAR mcstr()
+int mcstr()
 {
 	MC	*mcptr, *rtpcm;
 	DELTA	*tbl;
@@ -1162,7 +1158,7 @@ litcase:
 /*
  * mcclear -- Free up any CCL bitmaps, and MCNIL the MC search arrays.
  */
-VOID PASCAL NEAR mcclear()
+void mcclear()
 {
 	register MC	*mcptr;
 	register int	j;
@@ -1216,7 +1212,7 @@ VOID PASCAL NEAR mcclear()
  *	Software Tools, this is the function omatch(), but i felt there were
  *	too many functions with the 'match' name already.
  */
-int PASCAL NEAR	mceq(unsigned char bc, MC *mt)
+int mceq(unsigned char bc, MC *mt)
 {
 	register int result;
 
@@ -1261,7 +1257,7 @@ int PASCAL NEAR	mceq(unsigned char bc, MC *mt)
  *	ppatptr is left pointing to the end-of-character-class character,
  *	so that a loop may automatically increment with safety.
  */
-int PASCAL NEAR	cclmake(char **ppatptr, MC *mcptr)
+int cclmake(char **ppatptr, MC *mcptr)
 {
 	EBITMAP		bmap;
 	register char	*patptr;
@@ -1352,7 +1348,7 @@ int PASCAL NEAR	cclmake(char **ppatptr, MC *mcptr)
  *	Please Note:  If new meta-characters are added (see estruct.h) then
  *	you will also need to update this function!
  */
-int PASCAL NEAR	litmake(char **ppatptr, MC *mcptr)
+int litmake(char **ppatptr, MC *mcptr)
 {
 	char	collect[NPAT + 1];
 	int	collect_len;
@@ -1442,7 +1438,7 @@ int PASCAL NEAR	litmake(char **ppatptr, MC *mcptr)
 /*
  * biteq -- is the character in the bitmap?
  */
-int PASCAL NEAR	biteq(int bc, EBITMAP cclmap)
+int biteq(int bc, EBITMAP cclmap)
 {
 	if ((unsigned)bc >= HICHAR)
 		return FALSE;
@@ -1453,7 +1449,7 @@ int PASCAL NEAR	biteq(int bc, EBITMAP cclmap)
 /*
  * setbit -- Set a bit (ON only) in the bitmap.
  */
-VOID PASCAL NEAR setbit(int bc, EBITMAP cclmap)
+void setbit(int bc, EBITMAP cclmap)
 {
 	if ((unsigned)bc < HICHAR)
 		*(cclmap + (bc >> 3)) |= BIT(bc & 7);
@@ -1462,7 +1458,7 @@ VOID PASCAL NEAR setbit(int bc, EBITMAP cclmap)
 
 #if DEBUG_SEARCH
 
-int PASCAL NEAR mc_list(int f, int n)
+int mc_list(int f, int n)
 {
 	MC	*mcptr;
 	BUFFER *patbuf; 	/* buffer containing pattern list */
@@ -1574,7 +1570,7 @@ int PASCAL NEAR mc_list(int f, int n)
 	return(wpopup(patbuf));
 }
 
-int PASCAL NEAR rmc_list(int f, int n)
+int rmc_list(int f, int n)
 {
 	RMC	*rmcptr;
 	BUFFER *patbuf; 	/* buffer containing pattern list */
@@ -1636,7 +1632,7 @@ int PASCAL NEAR rmc_list(int f, int n)
 	return(wpopup(patbuf));
 }
 
-VOID PASCAL NEAR mctype_cat(char pline[], int mc_type)
+void mctype_cat(char pline[], int mc_type)
 {
 	switch (mc_type) {
 		case JMPTABLE:

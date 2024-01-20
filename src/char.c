@@ -1,9 +1,6 @@
 /*	CHAR.C:	Character handling functions for
 		MicroEMACS 4.00
 		(C)Copyright 1995 by Daniel Lawrence
-
-		ALL THE CODE HERE IS FOR VARIOUS FORMS OF ASCII AND
-		WILL HAVE TO BE MODIFIED FOR EBCDIC
 */
 
 #include	<stdio.h>
@@ -18,7 +15,7 @@
 	translated to itself).
 */
 
-int PASCAL NEAR is_letter(ch)
+int is_letter(ch)
 
 register char ch;
 
@@ -31,7 +28,7 @@ register char ch;
 	in the lower to uppercase translation table.
 */
 
-int PASCAL NEAR is_lower(ch)
+int is_lower(ch)
 
 register char ch;
 
@@ -44,7 +41,7 @@ register char ch;
 	in the upper to lowercase translation table.
 */
 
-int PASCAL NEAR is_upper(ch)
+int is_upper(ch)
 
 register char ch;
 
@@ -59,7 +56,7 @@ register char ch;
 	it gets returned unchanged.
 */
 
-unsigned int PASCAL NEAR chcase(ch)
+unsigned int chcase(ch)
 register unsigned int	ch;
 {
 	/* translate lowercase */
@@ -76,7 +73,7 @@ register unsigned int	ch;
 
 /* change *cp to an upper case character */
 
-VOID PASCAL NEAR uppercase(cp)
+void uppercase(cp)
 
 unsigned char *cp;	/* ptr to character to uppercase */
 
@@ -88,7 +85,7 @@ unsigned char *cp;	/* ptr to character to uppercase */
 
 /* change *cp to an lower case character */
 
-VOID PASCAL NEAR lowercase(cp)
+void lowercase(cp)
 
 unsigned char *cp;	/* ptr to character to lowercase */
 
@@ -98,7 +95,7 @@ unsigned char *cp;	/* ptr to character to lowercase */
 		*cp = upcase[*cp & 255];
 }
 
-int PASCAL NEAR upperc(char ch) /* return the upper case equivalant of a character */
+int upperc(char ch) /* return the upper case equivalant of a character */
 {
 	if (is_lower(ch))
 		return(lowcase[ch & 255]);
@@ -106,7 +103,7 @@ int PASCAL NEAR upperc(char ch) /* return the upper case equivalant of a charact
 		return(ch);
 }
 
-int PASCAL NEAR lowerc(char ch) /* return the lower case equivalant of a character */
+int lowerc(char ch) /* return the lower case equivalant of a character */
 {
 	if (is_upper(ch))
 		return(upcase[ch & 255]);
@@ -114,7 +111,7 @@ int PASCAL NEAR lowerc(char ch) /* return the lower case equivalant of a charact
 		return(ch);
 }
 
-VOID PASCAL NEAR initchars()	/* initialize the character upper/lower case tables */
+void initchars()	/* initialize the character upper/lower case tables */
 
 {
 	register int index;	/* index into tables */
@@ -244,7 +241,7 @@ VOID PASCAL NEAR initchars()	/* initialize the character upper/lower case tables
 
 /*	Set a character in the lowercase map */
 
-int PASCAL NEAR setlower(ch, val)
+int setlower(ch, val)
 
 char *ch;	/* ptr to character to set */
 char *val;	/* value to set it to */
@@ -255,7 +252,7 @@ char *val;	/* value to set it to */
 
 /*	Set a character in the uppercase map */
 
-int PASCAL NEAR setupper(ch, val)
+int setupper(ch, val)
 
 char *ch;	/* ptr to character to set */
 char *val;	/* value to set it to */

@@ -158,7 +158,7 @@ abortrun:
 	own used memory, otherwise we just exit.
 */
 
-PASCAL NEAR clean()
+clean()
 
 {
 	register BUFFER *bp;	/* buffer list pointer */
@@ -210,7 +210,7 @@ PASCAL NEAR clean()
 
 /*	Process a command line.   May be called any time.	*/
 
-VOID PASCAL NEAR dcline(argc, argv, firstflag)
+void dcline(argc, argv, firstflag)
 
 int argc;
 char *argv[];
@@ -238,7 +238,7 @@ int firstflag;			/* is this the first time in? */
 	int cryptflag;		/* encrypting on the way in? */
 	char ekey[NPAT];	/* startup encryption key */
 #endif
-	NOSHARE CONST extern char *pathname[];	/* startup file path/name array */
+	 const extern char *pathname[];	/* startup file path/name array */
 
 	viewflag = FALSE;	/* view mode defaults off in command line */
 	gotoflag = FALSE;	/* set to off to begin with */
@@ -356,9 +356,7 @@ int firstflag;			/* is this the first time in? */
 			/* set this to inactive */
 			bp = bfind(bname, TRUE, 0);
 			strcpy(bp->b_fname, argv[carg]);
-#if	WINDOW_MSWIN
-			fullpathname (bp->b_fname, NFILEN);
-#endif
+
 			bp->b_active = FALSE;
 			if (firstfile) {
 				firstbp = bp;
@@ -426,25 +424,7 @@ int firstflag;			/* is this the first time in? */
 	}
 }
 
-#if	WINDOW_MSWIN
-#define GETBASEKEY getbasekey
-static int PASCAL NEAR getbasekey()
-
-{
-    register int c;
-
-    notquiescent = -1;  /* will be <= 0 only if get_key() is called
-			   directly from editloop(). This is used to
-			   restrict some windows-specific actions
-			   (menus, sizing, etc...) when not called from
-			   the lowest level of the editor */
-    c = get_key();
-    notquiescent = 1;
-    return c;
-}
-#else
 #define GETBASEKEY get_key
-#endif
 
 /*
 	This is called to let the user edit something.	Note that if you
@@ -452,7 +432,7 @@ static int PASCAL NEAR getbasekey()
 	invented the "recursive-edit" function.
 */
 
-PASCAL NEAR editloop()
+editloop()
 
 {
 	register int c;		/* command character */
@@ -469,13 +449,9 @@ PASCAL NEAR editloop()
 loop:
 	/* if a macro error is pending, wait for a character */
 	if (exec_error) {
-#if	WINDOW_MSWIN
-		mlhistory();
-#else
 		mlforce(TEXT227);
 /*			"\n--- Press any key to Continue ---" */
 		tgetc();
-#endif
 		sgarbf = TRUE;
 		update(FALSE);
 		mlferase();
@@ -638,7 +614,7 @@ loop:
  * to read in a file by default, and we want the buffer name to be right.
  */
 
-VOID PASCAL NEAR edinit(bname)
+void edinit(bname)
 
 char bname[];			/* name of buffer to initialize */
 
@@ -698,7 +674,7 @@ char bname[];			/* name of buffer to initialize */
  * look at it. Return the status of command.
  */
 
-PASCAL NEAR execute(c, f, n)
+execute(c, f, n)
 
 int c;					/* key to execute */
 int f;					/* prefix argument flag */
@@ -835,7 +811,7 @@ has changed do a write on that buffer and exit emacs, otherwise simply
 exit.
 */
 
-PASCAL NEAR quickexit(f, n)
+quickexit(f, n)
 
 int f, n;				/* prefix flag and argument */
 
@@ -874,7 +850,7 @@ int f, n;				/* prefix flag and argument */
  * has been changed and not written out. Normally bound to "C-X C-C".
  */
 
-PASCAL NEAR quit(f, n)
+quit(f, n)
 
 int f, n;				/* prefix flag and argument */
 {
@@ -902,7 +878,7 @@ int f, n;				/* prefix flag and argument */
 	return(status);
 	}
 
-PASCAL NEAR meexit(status)
+meexit(status)
 int status;				/* return status of emacs */
 	{
 	eexitflag = TRUE;	/* flag a program exit */
@@ -919,7 +895,7 @@ int status;				/* return status of emacs */
  * return.
  */
 
-PASCAL NEAR ctlxlp(f, n)
+ctlxlp(f, n)
 
 int f, n;				/* prefix flag and argument */
 
@@ -942,7 +918,7 @@ int f, n;				/* prefix flag and argument */
  * routine. Set up the variables and return to the caller.
  */
 
-PASCAL NEAR ctlxrp(f, n)
+ctlxrp(f, n)
 
 int f, n;				/* prefix flag and argument */
 
@@ -966,7 +942,7 @@ int f, n;				/* prefix flag and argument */
  * command gets an error. Return TRUE if all ok, else FALSE.
  */
 
-PASCAL NEAR ctlxe(f, n)
+ctlxe(f, n)
 
 int f, n;				/* prefix flag and argument */
 
@@ -990,7 +966,7 @@ int f, n;				/* prefix flag and argument */
  * Sometimes called as a routine, to do general aborting of stuff.
  */
 
-PASCAL NEAR ctrlg(f, n)
+ctrlg(f, n)
 
 int f, n;				/* prefix flag and argument */
 
@@ -1005,7 +981,7 @@ int f, n;				/* prefix flag and argument */
 /* tell the user that this command is illegal while we are in
    VIEW (read-only) mode				*/
 
-PASCAL NEAR rdonly()
+rdonly()
 
 {
 	TTbeep();
@@ -1014,7 +990,7 @@ PASCAL NEAR rdonly()
 	return(FALSE);
 }
 
-PASCAL NEAR resterr()
+resterr()
 
 {
 	TTbeep();
@@ -1023,7 +999,7 @@ PASCAL NEAR resterr()
 	return(FALSE);
 }
 
-int PASCAL NEAR nullproc(f, n)	/* user function that does NOTHING */
+int nullproc(f, n)	/* user function that does NOTHING */
 
 int n, f;	/* yes, these are default and never used.. but MUST be here */
 
@@ -1031,7 +1007,7 @@ int n, f;	/* yes, these are default and never used.. but MUST be here */
 	return(TRUE);
 }
 
-PASCAL NEAR meta(f, n)	/* set META prefixing pending */
+meta(f, n)	/* set META prefixing pending */
 
 int f, n;				/* prefix flag and argument */
 
@@ -1042,7 +1018,7 @@ int f, n;				/* prefix flag and argument */
 	return(TRUE);
 }
 
-PASCAL NEAR cex(f, n)	/* set ^X prefixing pending */
+cex(f, n)	/* set ^X prefixing pending */
 
 int f, n;				/* prefix flag and argument */
 
@@ -1053,7 +1029,7 @@ int f, n;				/* prefix flag and argument */
 	return(TRUE);
 }
 
-int PASCAL NEAR unarg()	/* dummy function for binding to universal-argument */
+int unarg()	/* dummy function for binding to universal-argument */
 {
 	return(TRUE);
 }
@@ -1062,7 +1038,7 @@ int PASCAL NEAR unarg()	/* dummy function for binding to universal-argument */
 			ALWAYS null terminate
 */
 
-char *PASCAL NEAR bytecopy(dst, src, maxlen)
+char *bytecopy(dst, src, maxlen)
 
 char *dst;				/* destination of copied string */
 char *src;				/* source */
@@ -1082,7 +1058,7 @@ int maxlen;				/* maximum length */
 
 */
 
-char *PASCAL NEAR copystr(sp)
+char *copystr(sp)
 
 char *sp;				/* string to copy */
 
