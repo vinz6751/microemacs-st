@@ -370,11 +370,11 @@ int f, n;				/* default flag and numeric repeat count */
 /*				insspace(TRUE, 8 - (curwp->w_doto & 7));*/
 				insspace(TRUE, tabsize - (curwp->w_doto % tabsize));
 				}
-			forwchar(FALSE, 1);
+			forward_char(FALSE, 1);
 			}
 
 		/* advance/or back to the next line */
-		forwline(TRUE, inc);
+		forward_line(TRUE, inc);
 		n -= inc;
 		}
 	curwp->w_doto = 0;	/* to the begining of the line */
@@ -418,7 +418,7 @@ int f, n;				/* default flag and numeric repeat count */
 				if (ccol - fspace < 2)
 					fspace = -1;
 				else {
-					backchar(TRUE, ccol - fspace);
+					back_char(TRUE, ccol - fspace);
 					ldelete((long) (ccol - fspace), FALSE);
 					linsert(1, '\t');
 					fspace = -1;
@@ -443,11 +443,11 @@ int f, n;				/* default flag and numeric repeat count */
 				break;
 				}
 			ccol++;
-			forwchar(FALSE, 1);
+			forward_char(FALSE, 1);
 			}
 
 		/* advance/or back to the next line */
-		forwline(TRUE, inc);
+		forward_line(TRUE, inc);
 		n -= inc;
 		curwp->w_doto = 0;	/* start at the beginning */
 		}
@@ -495,7 +495,7 @@ int f, n;				/* default flag and numeric repeat count */
 		lp->l_used = length;
 
 		/* advance/or back to the next line */
-		forwline(TRUE, inc);
+		forward_line(TRUE, inc);
 		n -= inc;
 		}
 	lchange(WFEDIT);
@@ -528,7 +528,7 @@ int f, n;				/* prefix flag and argument */
 		}
 	while (s == TRUE && --i);
 	if (s == TRUE)		/* Then back up overtop */
-		s = backchar(f, n);	/* of them all. 	*/
+		s = back_char(f, n);	/* of them all. 	*/
 	return(s);
 	}
 
@@ -677,7 +677,7 @@ int c;					/* brace to insert (always } for now) */
 	oldoff = curwp->w_doto;
 
 	count = 1;
-	backchar(FALSE, 1);
+	back_char(FALSE, 1);
 
 	while (count > 0)
 		{
@@ -691,7 +691,7 @@ int c;					/* brace to insert (always } for now) */
 		if (ch == oc)
 			--count;
 
-		backchar(FALSE, 1);
+		back_char(FALSE, 1);
 		if (boundry(curwp->w_dotp, curwp->w_doto, REVERSE))
 			break;
 		}
@@ -706,7 +706,7 @@ int c;					/* brace to insert (always } for now) */
 	curwp->w_doto = 0;	/* debut de ligne */
 	/* aller au debut de la ligne apres la tabulation */
 	while ((ch = lgetc(curwp->w_dotp, curwp->w_doto)) == ' ' || ch == '\t')
-		forwchar(FALSE, 1);
+		forward_char(FALSE, 1);
 
 	/* delete back first */
 	target = getccol(FALSE);	/* c'est l'indent que l'on doit avoir */
@@ -901,7 +901,7 @@ int f, n;	/* prefix flag and argument */
 	undo_insert(OP_CPOS, 0L, obj);
 
 	/* and now delete the characters */
-	if ((status = backchar(f, n)) == TRUE)
+	if ((status = back_char(f, n)) == TRUE)
 		status = ldelete((long) n, f);
 	return(status);
 }
@@ -1197,9 +1197,9 @@ int f, n;				/* not used */
 	while (count > 0)
 		{
 		if (sdir == FORWARD)
-			forwchar(FALSE, 1);
+			forward_char(FALSE, 1);
 		else
-			backchar(FALSE, 1);
+			back_char(FALSE, 1);
 
 		if (curwp->w_doto == lused(curwp->w_dotp))
 			c = '\r';
@@ -1258,12 +1258,12 @@ fmatch(char ch)
 	/* find the top line and set up for scan */
 	toplp = lback(curwp->w_linep);
 	count = 1;
-	backchar(FALSE, 1);
+	back_char(FALSE, 1);
 
 	/* scan back until we find it, or reach past the top of the window */
 	while (count > 0 && curwp->w_dotp != toplp)
 		{
-		backchar(FALSE, 1);
+		back_char(FALSE, 1);
 		if (curwp->w_doto == lused(curwp->w_dotp))
 			c = '\r';
 		else

@@ -1468,7 +1468,7 @@ int mc_list(int f, int n)
 	int j;
 
 	/* prepare and clear the buffer holding the meta-character list */
-	patbuf = bfind("[Debug Search Metacharacters]", TRUE, BFINVS);
+	patbuf = find_buffer("[Debug Search Metacharacters]", TRUE, BFINVS);
 	if (patbuf == NULL) {
 		mlwrite(TEXT137);
 /*		"Cannot create buffer" */
@@ -1579,7 +1579,7 @@ int rmc_list(int f, int n)
 	int status;		/* return status from subcommands */
 
 	/* prepare and clear the buffer holding the meta-character list */
-	patbuf = bfind("[Debug Replace Metacharacters]", TRUE, BFINVS);
+	patbuf = find_buffer("[Debug Replace Metacharacters]", TRUE, BFINVS);
 	if (patbuf == NULL) {
 		mlwrite(TEXT137);
 /*		"Cannot create buffer" */

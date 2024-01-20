@@ -58,7 +58,6 @@ extern struct passwd *getpwnam();
  * with a ^G. Used any time a confirmation is required.
  */
 
-#if	!WINDOW_MSWIN	/* for MS Windows, mlyesno is defined in mswsys.c */
 mlyesno(prompt)
 
 char *prompt;
@@ -96,7 +95,6 @@ char *prompt;
 		return(FALSE);
 	}
 }
-#endif
 
 /*
  * Write a prompt into the message line, then read back a response. Keep
@@ -153,14 +151,9 @@ int c;
    name if it is unique.
 */
 
-#if	MSC
-int (*getname(char *prompt))(void)
-#else
+
 int (*getname(prompt))()
-
 char *prompt;	/* string to prompt with */
-#endif
-
 {
 	char *sp;	/* ptr to the returned string */
 
@@ -171,13 +164,13 @@ char *prompt;	/* string to prompt with */
 	return(fncmatch(sp));
 }
 
-/*	getcbuf:	get a completion from the user for a buffer name.
+/*	buffer_name_autocomplete:	get a completion from the user for a buffer name.
 
 			I was goaded into this by lots of other people's
 			completion code.
 */
 
-BUFFER *getcbuf(prompt, defval, createflag)
+BUFFER *buffer_name_autocomplete(prompt, defval, createflag)
 
 char *prompt;		/* prompt to user on command line */
 char *defval;		/* default value to display to user */
@@ -190,10 +183,10 @@ int createflag;		/* should this create a new buffer? */
 	if (sp == NULL)
 		return(NULL);
 
-	return(bfind(sp, createflag, 0));
+	return(find_buffer(sp, createflag, 0));
 }
 
-char *gtfilename(prompt)
+char *prompt_filename(prompt)
 char *prompt;		/* prompt to user on command line */
 {
 	char *sp;	/* ptr to the returned string */
@@ -203,7 +196,8 @@ char *prompt;		/* prompt to user on command line */
 		sp = complete(prompt, curbp->b_fname, CMP_FILENAME, NFILEN);
 	else
 		sp = complete(prompt, NULL, CMP_FILENAME, NFILEN);
-#if	MSDOS | OS2
+#if	TOS
+	char *scan;
 	/* change forward slashes to back */
 	if (sp) {
 		scan = sp;
@@ -307,13 +301,11 @@ int maxlen;		/* maximum length of input field */
 					comp_buffer(buf, &cpos);
 					break;
 				case CMP_COMMAND:
-					comp_command(buf, &cpos);
+					command_autocomplete(buf, &cpos);
 					break;
-#if	!WINDOW_MSWIN
 				case CMP_FILENAME:
 					comp_file(buf, &cpos);
 					break;
-#endif
 			}
 
 			TTflush();
@@ -406,7 +398,7 @@ int maxlen;		/* maximum length of input field */
 			/* save the variable name! */
 			buf[cpos] = 0;
 			strcpy(user_name, &buf[1]);
-#if	MSDOS | OS2 | VMS
+#if	TOS
 			mkupper(user_name);
 #endif
 
@@ -448,11 +440,9 @@ clist:			/* make a completion list! */
 				case CMP_COMMAND:
 					clist_command(buf, &cpos);
 					break;
-#if	!WINDOW_MSWIN
 				case CMP_FILENAME:
 					clist_file(buf, &cpos);
 					break;
-#endif
 			}
 			update(TRUE);
 
@@ -478,9 +468,9 @@ clist:			/* make a completion list! */
 	}
 }
 
-/*	comp_command:	Attempt a completion on a command name	*/
+/*	command_autocomplete:	Attempt a completion on a command name	*/
 
-void comp_command(name, cpos)
+void command_autocomplete(name, cpos)
 
 char *name;	/* command containing the current name to complete */
 int *cpos;	/* ptr to position of next character to insert */
@@ -572,7 +562,7 @@ int *cpos;	/* ptr to position of next character to insert */
 	register BUFFER *listbuf;/* buffer to put completion list into */
 
 	/* get a buffer for the completion list */
-	listbuf = bfind("[Completion list]", TRUE, BFINVS);
+	listbuf = find_buffer("[Completion list]", TRUE, BFINVS);
 	if (listbuf == NULL || bclear(listbuf) == FALSE) {
 		ctrlg(FALSE, 0);
 		TTflush();
@@ -684,7 +674,7 @@ int *cpos;	/* ptr to position of next character to insert */
 	register BUFFER *bp;	/* trial buffer to complete */
 
 	/* get a buffer for the completion list */
-	listbuf = bfind("[Completion list]", TRUE, BFINVS);
+	listbuf = find_buffer("[Completion list]", TRUE, BFINVS);
 	if (listbuf == NULL || bclear(listbuf) == FALSE) {
 		ctrlg(FALSE, 0);
 		TTflush();
@@ -709,7 +699,6 @@ int *cpos;	/* ptr to position of next character to insert */
 	return;
 }
 
-#if	!WINDOW_MSWIN
 /*	comp_file:	Attempt a completion on a file name	*/
 
 void comp_file(name, cpos)
@@ -802,7 +791,7 @@ int *cpos;	/* ptr to position of next character to insert */
 	register char *fname;	/* trial file to complete */
 
 	/* get a buffer for the completion list */
-	listbuf = bfind("[Completion list]", TRUE, BFINVS);
+	listbuf = find_buffer("[Completion list]", TRUE, BFINVS);
 	if (listbuf == NULL || bclear(listbuf) == FALSE) {
 		ctrlg(FALSE, 0);
 		TTflush();
@@ -828,7 +817,6 @@ int *cpos;	/* ptr to position of next character to insert */
 	wpopup(listbuf);
 	return;
 }
-#endif
 
 /*	tgetc:	Get a key from the terminal driver, resolve any keyboard
 		macro action					*/

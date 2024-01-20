@@ -603,7 +603,7 @@ Variable}).
 \par \pard\plain \s12\fi-720\li720\sa120 \f4\fs20 Note:\tab end of lines count as one character.
 \par \pard\plain \s6\sa120 \f4\fs20 If the move would take the point beyond the boundaries of the buffer, this command fails and the point is left at said boundary.
 \par \pard\plain \s251\sa120\tx2880 \b\f4\fs20 {\plain \f4\fs16\up6 \page ${\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 $} goto-line command}} {\plain \f4\fs16\up6 #{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 #} goto_line}} {\plain \f4\fs16\up6 +
-{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 +} Commands:gotoline}} {\plain \f4\fs16\up6 K{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 K} position;point;goto-line}} goto-line
+{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 +} Commands:goto_line}} {\plain \f4\fs16\up6 K{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 K} position;point;goto-line}} goto-line
 \par \pard\plain \s6\sa120 \f4\fs20 Default binding: {\ul M-G}{\v Keystroke}
 \par Syntax:
 \par \pard\plain \s4\fi-2160\li2880\sa120\tx2880 \f34\fs18 {\i n}  goto-line
@@ -612,7 +612,7 @@ Variable}).
 \par \pard\plain \s6\sa120 \f4\fs20 This {\uldb command}{\v Commands} moves the {\ul point}{\v Point} to the first character of line number {\i n} in the current {\ul buffer}{\v Buffer}.
 \par The command fails if {\i n} is lower than 1 or if the buffer is empty. If {\i n} is greater than the number of lines in the buffer, the point is simply positioned at the end of the buffer.
 \par \pard\plain \s251\sa120\tx2880 \b\f4\fs20 {\plain \f4\fs16\up6 \page ${\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 $} goto-mark command}} {\plain \f4\fs16\up6 #{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 #} goto_mark}} {\plain \f4\fs16\up6 +
-{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 +} Commands:gotomark}} {\plain \f4\fs16\up6 K{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 K} position;mark;goto-mark}} goto-mark
+{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 +} Commands:goto_mark}} {\plain \f4\fs16\up6 K{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 K} position;mark;goto-mark}} goto-mark
 \par \pard\plain \s6\sa120 \f4\fs20 Default binding: {\ul M-^G}{\v Keystroke}
 \par Syntax:
 \par \pard\plain \s4\fi-2160\li2880\sa120\tx2880 \f34\fs18 {\i n}  goto-mark
@@ -1307,7 +1307,7 @@ MAGIC} mode is set or not in the current {\ul buffer}{\v Buffer}.
  mode). The specified key can be up to 128 characters long. A length of at least 5 characters is recommended.
 \par This command is unaffected by {\ul numeric arguments}{\v Argument}.
 \par \pard\plain \s251\sa120\tx2880 \b\f4\fs20 {\plain \f4\fs16\up6 \page ${\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 $} set-mark command}} {\plain \f4\fs16\up6 #{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 #} set_mark}} {\plain \f4\fs16\up6 +
-{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 +} Commands:setmark}} {\plain \f4\fs16\up6 K{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 K} set-mark;mark}} set-mark
+{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 +} Commands:set_mark}} {\plain \f4\fs16\up6 K{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 K} set-mark;mark}} set-mark
 \par \pard\plain \s6\sa120 \f4\fs20 Default bindings: {\ul M-  }{\v Keystroke} (Esc Spacebar) and {\ul M-.}{\v Keystroke}
 \par Syntax:
 \par \pard\plain \s4\fi-2160\li2880\sa120\tx2880 \f34\fs18 {\i n}  set-mark
@@ -1474,7 +1474,7 @@ append-file}{\v append_file}, {\uldb find-file}{\v find_file}, {\uldb read-file}
 \par This {\uldb command}{\v Commands} immediately updates all elements of the MicroEMACS display during the execution of a {\ul macro}{\v Macro}. It has no visible effect when used interactively.
 \par This command is unaffected by {\ul numeric arguments}{\v Argument}.
 \par \pard\plain \s251\sa120\tx2880 \b\f4\fs20 {\plain \f4\fs16\up6 \page ${\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 $} view-file command}} {\plain \f4\fs16\up6 #{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 #} view_file}} {\plain \f4\fs16\up6 +
-{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 +} Commands:viewfile}} {\plain \f4\fs16\up6 K{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 K} view-file;file;open;read;VIEW}} view-file
+{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 +} Commands:view_file}} {\plain \f4\fs16\up6 K{\footnote \pard\plain \s245 \f4\fs20 {\fs16\up6 K} view-file;file;open;read;VIEW}} view-file
 \par \pard\plain \s6\sa120 \f4\fs20 Default binding: 
 \par Syntax:
 \par \pard\plain \s4\fi-2160\li2880\sa120\tx2880 \f34\fs18 find-file  {\i file name}

@@ -62,7 +62,7 @@ int f, n;				/* prefix flag and argument */
 	/* Make sure the search doesn't match where we already
 	 * are by backing up a character.
 	 */
-	backchar(TRUE, 1);
+	back_char(TRUE, 1);
 
 	if (status = isearch(REVERSE))
 		mlerase();		/* If happy, just erase the cmd line  */

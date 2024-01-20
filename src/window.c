@@ -617,7 +617,7 @@ int f, n;	/* prefix flag and argument */
 
 {
 	nextwind(FALSE, 1);
-	backpage(f, n);
+	backward_page(f, n);
 	prevwind(FALSE, 1);
 }
 
@@ -627,7 +627,7 @@ int f, n;	/* prefix flag and argument */
 
 {
 	nextwind(FALSE, 1);
-	forwpage(f, n);
+	forward_page(f, n);
 	prevwind(FALSE, 1);
 }
 

@@ -584,7 +584,7 @@ int f, n;
                 return(FALSE);
 
 	/* get rid of the command output buffer if it exists */
-        if ((bp=bfind(bname, FALSE, 0)) != FALSE) {
+        if ((bp=find_buffer(bname, FALSE, 0)) != FALSE) {
 		/* try to make sure we are off screen */
 		wp = wheadp;
 		while (wp != NULL) {

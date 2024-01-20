@@ -23,7 +23,7 @@
  * "read a file into the current buffer" code.
  * Bound to "C-X C-R".
  */
-fileread(f, n)
+file_read(f, n)
 
 int f, n;	/* defualt and numeric arguments (unused) */
 
@@ -33,7 +33,7 @@ int f, n;	/* defualt and numeric arguments (unused) */
 	if (restflag)		/* don't allow this command if restricted */
 		return(resterr());
 
-	if ((fname = gtfilename(TEXT131)) == NULL)
+	if ((fname = prompt_filename(TEXT131)) == NULL)
 /*                              "Read file" */
 		return(FALSE);
 	return(readin(fname, TRUE));
@@ -46,7 +46,7 @@ int f, n;	/* defualt and numeric arguments (unused) */
  * "insert a file into the current buffer" code.
  * Bound to "C-X C-I".
  */
-insfile(f, n)
+insert_file(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -60,7 +60,7 @@ int f,n;	/* prefix flag and argument */
 	if (curbp->b_mode&MD_READ_ONLY)      /* don't allow this command if  */
 		return(rdonly());	/* we are in read only mode	*/
 
-	if ((fname = gtfilename(TEXT132)) == NULL) 
+	if ((fname = prompt_filename(TEXT132)) == NULL) 
 /*                              "Insert file" */
 		return(FALSE);
 	/*
@@ -89,7 +89,7 @@ int f,n;	/* prefix flag and argument */
  * text, and switch to the new buffer.
  * Bound to C-X C-F.
  */
-filefind(f, n)
+find_file(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -99,13 +99,13 @@ int f,n;	/* prefix flag and argument */
 	if (restflag)		/* don't allow this command if restricted */
 		return(resterr());
 
-	if ((fname = gtfilename(TEXT133)) == NULL) 
+	if ((fname = prompt_filename(TEXT133)) == NULL) 
 /*                              "Find file" */
 		return(FALSE);
 	return(getfile(fname, TRUE));
 }
 
-viewfile(f, n)	/* visit a file in VIEW mode */
+view_file(f, n)	/* visit a file in VIEW mode */
 
 int f,n;	/* prefix flag and argument */
 
@@ -116,7 +116,7 @@ int f,n;	/* prefix flag and argument */
 	if (restflag)		/* don't allow this command if restricted */
 		return(resterr());
 
-	if ((fname = gtfilename(TEXT134)) == NULL) 
+	if ((fname = prompt_filename(TEXT134)) == NULL) 
 /*                              "View file" */
 		return(FALSE);
 	s = getfile(fname, FALSE);
@@ -195,10 +195,10 @@ int lockfl;		/* check the file for locks? */
 	makename(bname, fname); 		/* New buffer name.	*/
 
 	/* prevent buffer name conflicts */
-	while ((bp=bfind(bname, FALSE, 0)) != NULL) {
+	while ((bp=find_buffer(bname, FALSE, 0)) != NULL) {
 
 		/* first, come up with our own name */
-		unqname(bname);
+		make_buffer_name_unique(bname);
 
 		/* if interactive, let em change it if they dislike our names */
 		if (clexec == FALSE) {
@@ -214,13 +214,13 @@ int lockfl;		/* check the file for locks? */
 				return(s);
 			if (s == FALSE) {	/* CR to let the computer pick */
 				makename(bname, fname);	/* New buffer name. */
-				unqname(bname);		/* which is unique */
+				make_buffer_name_unique(bname);		/* which is unique */
 			}
 		}
 	}
 
 	/* create the new buffer */
-	if (bp==NULL && (bp=bfind(bname, TRUE, 0))==NULL) {
+	if (bp==NULL && (bp=find_buffer(bname, TRUE, 0))==NULL) {
 		mlwrite(TEXT137);
 /*                      "Cannot create buffer" */
 		return(FALSE);
@@ -444,7 +444,7 @@ char *fname;
 	return(pathp);
 }
 
-void unqname(name)	/* make sure a buffer name is unique */
+void make_buffer_name_unique(name)	/* make sure a buffer name is unique */
 
 char *name;	/* name to check on */
 
@@ -452,7 +452,7 @@ char *name;	/* name to check on */
 	register char *sp;
 
 	/* check to see if it is in the buffer list */
-	while (bfind(name, 0, FALSE) != NULL) {
+	while (find_buffer(name, 0, FALSE) != NULL) {
 
 		/* go to the end of the name */
 		sp = name;
@@ -477,7 +477,7 @@ char *name;	/* name to check on */
  * and ^X^A for appending.
  */
 
-filewrite(f, n)
+file_write(f, n)
 
 int f, n;	/* emacs arguments */
 
@@ -488,7 +488,7 @@ int f, n;	/* emacs arguments */
 	if (restflag)		/* don't allow this command if restricted */
 		return(resterr());
 
-	if ((fname = gtfilename(TEXT144)) == NULL)
+	if ((fname = prompt_filename(TEXT144)) == NULL)
 /*                     "Write file: " */
 		return(FALSE);
 	if ((s=writeout(fname, "w")) == TRUE) {
@@ -500,7 +500,7 @@ int f, n;	/* emacs arguments */
 	return(s);
 }
 
-fileapp(f, n)	/* append file */
+file_append(f, n)	/* append file */
 
 int f, n;	/* emacs arguments */
 
@@ -510,7 +510,7 @@ int f, n;	/* emacs arguments */
 
 	if (restflag)		/* don't allow this command if restricted */
 		return(resterr());
-	if ((fname = gtfilename(TEXT218)) == NULL)
+	if ((fname = prompt_filename(TEXT218)) == NULL)
 /*                     "Append file: " */
 		return(FALSE);
 	if ((s=writeout(fname, "a")) == TRUE) {
@@ -873,7 +873,7 @@ int f,n;	/* prefix flag and argument */
 		return(status);
 
 	/* get a buffer for the file list */
-	dirbuf = bfind("File List", TRUE, BFINVS);
+	dirbuf = find_buffer("File List", TRUE, BFINVS);
 	if (dirbuf == NULL || bclear(dirbuf) == FALSE) {
 		mlwrite("Can not display file list");
 /*			"Can not display function list" */

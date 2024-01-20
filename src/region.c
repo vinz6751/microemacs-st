@@ -298,10 +298,10 @@ int f,n;	/* prefix flag and argument */
 	/* move forward to the end of this region
 	   (a long number of bytes perhaps) */
 	while (creg.r_size > (long)32000) {
-		forwchar(TRUE, 32000);
+		forward_char(TRUE, 32000);
 		creg.r_size -= (long)32000;
 	}
-	forwchar(TRUE, (int)creg.r_size);
+	forward_char(TRUE, (int)creg.r_size);
 	curwp->w_doto = 0;		/* only full lines! */
 
 	/* archive the bottom fragment */
@@ -577,7 +577,7 @@ int f,n;	/* default flag and numeric repeat count */
 		}
 
 		/* advance/or back to the next line */
-		forwline(TRUE, inc);
+		forward_line(TRUE, inc);
 		n -= inc;
 	}
 
@@ -617,7 +617,7 @@ int f,n;	/* default flag and numeric repeat count */
 		}
 
 		/* advance/or back to the next line */
-		forwline(TRUE, inc);
+		forward_line(TRUE, inc);
 		n -= inc;
 	}
 

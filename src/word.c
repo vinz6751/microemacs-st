@@ -28,7 +28,7 @@ int n;		/* numeric argument */
 	register int c;		/* charector temporary */
 
 	/* backup from the <NL> 1 char */
-	if (!backchar(FALSE, 1))
+	if (!back_char(FALSE, 1))
 		return(FALSE);
 
 	/* back up until we aren't in a word,
@@ -37,11 +37,11 @@ int n;		/* numeric argument */
 	while (((c = lgetc(curwp->w_dotp, curwp->w_doto)) != ' ')
 				&& (c != '\t')) {
 		cnt++;
-		if (!backchar(FALSE, 1))
+		if (!back_char(FALSE, 1))
 			return(FALSE);
 		/* if we make it to the beginning, start a new line */
 		if (curwp->w_doto == 0) {
-			gotoeol(FALSE, 0);
+			goto_end_of_line(FALSE, 0);
 			return(lnewline());
 		}
 	}
@@ -56,7 +56,7 @@ int n;		/* numeric argument */
 
 	/* and past the first word */
 	while (cnt-- > 0) {
-		if (forwchar(FALSE, 1) == FALSE)
+		if (forward_char(FALSE, 1) == FALSE)
 			return(FALSE);
 	}
 
@@ -71,7 +71,7 @@ int n;		/* numeric argument */
 
 /*
  * Move the cursor backward by "n" words. All of the details of motion are
- * performed by the "backchar" and "forwchar" routines. Error if you try to
+ * performed by the "back_char" and "forward_char" routines. Error if you try to
  * move beyond the buffers.
  */
 backword(f, n)
@@ -81,24 +81,24 @@ int f,n;	/* prefix flag and argument */
 {
 	if (n < 0)
 		return(forwword(f, -n));
-	if (backchar(FALSE, 1) == FALSE)
+	if (back_char(FALSE, 1) == FALSE)
 		return(FALSE);
 	while (n--) {
 		while (inword() == FALSE) {
-			if (backchar(FALSE, 1) == FALSE)
+			if (back_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 		while (inword() != FALSE) {
-			if (backchar(FALSE, 1) == FALSE)
+			if (back_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 	}
-	return(forwchar(FALSE, 1));
+	return(forward_char(FALSE, 1));
 }
 
 /*
  * Move the cursor forward by the specified number of words. All of the motion
- * is done by "forwchar". Error if you try and move beyond the buffer's end.
+ * is done by "forward_char". Error if you try and move beyond the buffer's end.
  */
 forwword(f, n)
 
@@ -110,13 +110,13 @@ int f,n;	/* prefix flag and argument */
 	while (n--) {
 		/* scan through the current word */
 		while (inword() == TRUE) {
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 
 		/* scan through the intervening white space */
 		while (inword() == FALSE) {
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 	}
@@ -137,13 +137,13 @@ int f,n;	/* prefix flag and argument */
 	while (n--) {
 		/* scan through the intervening white space */
 		while (inword() == FALSE) {
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 
 		/* scan through the current word */
 		while (inword() == TRUE) {
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 	}
@@ -168,7 +168,7 @@ int f,n;	/* prefix flag and argument */
 		return(FALSE);
 	while (n--) {
 		while (inword() == FALSE) {
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 		while (inword() != FALSE) {
@@ -180,7 +180,7 @@ int f,n;	/* prefix flag and argument */
 				undo_insert(OP_REPC, 1L, obj);
 				lchange(WFHARD);
 			}
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 	}
@@ -205,7 +205,7 @@ int f,n;	/* prefix flag and argument */
 		return(FALSE);
 	while (n--) {
 		while (inword() == FALSE) {
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 		while (inword() != FALSE) {
@@ -217,7 +217,7 @@ int f,n;	/* prefix flag and argument */
 				undo_insert(OP_REPC, 1L, obj);
 				lchange(WFHARD);
 			}
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 	}
@@ -243,7 +243,7 @@ int f,n;	/* prefix flag and argument */
 		return(FALSE);
 	while (n--) {
 		while (inword() == FALSE) {
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 		}
 		if (inword() != FALSE) {
@@ -255,7 +255,7 @@ int f,n;	/* prefix flag and argument */
 				undo_insert(OP_REPC, 1L, obj);
 				lchange(WFHARD);
 			}
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 			while (inword() != FALSE) {
 				c = lgetc(curwp->w_dotp, curwp->w_doto);
@@ -266,7 +266,7 @@ int f,n;	/* prefix flag and argument */
 					undo_insert(OP_REPC, 1L, obj);
 					lchange(WFHARD);
 				}
-				if (forwchar(FALSE, 1) == FALSE)
+				if (forward_char(FALSE, 1) == FALSE)
 					return(FALSE);
 			}
 		}
@@ -312,7 +312,7 @@ int f,n;	/* prefix flag and argument */
 
 	/* get us into a word.... */
 	while (inword() == FALSE) {
-		if (forwchar(FALSE, 1) == FALSE)
+		if (forward_char(FALSE, 1) == FALSE)
 			return(FALSE);
 		++size;
 	}
@@ -320,7 +320,7 @@ int f,n;	/* prefix flag and argument */
 	if (n == 0) {
 		/* skip one word, no whitespace! */
 		while (inword() == TRUE) {
-			if (forwchar(FALSE, 1) == FALSE)
+			if (forward_char(FALSE, 1) == FALSE)
 				return(FALSE);
 			++size;
 		}
@@ -330,14 +330,14 @@ int f,n;	/* prefix flag and argument */
 	
 			/* if we are at EOL; skip to the beginning of the next */
 			while (curwp->w_doto == lused(curwp->w_dotp)) {
-				if (forwchar(FALSE, 1) == FALSE)
+				if (forward_char(FALSE, 1) == FALSE)
 					return(FALSE);
 				++size;
 			}
 	
 			/* move forward till we are at the end of the word */
 			while (inword() == TRUE) {
-				if (forwchar(FALSE, 1) == FALSE)
+				if (forward_char(FALSE, 1) == FALSE)
 					return(FALSE);
 				++size;
 			}
@@ -345,7 +345,7 @@ int f,n;	/* prefix flag and argument */
 			/* if there are more words, skip the interword stuff */
 			if (n != 0)
 				while (inword() == FALSE) {
-					if (forwchar(FALSE, 1) == FALSE)
+					if (forward_char(FALSE, 1) == FALSE)
 						return(FALSE);
 					++size;
 				}
@@ -355,7 +355,7 @@ int f,n;	/* prefix flag and argument */
 		while ((curwp->w_doto == lused(curwp->w_dotp)) ||
 			((c = lgetc(curwp->w_dotp, curwp->w_doto)) == ' ') ||
 			(c == '\t')) {
-				if (forwchar(FALSE, 1) == FALSE)
+				if (forward_char(FALSE, 1) == FALSE)
 					break;
 				++size;
 		}
@@ -396,24 +396,24 @@ int f,n;	/* prefix flag and argument */
 	undo_insert(OP_CPOS, 0L, obj);
 
 	/* backup for the deletion */
-	if (backchar(FALSE, 1) == FALSE)
+	if (back_char(FALSE, 1) == FALSE)
 		return(FALSE);
 	size = 0;
 	while (n--) {
 		while (inword() == FALSE) {
-			if (backchar(FALSE, 1) == FALSE)
+			if (back_char(FALSE, 1) == FALSE)
 				return(FALSE);
 			++size;
 		}
 		while (inword() != FALSE) {
 			++size;
-			if (backchar(FALSE, 1) == FALSE)
+			if (back_char(FALSE, 1) == FALSE)
 				goto bckdel;
 		}
 	}
-	if (forwchar(FALSE, 1) == FALSE)
+	if (forward_char(FALSE, 1) == FALSE)
 		return(FALSE);
-bckdel:	if (forwchar(FALSE, size) == FALSE)
+bckdel:	if (forward_char(FALSE, size) == FALSE)
 		return(FALSE);
 	return(ldelete(-size, TRUE));
 }
@@ -486,11 +486,11 @@ int f, n;	/* Default flag and Numeric argument */
 	ptoff = curwp->w_doto;
 
 	/* record the pointer to the line just past the EOP */
-	gotoeop(FALSE, 1);
+	goto_end_of_paragraph(FALSE, 1);
 	eop = lforw(curwp->w_dotp);
 
 	/* and back top the beginning of the paragraph */
-	gotobop(FALSE, 1);
+	goto_begining__of_paragraph(FALSE, 1);
 	bop = lp = curwp->w_dotp;
 
 	/* ok, how big is this paragraph? */
@@ -539,7 +539,7 @@ int f, n;	/* Default flag and Numeric argument */
 	status = linstr(para);
 	lnewline();		/* add the last newline to our paragraph */
 	if (status == TRUE)	/* reposition us to the same place */
-		status = backchar(FALSE, back);
+		status = back_char(FALSE, back);
 
 	/* make sure the display is not horizontally scrolled */
 	if (curwp->w_fcol != 0) {
@@ -611,14 +611,14 @@ int n;	/* # of paras to delete */
 	while (n--) {		/* for each paragraph to delete */
 
 		/* mark out the end and beginning of the para to delete */
-		gotoeop(FALSE, 1);
+		goto_end_of_paragraph(FALSE, 1);
 
 		/* set the mark here */
 		curwp->w_markp[0] = curwp->w_dotp;
 		curwp->w_marko[0] = curwp->w_doto;
 
 		/* go to the beginning of the paragraph */
-		gotobop(FALSE, 1);
+		goto_begining__of_paragraph(FALSE, 1);
 		curwp->w_doto = 0;	/* force us to the beginning of line */
 	
 		/* and delete it */

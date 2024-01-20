@@ -143,7 +143,7 @@ char *cline;	/* command line to execute */
 		strcat(bufn, "]");
 
 		/* find the pointer to that buffer */
-        	if ((bp=bfind(bufn, FALSE, 0)) == NULL) {
+        	if ((bp=find_buffer(bufn, FALSE, 0)) == NULL) {
 			mlwrite(TEXT16);
 /*	                      "[No such Function]" */
 			execstr = oldestr;
@@ -313,7 +313,7 @@ int n;		/* macro number to use */
 	strcat(bname, "]");
 
 	/* set up the new macro buffer */
-	if ((bp = bfind(bname, TRUE, BFINVS)) == NULL) {
+	if ((bp = find_buffer(bname, TRUE, BFINVS)) == NULL) {
 		mlwrite(TEXT113);
 /*                      "Can not create macro" */
 		return(FALSE);
@@ -380,7 +380,7 @@ int f, n;	/* default flag and numeric arg */
 	strcat(bufn, "]");
 
 	/* find the pointer to that buffer */
-        if ((bp=bfind(bufn, FALSE, 0)) == NULL) {
+        if ((bp=find_buffer(bufn, FALSE, 0)) == NULL) {
 		mlwrite(TEXT116);
 /*                      "No such procedure" */
                 return(FALSE);
@@ -404,7 +404,7 @@ int f, n;	/* default flag and numeric arg */
         register int status;		/* status return */
 
 	/* find out what buffer the user wants to execute */
-	if ((bp = getcbuf(TEXT117, curbp->b_bname, FALSE)) == NULL)
+	if ((bp = buffer_name_autocomplete(TEXT117, curbp->b_bname, FALSE)) == NULL)
 /*                        "Execute buffer: " */
 		return(ABORT);
 
@@ -1172,8 +1172,8 @@ char *fname;	/* file name to execute */
 	char bname[NBUFN];	/* name of buffer */
 
 	makename(bname, fname);		/* derive the name of the buffer */
-	unqname(bname);			/* make sure we don't stomp things */
-	if ((bp = bfind(bname, TRUE, 0)) == NULL) /* get the needed buffer */
+	make_buffer_name_unique(bname);			/* make sure we don't stomp things */
+	if ((bp = find_buffer(bname, TRUE, 0)) == NULL) /* get the needed buffer */
 		return(FALSE);
 
 	bp->b_mode = MD_READ_ONLY;	/* mark the buffer as read only */

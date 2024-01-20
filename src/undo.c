@@ -116,7 +116,7 @@ int undo_op(void)
 	up = curwp->w_bufp->undo_head;
 
 	/* restore the buffer position */
-	gotoline(TRUE, up->line_num);
+	goto_line(TRUE, up->line_num);
 	curwp->w_doto = up->offset;
 	op_type = up->type;
 

@@ -28,7 +28,7 @@ int f,n;	/* prefix flag and argument */
 
 	/* get the buffer name to switch to */
 	bp = getdefb();
-	bp = getcbuf(TEXT24, bp ? bp->b_bname : mainbuf, TRUE);
+	bp = buffer_name_autocomplete(TEXT24, bp ? bp->b_bname : mainbuf, TRUE);
 /*			    "Use buffer" */
 	if (!bp)
 		return(ABORT);
@@ -160,7 +160,7 @@ int f,n;	/* prefix flag and argument */
 
 	/* get the buffer name to kill */
 	bp = getdefb();
-	bp = getcbuf(TEXT26, bp ? bp->b_bname : mainbuf, TRUE);
+	bp = buffer_name_autocomplete(TEXT26, bp ? bp->b_bname : mainbuf, TRUE);
 /*		     "Kill buffer" */
 	if (bp == NULL)
 		return(ABORT);
@@ -179,7 +179,7 @@ int f, n;	/* default and numeric arguments */
 
 	/* get the buffer name to pop */
 	bp = getdefb();
-	bp = getcbuf(TEXT27, bp ? bp->b_bname : mainbuf, TRUE);
+	bp = buffer_name_autocomplete(TEXT27, bp ? bp->b_bname : mainbuf, TRUE);
 /*		     "Pop buffer" */
 	if (bp == NULL)
 		return(ABORT);
@@ -508,7 +508,7 @@ anycb()
  * and the "cflag" is TRUE, create it. The "bflag" is
  * the settings for the flags in in buffer.
  */
-BUFFER *bfind(bname, cflag, bflag)
+BUFFER *find_buffer(bname, cflag, bflag)
 
 register char	*bname; /* name of buffer to find */
 int cflag;		/* create it if not found? */

@@ -130,7 +130,7 @@ char *fname;		/* name of function to evaluate */
 				strcat(result, "]");
 
 				/* find it, return ERROR if it does not exist */
-				bp = bfind(result, FALSE, 0);
+				bp = find_buffer(result, FALSE, 0);
 				if (bp == NULL)
 					return(errorm);
 
@@ -893,17 +893,17 @@ char *value;	/* value to set to */
 					lnewline();
 				else
 					linsert(1, (char)c);
-				backchar(FALSE, 1);
+				back_char(FALSE, 1);
 				break;
 		case EVCURCOL:	status = setccol(asc_int(value));
 				break;
-		case EVCURLINE: status = gotoline(TRUE, asc_int(value));
+		case EVCURLINE: status = goto_line(TRUE, asc_int(value));
 				break;
 		case EVCURWIDTH:status = newwidth(TRUE, asc_int(value));
 				break;
 		case EVCURWIND: nextwind(TRUE, asc_int(value));
 				break;
-		case EVCWLINE:	status = forwline(TRUE,
+		case EVCWLINE:	status = forward_line(TRUE,
 						asc_int(value) - getwpos());
 				break;
 		case EVDEBUG:	macbug = stol(value);
@@ -1269,7 +1269,7 @@ char *token;		/* token to evaluate */
 
 				/* grab the right buffer */
 				strcpy(token, fixnull(getval(&token[1])));
-				bp = bfind(token, FALSE, 0);
+				bp = find_buffer(token, FALSE, 0);
 				if (bp == NULL)
 					return(NULL);
 	        
@@ -1616,7 +1616,7 @@ int f,n;	/* prefix flag and argument */
 	char outseq[256];	/* output buffer for keystroke sequence */
 
 	/* and get a buffer for it */
-	varbuf = bfind(TEXT56, TRUE, BFINVS);
+	varbuf = find_buffer(TEXT56, TRUE, BFINVS);
 /*		   "Variable list" */
 	if (varbuf == NULL || bclear(varbuf) == FALSE) {
 		mlwrite(TEXT57);
@@ -1717,7 +1717,7 @@ int f,n;	/* prefix flag and argument */
 	char outseq[80];	/* output buffer for keystroke sequence */
 
 	/* get a buffer for the function list */
-	fncbuf = bfind(TEXT211, TRUE, BFINVS);
+	fncbuf = find_buffer(TEXT211, TRUE, BFINVS);
 /*		   "Function list" */
 	if (fncbuf == NULL || bclear(fncbuf) == FALSE) {
 		mlwrite(TEXT212);

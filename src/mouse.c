@@ -177,7 +177,6 @@ int f,n;	/* prefix flag and argument */
 	lastxpos = xpos;
 	lastmcmd = MREGDWN;
 
-#if	!WINDOW_MSWIN
 	/* if we are in the upper left corner, create a new window */
 	if (xpos == 0 && ypos == 0) {
 
@@ -200,7 +199,7 @@ int f,n;	/* prefix flag and argument */
 		/* and make this screen current */
 		return(select_screen(sp, TRUE));
 	}
-#endif
+
 
 	/* if we move the mouse off the windows, don't move anything */
 	if ((wp=mousewindow(ypos)) == NULL)
@@ -232,7 +231,7 @@ int f,n;	/* prefix flag and argument */
 			curwp->w_markp[hilite] = curwp->w_dotp;
 			curwp->w_marko[hilite] = curwp->w_doto;
 		}
-		return(setmark(FALSE, 0));
+		return(set_mark(FALSE, 0));
 	} else {
 		lastflag &= ~CFKILL;
 		return(killregion(FALSE, 0));
@@ -277,7 +276,6 @@ int f,n;	/* prefix flag and argument */
 	++nclicks;
 	lastwp = mousewindow(lastypos);		/* remember last window */
 
-#if	!WINDOW_MSWIN
 	/* if the down click was in the upper left corner...
 	   then we are moving a just created screen */
 	if (lastypos == 0 && lastxpos == 0) {
@@ -288,7 +286,6 @@ int f,n;	/* prefix flag and argument */
 #endif
 		return(TRUE);
 	}
-#endif
 
 	/* Just where was the last click? */
 	lastmodeline = ismodeline(lastwp, lastypos);
@@ -394,7 +391,6 @@ int f,n;	/* prefix flag and argument */
 	if (lastypos==ypos && lastxpos==xpos)
 		return(FALSE);
 
-#if	!WINDOW_MSWIN
 	/* if the down click was in the bottom right corner...
 	   then we are resizing */
 	if (lastypos == term.t_nrow && lastxpos + 1 == term.t_ncol) {
@@ -424,7 +420,7 @@ int f,n;	/* prefix flag and argument */
 #endif
 		return(TRUE);
 	}
-#endif
+
 
 	/* if the down click was not in a window.. fail the command
 	   (for example, if we click on the command line) */

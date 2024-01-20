@@ -22,7 +22,7 @@ int f,n;	/* prefix flag and argument */
 	char *fname;		/* file name of help file */
 
 	/* first check if we are already here */
-	bp = bfind("emacs.hlp", FALSE, BFINVS);
+	bp = find_buffer("emacs.hlp", FALSE, BFINVS);
 
 	if (bp == NULL) {
 		fname = flook(pathname[1], FALSE);
@@ -206,7 +206,7 @@ int f, n;	/* command arguments [IGNORED] */
 	/* translate it to a buffer pointer */
 	bufn[0] = '[';
 	strcat(bufn, "]");
-	if ((kmacro=bfind(bufn, FALSE, 0)) == NULL) {
+	if ((kmacro=find_buffer(bufn, FALSE, 0)) == NULL) {
 		mlwrite(TEXT130);
 /*		"Macro not defined"*/
 		return(FALSE);
@@ -398,7 +398,7 @@ char *mstring;	/* match string if a partial list */
 	int first_entry;	/* is this the first macro listing? */
 	
 	/* get a buffer for the binding list */
-	listbuf = bfind(TEXT21, TRUE, BFINVS);
+	listbuf = find_buffer(TEXT21, TRUE, BFINVS);
 /*		   "Binding list" */
 	if (listbuf == NULL || bclear(listbuf) == FALSE) {
 		mlwrite(TEXT22);
@@ -1042,7 +1042,7 @@ int set_key(KEYTAB *key, char *name)
 	strcpy(bufn, "[");
 	strcat(bufn, name);
 	strcat(bufn, "]");
-	if ((kmacro=bfind(bufn, FALSE, 0)) != NULL) {
+	if ((kmacro=find_buffer(bufn, FALSE, 0)) != NULL) {
 		key->k_ptr.buf = kmacro;
 		key->k_type = BINDBUF;
 		return(TRUE);

@@ -188,7 +188,7 @@ int  lmax;
 	for (i = 0;  go_on && i < lmax - 1 && inword();  i++)
 		{
 		str[i] = lgetc(curwp->w_dotp, curwp->w_doto);
-		go_on = forwchar(FALSE, 1);
+		go_on = forward_char(FALSE, 1);
 		}
 
 	str[i] = 0;			/* Terminate word		*/
@@ -213,10 +213,10 @@ int f, n;
 
 	{
 	while (inword())
-		if (backchar(FALSE, 1) == FALSE)
+		if (back_char(FALSE, 1) == FALSE)
 			break;
 	if (!inword())		/* Adjust for not beginning of file	*/
-		forwchar(FALSE, 1);
+		forward_char(FALSE, 1);
 
 	return (TRUE);
 	}
@@ -347,8 +347,8 @@ int  retag;
 		{				/* Ok, we got the file. Search!	*/
 		if (thisfile && retag == FALSE)
 			/* It's the same file so just set mark	*/
-			setmark(FALSE, FALSE);
-		gotoline(TRUE, 1);
+			set_mark(FALSE, FALSE);
+		goto_line(TRUE, 1);
 
 		/* Set-up for searching... use exact mode, not magic	*/
 		curbp->b_mode |= MD_EXACT_SEARCH;
@@ -368,8 +368,8 @@ int  retag;
 			{
 			/* Sorry, we couldn't find pattern so return...	*/
 			if (thisfile && retag == FALSE)
-				/* It's the same file so simply swapmark*/
-				swapmark(FALSE, FALSE);
+				/* It's the same file so simply swap_mark*/
+				swap_mark(FALSE, FALSE);
 			else 		/* Get old file	*/
 				getfile(curtp->t_fname, TRUE);
 			/* Tell user about our misfortune	*/
@@ -484,7 +484,7 @@ int f, n;
 	if (*curtp->t_fname != '\0')
 		{
 		if (thisfile)
-			swapmark(FALSE, FALSE);
+			swap_mark(FALSE, FALSE);
 		else
 			getfile(curtp->t_fname, TRUE);
 		*curtp->t_fname = '\0';

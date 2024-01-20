@@ -101,9 +101,7 @@ char *argv[];			/* argument strings */
 
 	/* Initialize the editor */
 	eexitflag = FALSE;
-#if	!WINDOW_MSWIN
 	vtinit();			/* Terminal */
-#endif
 
 	if (eexitflag)
 		goto abortrun;
@@ -351,10 +349,10 @@ int firstflag;			/* is this the first time in? */
 #endif
 			/* set up a buffer for this file */
 			makename(bname, argv[carg]);
-			unqname(bname);
+			make_buffer_name_unique(bname);
 
 			/* set this to inactive */
-			bp = bfind(bname, TRUE, 0);
+			bp = find_buffer(bname, TRUE, 0);
 			strcpy(bp->b_fname, argv[carg]);
 
 			bp->b_active = FALSE;
@@ -390,7 +388,7 @@ int firstflag;			/* is this the first time in? */
 
 	/* if there are any files to read, read the first one! */
 	if (firstflag) {
-		bp = bfind(mainbuf, FALSE, 0);
+		bp = find_buffer(mainbuf, FALSE, 0);
 		if (firstfile == FALSE && (gflags & GFREAD)) {
 			swbuffer(firstbp);
 			curbp->b_mode |= gmode;
@@ -412,8 +410,8 @@ int firstflag;			/* is this the first time in? */
 		mlwrite(TEXT101);
 /*			"[Can not search and goto at the same time!]" */
 	} else if (gotoflag) {
-		if ((gotoline(TRUE, gline) == FALSE) ||
-			(forwchar(TRUE, gchar - 1) == FALSE)) {
+		if ((goto_line(TRUE, gline) == FALSE) ||
+			(forward_char(TRUE, gchar - 1) == FALSE)) {
 			update(FALSE);
 			mlwrite(TEXT102);
 /*				"[Bogus goto argument]" */
@@ -649,10 +647,10 @@ char bname[];			/* name of buffer to initialize */
 	exithook.k_type = BINDFNC;
 
 	/* allocate the first buffer */
-	bp = bfind(bname, TRUE, 0);	/* First buffer 	*/
-	blistp = bfind("[Buffers]", TRUE, BFINVS);	/* Buffer list buffer	*/
-	slistp = bfind("[Screens]", TRUE, BFINVS);	/* screen list buffer	*/
-	ulistp = bfind("[Undos]", TRUE, BFINVS);	/* undo list buffer	*/
+	bp = find_buffer(bname, TRUE, 0);	/* First buffer 	*/
+	blistp = find_buffer("[Buffers]", TRUE, BFINVS);	/* Buffer list buffer	*/
+	slistp = find_buffer("[Screens]", TRUE, BFINVS);	/* screen list buffer	*/
+	ulistp = find_buffer("[Undos]", TRUE, BFINVS);	/* undo list buffer	*/
 	if (bp == NULL || blistp == NULL)
 		meexit(1);
 

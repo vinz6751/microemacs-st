@@ -23,12 +23,12 @@
 	{MOUS|'1',		BINDFNC,	resizm},
 #endif 
 
-	{CTRL|'A',		BINDFNC,	gotobol},
-	{CTRL|'B',		BINDFNC,	backchar},
+	{CTRL|'A',		BINDFNC,	goto_begining_of_line},
+	{CTRL|'B',		BINDFNC,	back_char},
 	{CTRL|'C',		BINDFNC,	insspace},
 	{CTRL|'D',		BINDFNC,	forwdel},
-	{CTRL|'E',		BINDFNC,	gotoeol},
-	{CTRL|'F',		BINDFNC,	forwchar},
+	{CTRL|'E',		BINDFNC,	goto_end_of_line},
+	{CTRL|'F',		BINDFNC,	forward_char},
 	{CTRL|'G',		BINDFNC,	ctrlg},
 	{CTRL|'H',		BINDFNC,	backdel},
 	{CTRL|'I',		BINDFNC,	tab},
@@ -36,43 +36,43 @@
 	{CTRL|'K',		BINDFNC,	killtext},
 	{CTRL|'L',		BINDFNC,	refresh},
 	{CTRL|'M',		BINDFNC,	newline},
-	{CTRL|'N',		BINDFNC,	forwline},
+	{CTRL|'N',		BINDFNC,	forward_line},
 	{CTRL|'O',		BINDFNC,	openline},
-	{CTRL|'P',		BINDFNC,	backline},
+	{CTRL|'P',		BINDFNC,	backward_line},
 	{CTRL|'Q',		BINDFNC,	quote},
 	{CTRL|'R',		BINDFNC,	backsearch},
 	{CTRL|'S',		BINDFNC,	forwsearch},
 	{CTRL|'T',		BINDFNC,	twiddle},
 	{CTRL|'U',		BINDFNC,	unarg},
-	{CTRL|'V',		BINDFNC,	forwpage},
+	{CTRL|'V',		BINDFNC,	forward_page},
 	{CTRL|'W',		BINDFNC,	killregion},
 	{CTRL|'X',		BINDFNC,	cex},
 	{CTRL|'Y',		BINDFNC,	yank},
-	{CTRL|'Z',		BINDFNC,	backpage},
+	{CTRL|'Z',		BINDFNC,	backward_page},
 	{CTRL|'[',		BINDFNC,	meta},
 	{CTRL|'\\',		BINDFNC,	forwsearch},
 	{CTRL|'^',		BINDFNC,	quote},
 	{CTRL|'_',		BINDFNC,	undo},
-	{CTLX|CTRL|'A',		BINDFNC,	fileapp},
+	{CTLX|CTRL|'A',		BINDFNC,	file_append},
 	{CTLX|CTRL|'B', 	BINDFNC,	listbuffers},
 	{CTLX|CTRL|'C', 	BINDFNC,	quit},
 	{CTLX|CTRL|'D', 	BINDFNC,	detab},
 	{CTLX|CTRL|'E', 	BINDFNC,	entab},
-	{CTLX|CTRL|'F', 	BINDFNC,	filefind},
-	{CTLX|CTRL|'I', 	BINDFNC,	insfile},
+	{CTLX|CTRL|'F', 	BINDFNC,	find_file},
+	{CTLX|CTRL|'I', 	BINDFNC,	insert_file},
 	{CTLX|CTRL|'K',		BINDFNC,	macrotokey},
 	{CTLX|CTRL|'L', 	BINDFNC,	lowerregion},
 	{CTLX|CTRL|'M', 	BINDFNC,	delmode},
 	{CTLX|CTRL|'N', 	BINDFNC,	mvdnwind},
 	{CTLX|CTRL|'O', 	BINDFNC,	deblank},
 	{CTLX|CTRL|'P', 	BINDFNC,	mvupwind},
-	{CTLX|CTRL|'R', 	BINDFNC,	fileread},
+	{CTLX|CTRL|'R', 	BINDFNC,	file_read},
 	{CTLX|CTRL|'S', 	BINDFNC,	filesave},
 	{CTLX|CTRL|'T', 	BINDFNC,	trim},
 	{CTLX|CTRL|'U', 	BINDFNC,	upperregion},
-	{CTLX|CTRL|'V', 	BINDFNC,	viewfile},
-	{CTLX|CTRL|'W', 	BINDFNC,	filewrite},
-	{CTLX|CTRL|'X', 	BINDFNC,	swapmark},
+	{CTLX|CTRL|'V', 	BINDFNC,	view_file},
+	{CTLX|CTRL|'W', 	BINDFNC,	file_write},
+	{CTLX|CTRL|'X', 	BINDFNC,	swap_mark},
 	{CTLX|CTRL|'Z', 	BINDFNC,	shrinkwind},
 	{CTLX|CTRL|'\\', 	BINDFNC,	filesave},
 	{CTLX|'?',		BINDFNC,	deskey},
@@ -86,7 +86,7 @@
 	{CTLX|'<',		BINDFNC,	narrow},
 	{CTLX|'>',		BINDFNC,	widen},
 	{CTLX|'^',		BINDFNC,	enlargewind},
-	{CTLX|' ',		BINDFNC,	remmark},
+	{CTLX|' ',		BINDFNC,	remove_mark},
 	{CTLX|'0',		BINDFNC,	delwind},
 	{CTLX|'1',		BINDFNC,	onlywind},
 	{CTLX|'2',		BINDFNC,	splitwind},
@@ -115,7 +115,7 @@
 	{META|CTRL|'C', 	BINDFNC,	wordcount},
 	{META|CTRL|'E', 	BINDFNC,	execproc},
 	{META|CTRL|'F', 	BINDFNC,	getfence},
-	{META|CTRL|'G', 	BINDFNC,	gotomark},
+	{META|CTRL|'G', 	BINDFNC,	goto_mark},
 	{META|CTRL|'H', 	BINDFNC,	delbword},
 	{META|CTRL|'K', 	BINDFNC,	unbindkey},
 	{META|CTRL|'L', 	BINDFNC,	reposition},
@@ -130,14 +130,14 @@
 	{META|CTRL|'Y',		BINDFNC,	clear_ring},
 	{META|CTRL|'Z', 	BINDFNC,	nextup},
 	{META|CTRL|'\\', 	BINDFNC,	execfile},
-	{META|' ',		BINDFNC,	setmark},
+	{META|' ',		BINDFNC,	set_mark},
 	{META|'?',		BINDFNC,	help},
 	{META|'!',		BINDFNC,	reposition},
 	{META|')',		BINDFNC,	indent_region},
 	{META|'(',		BINDFNC,	undent_region},
-	{META|'.',		BINDFNC,	setmark},
-	{META|'>',		BINDFNC,	gotoeob},
-	{META|'<',		BINDFNC,	gotobob},
+	{META|'.',		BINDFNC,	set_mark},
+	{META|'>',		BINDFNC,	goto_end_of_buffer},
+	{META|'<',		BINDFNC,	goto_begining_of_buffer},
 	{META|'~',		BINDFNC,	unmark},
 	{META|'A',		BINDFNC,	apro},
 	{META|'B',		BINDFNC,	backword},
@@ -147,19 +147,19 @@
 	{META|'E',		BINDFNC,	setekey},
 #endif
 	{META|'F',		BINDFNC,	forwword},
-	{META|'G',		BINDFNC,	gotoline},
+	{META|'G',		BINDFNC,	goto_line},
 	{META|'K',		BINDFNC,	bindtokey},
 	{META|'L',		BINDFNC,	lowerword},
 	{META|'M',		BINDFNC,	setgmode},
-	{META|'N',		BINDFNC,	gotoeop},
-	{META|'P',		BINDFNC,	gotobop},
+	{META|'N',		BINDFNC,	goto_end_of_paragraph},
+	{META|'P',		BINDFNC,	goto_begining__of_paragraph},
 	{META|'Q',		BINDFNC,	fillpara},
 	{META|'R',		BINDFNC,	sreplace},
 #if	BSD || FREEBSD || HPUX8 || HPUX9 || VMS || SUN || AVIION
 	{META|'S',		BINDFNC,	bktoshell},
 #endif
 	{META|'U',		BINDFNC,	upperword},
-	{META|'V',		BINDFNC,	backpage},
+	{META|'V',		BINDFNC,	backward_page},
 	{META|'W',		BINDFNC,	copyregion},
 	{META|'X',		BINDFNC,	namedcmd},
 	{META|'Y',		BINDFNC,	yank_pop},
@@ -174,24 +174,24 @@
 	{ALTD|'R',		BINDFNC,	backhunt},
 	{ALTD|'S',		BINDFNC,	forwhunt},
 
-	{SPEC|'<',		BINDFNC,	gotobob},	/* Home */
-	{SPEC|'P',		BINDFNC,	backline},	/* up */
-	{SPEC|'Z',		BINDFNC,	backpage},	/* PgUp */
-	{SPEC|'B',		BINDFNC,	backchar},	/* left */
+	{SPEC|'<',		BINDFNC,	goto_begining_of_buffer},	/* Home */
+	{SPEC|'P',		BINDFNC,	backward_line},	/* up */
+	{SPEC|'Z',		BINDFNC,	backward_page},	/* PgUp */
+	{SPEC|'B',		BINDFNC,	back_char},	/* left */
 
 	{SPEC|'L',		BINDFNC,	reposition},	/* NP5 */
 
-	{SPEC|'F',		BINDFNC,	forwchar},	/* right */
-	{SPEC|'>',		BINDFNC,	gotoeob},	/* End */
-	{SPEC|'N',		BINDFNC,	forwline},	/* down */
-	{SPEC|'V',		BINDFNC,	forwpage},	/* PgDn */
+	{SPEC|'F',		BINDFNC,	forward_char},	/* right */
+	{SPEC|'>',		BINDFNC,	goto_end_of_buffer},	/* End */
+	{SPEC|'N',		BINDFNC,	forward_line},	/* down */
+	{SPEC|'V',		BINDFNC,	forward_page},	/* PgDn */
 	{SPEC|'C',		BINDFNC,	insspace},	/* Ins */
 	{SPEC|'D',		BINDFNC,	forwdel},	/* Del */
 
 	{SPEC|CTRL|'B', 	BINDFNC,	backword},	/* ctrl left */
 	{SPEC|CTRL|'F', 	BINDFNC,	forwword},	/* ctrl right */
-	{SPEC|CTRL|'Z', 	BINDFNC,	gotobop},	/* ctrl PgUp */
-	{SPEC|CTRL|'V', 	BINDFNC,	gotoeop},	/* ctrl PgDn */
+	{SPEC|CTRL|'Z', 	BINDFNC,	goto_begining__of_paragraph},	/* ctrl PgUp */
+	{SPEC|CTRL|'V', 	BINDFNC,	goto_end_of_paragraph},	/* ctrl PgDn */
 
 #if ATKBD | OS2
 
@@ -202,23 +202,23 @@
 
    See keyboard.c for a full list of available keys.
 */
-	{SPEC|'a',		BINDFNC,	gotobob},	/* grey Home */
-	{SPEC|'b',		BINDFNC,	backline},	/* grey up */
-	{SPEC|'c',		BINDFNC,	backpage},	/* grey PgUp */
-	{SPEC|'d',		BINDFNC,	backchar},	/* grey left */
+	{SPEC|'a',		BINDFNC,	goto_begining_of_buffer},	/* grey Home */
+	{SPEC|'b',		BINDFNC,	backward_line},	/* grey up */
+	{SPEC|'c',		BINDFNC,	backward_page},	/* grey PgUp */
+	{SPEC|'d',		BINDFNC,	back_char},	/* grey left */
 	{SPEC|'e',		BINDFNC,	reposition},	/* grey center */
-	{SPEC|'f',		BINDFNC,	forwchar},	/* grey right */
-	{SPEC|'g',		BINDFNC,	gotoeob},	/* grey End */
-	{SPEC|'h',		BINDFNC,	forwline},	/* grey down */
-	{SPEC|'i',		BINDFNC,	forwpage},	/* grey PgDn */
+	{SPEC|'f',		BINDFNC,	forward_char},	/* grey right */
+	{SPEC|'g',		BINDFNC,	goto_end_of_buffer},	/* grey End */
+	{SPEC|'h',		BINDFNC,	forward_line},	/* grey down */
+	{SPEC|'i',		BINDFNC,	forward_page},	/* grey PgDn */
 	{SPEC|'j',		BINDFNC,	insspace},	/* grey Ins */
 	{SPEC|'k',		BINDFNC,	forwdel},	/* grey Del */
 	{SPEC|':',		BINDFNC,	execcmd},	/* pause */
 
-	{SPEC|CTRL|'c',		BINDFNC,	gotobop},	/* ctrl grey PgUp */
+	{SPEC|CTRL|'c',		BINDFNC,	goto_begining__of_paragraph},	/* ctrl grey PgUp */
 	{SPEC|CTRL|'d',		BINDFNC,	backword},	/* ctrl grey left */
 	{SPEC|CTRL|'f',		BINDFNC,	forwword},	/* ctrl grey right */
-	{SPEC|CTRL|'i',		BINDFNC,	gotoeop},	/* ctrl grey PgDn */
+	{SPEC|CTRL|'i',		BINDFNC,	goto_end_of_paragraph},	/* ctrl grey PgDn */
 
 #endif
 

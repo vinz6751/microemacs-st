@@ -155,7 +155,7 @@ int f, n;	/* numeric flag and argument */
 	char outseq[NSTRING];	/* output buffer for keystroke sequence */
 
 	/* and get a buffer for it */
-	abbbuf = bfind(TEXT234, TRUE, BFINVS);
+	abbbuf = find_buffer(TEXT234, TRUE, BFINVS);
 /*		   "Abbreviation list" */
 	if (abbbuf == NULL || bclear(abbbuf) == FALSE) {
 		mlwrite(TEXT235);
@@ -232,7 +232,7 @@ int f,n;	/* prefix flag and argument */
 	
 	/* get the buffer to load abbreviations from */
 	bp = getdefb();
-	bp = getcbuf(TEXT236, bp ? bp->b_bname : mainbuf, TRUE);
+	bp = buffer_name_autocomplete(TEXT236, bp ? bp->b_bname : mainbuf, TRUE);
 /*		     "Define Abbreviations in buffer" */
 	if (bp == NULL)
 		return(ABORT);

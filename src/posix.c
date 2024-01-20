@@ -575,7 +575,7 @@ int n;					/* Argument count		*/
 		return(s);
 
 	/* Get rid of the command output buffer if it exists */
-	bp = bfind(filnam, FALSE, 0);
+	bp = find_buffer(filnam, FALSE, 0);
 	if (bp) {
 		/* Try to make sure we are off screen */
 		wp = wheadp;

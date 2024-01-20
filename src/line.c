@@ -148,7 +148,7 @@ int f, n;	/* default flag and numeric argument */
 	register int	status;
 
 	if ((status = linsert(n, ' ')) == TRUE)
-		status = backchar(f, n);
+		status = back_char(f, n);
 	return status;
 }
 
@@ -554,7 +554,7 @@ int kflag;	/* put killed text in kill buffer flag */
 	
 				/* flag that we are making a hard change */
 				lchange(WFHARD);
-				backchar(TRUE, 1);
+				back_char(TRUE, 1);
 				if (ldelnewline() == FALSE ||
 				    (kflag != FALSE &&
 				     kinsert(REVERSE, '\r')==FALSE))
@@ -668,7 +668,7 @@ char *iline;	/* contents of new line */
 	if ((status = linstr(iline)) != TRUE)
 		return(status);
 	status = lnewline();
-	backline(TRUE, 1);
+	backward_line(TRUE, 1);
 	return(status);
 }
 

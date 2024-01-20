@@ -19,7 +19,7 @@
  * beginning of the current line.
  * Trivial.
  */
-gotobol(f, n)
+goto_begining_of_line(f, n)
 
 int f,n;	/* argument flag and num */
 
@@ -30,11 +30,11 @@ int f,n;	/* argument flag and num */
 
 /*
  * Move the cursor backwards by "n" characters. If "n" is less than zero call
- * "forwchar" to actually do the move. Otherwise compute the new cursor
+ * "forward_char" to actually do the move. Otherwise compute the new cursor
  * location. Error if you try and move out of the buffer. Set the flag if the
  * line pointer for dot changes.
  */
-backchar(f, n)
+back_char(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -42,7 +42,7 @@ int f,n;	/* prefix flag and argument */
         register LINE   *lp;
 
         if (n < 0)
-                return(forwchar(f, -n));
+                return(forward_char(f, -n));
         while (n--) {
                 if (curwp->w_doto == 0) {
                         if ((lp=lback(curwp->w_dotp)) == curbp->b_linep)
@@ -59,7 +59,7 @@ int f,n;	/* prefix flag and argument */
 /*
  * Move the cursor to the end of the current line. Trivial. No errors.
  */
-gotoeol(f, n)
+goto_end_of_line(f, n)
 
 int f,n;	/* argument flag and num */
 
@@ -70,17 +70,17 @@ int f,n;	/* argument flag and num */
 
 /*
  * Move the cursor forwards by "n" characters. If "n" is less than zero call
- * "backchar" to actually do the move. Otherwise compute the new cursor
+ * "back_char" to actually do the move. Otherwise compute the new cursor
  * location, and move ".". Error if you try and move off the end of the
  * buffer. Set the flag if the line pointer for dot changes.
  */
-forwchar(f, n)
+forward_char(f, n)
 
 int f,n;	/* prefix flag and argument */
 
 {
         if (n < 0)
-                return(backchar(f, -n));
+                return(back_char(f, -n));
         while (n--) {
                 if (curwp->w_doto == lused(curwp->w_dotp)) {
                         if (curwp->w_dotp == curbp->b_linep)
@@ -94,7 +94,7 @@ int f,n;	/* prefix flag and argument */
     return(TRUE);
 }
 
-gotoline(f, n)	/* move to a particular line.
+goto_line(f, n)	/* move to a particular line.
 			   argument (n) must be a positive integer for
 			   this to actually do anything		*/
 
@@ -121,7 +121,7 @@ int f,n;	/* prefix flag and argument */
 	/* first, we go to the start of the buffer */
         curwp->w_dotp  = lforw(curbp->b_linep);
         curwp->w_doto  = 0;
-	return(forwline(f, n-1));
+	return(forward_line(f, n-1));
 }
 
 /*
@@ -129,7 +129,7 @@ int f,n;	/* prefix flag and argument */
  * considered to be hard motion; it really isn't if the original value of dot
  * is the same as the new value of dot. Normally bound to "M-<".
  */
-gotobob(f, n)
+goto_begining_of_buffer(f, n)
 
 int f,n;	/* argument flag and num */
 
@@ -145,7 +145,7 @@ int f,n;	/* argument flag and num */
  * (ZJ). The standard screen code does most of the hard parts of update.
  * Bound to "M->".
  */
-gotoeob(f, n)
+goto_end_of_buffer(f, n)
 
 int f,n;	/* argument flag and num */
 
@@ -162,7 +162,7 @@ int f,n;	/* argument flag and num */
  * controls how the goal column is set. Bound to "C-N". No errors are
  * possible.
  */
-forwline(f, n)
+forward_line(f, n)
 
 int f,n;	/* argument flag and num */
 
@@ -170,7 +170,7 @@ int f,n;	/* argument flag and num */
         register LINE   *dlp;
 
         if (n < 0)
-                return(backline(f, -n));
+                return(backward_line(f, -n));
 
 	/* if we are on the last line as we start....fail the command */
 	if (curwp->w_dotp == curbp->b_linep)
@@ -197,12 +197,12 @@ int f,n;	/* argument flag and num */
 }
 
 /*
- * This function is like "forwline", but goes backwards. The scheme is exactly
+ * This function is like "forward_line", but goes backwards. The scheme is exactly
  * the same. Check for arguments that are less than zero and call your
  * alternate. Figure out the new line and call "movedot" to perform the
  * motion. No errors are possible. Bound to "C-P".
  */
-backline(f, n)
+backward_line(f, n)
 
 int f,n;	/* argument flag and num */
 
@@ -210,7 +210,7 @@ int f,n;	/* argument flag and num */
         register LINE   *dlp;
 
         if (n < 0)
-                return(forwline(f, -n));
+                return(forward_line(f, -n));
 
 
 	/* if we are on the last line as we start....fail the command */
@@ -237,7 +237,7 @@ int f,n;	/* argument flag and num */
     return(TRUE);
 }
 
-gotobop(f, n) /* go back to the beginning of the current paragraph
+goto_begining__of_paragraph(f, n) /* go back to the beginning of the current paragraph
 		   here we look for a blank line or a character from
 		   $paralead to delimit the beginning of a paragraph or
 		   $fmtlead to delimit a line before the paragraph */
@@ -245,19 +245,19 @@ gotobop(f, n) /* go back to the beginning of the current paragraph
 int f, n;	/* default Flag & Numeric argument */
 
 {
-	register int suc;	/* success of last backchar */
+	register int suc;	/* success of last back_char */
 	register int c;		/* current character in scan */
 	register char *sp;	/* ptr into character leadin lists */
 
 	if (n < 0)	/* the other way...*/
-		return(gotoeop(f, -n));
+		return(goto_end_of_paragraph(f, -n));
 
 	while (n-- > 0) {	/* for each one asked for */
 
 		/* first scan back until we are in a word */
-		suc = backchar(FALSE, 1);
+		suc = back_char(FALSE, 1);
 		while (!inword() && suc)
-			suc = backchar(FALSE, 1);
+			suc = back_char(FALSE, 1);
 		curwp->w_doto = 0;	/* and go to the B-O-Line */
 
 		/* scan back through the text */
@@ -294,16 +294,16 @@ int f, n;	/* default Flag & Numeric argument */
 		}
 
 		/* and then forward until we are in a word */
-/*		suc = forwchar(FALSE, 1); */
+/*		suc = forward_char(FALSE, 1); */
 		suc = TRUE;
 		while (suc && !inword())
-			suc = forwchar(FALSE, 1);
+			suc = forward_char(FALSE, 1);
 	}
 	curwp->w_flag |= WFMOVE;	/* force screen update */
 	return(TRUE);
 }
 
-gotoeop(f, n) /* go forword to the end of the current paragraph
+goto_end_of_paragraph(f, n) /* go forword to the end of the current paragraph
 			     looking for a member of $paralead or $fmtlead
 			     or a blank line to delimit the start of the
 			     next paragraph
@@ -312,19 +312,19 @@ gotoeop(f, n) /* go forword to the end of the current paragraph
 int f, n;	/* default Flag & Numeric argument */
 
 {
-	register int suc;	/* success of last backchar */
+	register int suc;	/* success of last back_char */
 	register int c;		/* current character in scan */
 	register char *sp;	/* ptr into character leadin lists */
 
 	if (n < 0)	/* the other way...*/
-		return(gotobop(f, -n));
+		return(goto_begining__of_paragraph(f, -n));
 
 	while (n-- > 0) {	/* for each one asked for */
 
 		/* first scan forward until we are in a word */
-		suc = forwchar(FALSE, 1);
+		suc = forward_char(FALSE, 1);
 		while (!inword() && suc)
-			suc = forwchar(FALSE, 1);
+			suc = forward_char(FALSE, 1);
 
 		/* and go to the B-O-Line */
 		curwp->w_doto = 0;
@@ -367,9 +367,9 @@ int f, n;	/* default Flag & Numeric argument */
 		}
 
 		/* and then backward until we are in a word */
-		suc = backchar(FALSE, 1);
+		suc = back_char(FALSE, 1);
 		while (suc && !inword()) {
-			suc = backchar(FALSE, 1);
+			suc = back_char(FALSE, 1);
 		}
 		curwp->w_doto = lused(curwp->w_dotp);	/* and to the EOL */
 	}
@@ -417,7 +417,7 @@ register LINE   *dlp;
  * is overlap between screens. This defaults to overlap value in ITS EMACS.
  *  Because this zaps the top line in the window, we have to do a hard update.
  */
-forwpage(f, n)
+forward_page(f, n)
 
 int f,n;	/* prefix flag and argument */
 
@@ -433,7 +433,7 @@ int f,n;	/* prefix flag and argument */
                 if (n <= 0)                     /* Forget the overlap   */
                         n = 1;                  /* if tiny window.      */
         } else if (n < 0)
-                return(backpage(f, -n));
+                return(backward_page(f, -n));
         lp = curwp->w_linep;
         while (n-- && lp!=curbp->b_linep)
                 lp = lforw(lp);
@@ -445,12 +445,12 @@ int f,n;	/* prefix flag and argument */
 }
 
 /*
- * This command is like "forwpage", but it goes backwards. overlap, like
+ * This command is like "forward_page", but it goes backwards. overlap, like
  * above, is the overlap between the two windows. The value is from the ITS
  * EMACS manual. Bound to "M-V". We do a hard update for exactly the same
  * reason.
  */
-backpage(f, n)
+backward_page(f, n)
 
 register int f;
 register int n;
@@ -467,7 +467,7 @@ register int n;
                 if (n <= 0)                     /* Don't blow up if the */
                         n = 1;                  /* window is tiny.      */
         } else if (n < 0)
-                return(forwpage(f, -n));
+                return(forward_page(f, -n));
         lp = curwp->w_linep;
         while (n-- && lback(lp)!=curbp->b_linep)
                 lp = lback(lp);
@@ -482,7 +482,7 @@ register int n;
  * Set the mark in the current window to the value of "." in the window. No
  * errors are possible. Bound to "M-.".
  */
-setmark(f, n)
+set_mark(f, n)
 
 int f,n;	/* argument flag and num */
 
@@ -503,7 +503,7 @@ int f,n;	/* argument flag and num */
  * Remove the mark in the current window.
  * Bound to ^X <space> 
  */
-remmark(f, n)
+remove_mark(f, n)
 
 int f,n;	/* argument flag and num */
 
@@ -526,7 +526,7 @@ int f,n;	/* argument flag and num */
  * that moves the mark about. The only possible error is "no mark". Bound to
  * "C-X C-X".
  */
-swapmark(f, n)
+swap_mark(f, n)
 
 int f,n;	/* argument flag and num */
 
@@ -559,7 +559,7 @@ int f,n;	/* argument flag and num */
  * the hard work gets done by the standard routine that moves the mark
  * about. The only possible error is "no mark". Bound to "M-^G".
  */
-gotomark(f, n)
+goto_mark(f, n)
 
 int f, n;	/* default and numeric args */
 

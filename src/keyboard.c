@@ -306,7 +306,7 @@ int listkeymaps(int f, int n)
 	/*
 	 * Get a buffer for it.
 	 */
-	seqbuf = bfind("Key sequence list", TRUE, BFINVS);
+	seqbuf = find_buffer("Key sequence list", TRUE, BFINVS);
 /*		   "Key sequence list" */
 
 	if (seqbuf == NULL || bclear(seqbuf) == FALSE) {

@@ -159,7 +159,7 @@ qprompt:
 
 			case 'n':	/* no, onward */
 			case 'N':
-				forwchar(FALSE, 1);
+				forward_char(FALSE, 1);
 				continue;
 
 			case '!':	/* yes/stop asking */
@@ -184,7 +184,7 @@ qprompt:
 				/* Delete the new string,
 				 * restore the old match.
 				 */
-				backchar(FALSE, replen);
+				back_char(FALSE, replen);
 				status = delins(replen, oldpatmatch, FALSE);
 				if (status != TRUE) {
 					mmove_flag = TRUE;
@@ -196,7 +196,7 @@ qprompt:
 				 * reprompt.
 				 */
 				--numsub;
-				backchar(FALSE, oldmatchlen);
+				back_char(FALSE, oldmatchlen);
 				matchlen = oldmatchlen;
 				matchline = curwp->w_dotp;
 				matchoff = curwp->w_doto;

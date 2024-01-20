@@ -165,7 +165,7 @@
  *	15-apr-86
  *	- fixed tab expansion bug in DISPLAY which hung the AMIGA
  *	  (sent in by Dawn Banks)
- *	- fixed curcol problen if forwline/backline during keyboard
+ *	- fixed curcol problen if forward_line/backward_line during keyboard
  *	  macro execution (sent in by Ernst Christen)
  *	- added AMIGA function/cursor key support
  *	- fixed nonterminating <NL> replacement bug
@@ -545,7 +545,7 @@
  *	- added !IF  !ELSE  !ENDIF  directives and changed the
  *	  name of !END to !ENDM....real slick stuff
  *	5-jan-87
- *	- quick-exit (M-Z) aborts on any filewrite errors
+ *	- quick-exit (M-Z) aborts on any file_write errors
  *	8-jan-87
  *	- debugged a lot of the new directive and evaluation code.
  *	  BEWARE of stack space overflows! (increasing stack to
@@ -839,7 +839,7 @@
  *	- added binary and, or, and xor functions as submited by John Maline
  *	  (&band   &bor    and	&bxor)
  *	- added binary not (&bnot) function
- *	- added fixes for gotoline() and nextarg() as submited by David
+ *	- added fixes for goto_line() and nextarg() as submited by David
  *	  Dermott
  *	- fixed return value of $curwidth as submitted by David Dermott
  *	- fixed several calls to ldelete() to have a long first argument
@@ -1602,8 +1602,8 @@
  *	  when mixing various consective forward and backward kills. This
  *	  new code is smaller and involved less changes.
  *	2-may-91
- *	- changed some WFHARDs to WFMOVEs in basic.c for gotobob() and
- *	  gotoeob() as suggested by Risto Kankkunen
+ *	- changed some WFHARDs to WFMOVEs in basic.c for goto_begining_of_buffer() and
+ *	  goto_end_of_buffer() as suggested by Risto Kankkunen
  *	- removed a call to turn break off under MSDOS in ibmkopen()
  *	  in ibmpc.c to answer a observation from John A Steele
  *	- changed some file names. ATARI.C => TOS.C   ST520.C => ST52.C
@@ -1615,7 +1615,7 @@
  *	- cause the prompt for search patterns to show the current search
  *	  terminator
  *	23-jun-91
- *	- in BASIC.C in gotobop/eop() changed some offests to zero constants
+ *	- in BASIC.C in goto_begining__of_paragraph/eop() changed some offests to zero constants
  *	  speeding things up.
  *	- also added $scribe so I can add in scribe specific formatting
  *	  features, like deciding @commands at the begining of lines delimit
@@ -2110,7 +2110,7 @@
  *	- cleaned up spacing and formating in isearch.c. Arg.
  *	- blocked mouse movement events from occuring during incremental
  *	  and replace query searches if $mmove is set to 1.
- *	- put in code in gtfilename() in input.c to change forward slashes
+ *	- put in code in prompt_filename() in input.c to change forward slashes
  *	  to back slashes in input filenames for MSDOS and OS/2
  *	26 Mar 93 John Gamble
  *	- Fixed the TERM structure in SMG.C.
