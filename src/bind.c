@@ -45,7 +45,7 @@ int f,n;	/* prefix flag and argument */
 		swbuffer(bp);
 
 	/* make this window in VIEW mode, update all mode lines */
-	curwp->w_bufp->b_mode |= MDVIEW;
+	curwp->w_bufp->b_mode |= MD_READ_ONLY;
 	curwp->w_bufp->b_flag |= BFINVS;
 	upmode();
 	return(TRUE);

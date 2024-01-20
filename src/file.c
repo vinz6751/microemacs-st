@@ -57,7 +57,7 @@ int f,n;	/* prefix flag and argument */
 
 	if (restflag)		/* don't allow this command if restricted */
 		return(resterr());
-	if (curbp->b_mode&MDVIEW)      /* don't allow this command if  */
+	if (curbp->b_mode&MD_READ_ONLY)      /* don't allow this command if  */
 		return(rdonly());	/* we are in read only mode	*/
 
 	if ((fname = gtfilename(TEXT132)) == NULL) 
@@ -121,7 +121,7 @@ int f,n;	/* prefix flag and argument */
 		return(FALSE);
 	s = getfile(fname, FALSE);
 	if (s) {	/* if we succeed, put it in view mode */
-		curwp->w_bufp->b_mode |= MDVIEW;
+		curwp->w_bufp->b_mode |= MD_READ_ONLY;
 		upmode();
 	}
 	return(s);
@@ -137,7 +137,7 @@ resetkey()	/* reset the encryption key if needed */
 	cryptflag = FALSE;
 
 	/* if we are in crypt mode */
-	if (curbp->b_mode & MDCRYPT) {
+	if (curbp->b_mode & MD_ENCRYPT) {
 		if (curbp->b_key[0] == 0) {
 			s = setekey(FALSE, 0);
 			if (s != TRUE)
@@ -327,7 +327,7 @@ int	lockfl;		/* check for file locks? */
 	/* if we don't have write priviledges, make this in VIEW mode */
 	if (s !=FIOERR && s != FIOFNF) {
 		if (access(fname, 2 /* W_OK*/) != 0)
-			curbp->b_mode |= MDVIEW;
+			curbp->b_mode |= MD_READ_ONLY;
 	}
 #endif
 
@@ -368,7 +368,7 @@ out:
 	}
 #if	FILOCK
 	if (force_read == TRUE) {
-		curbp->b_mode |= MDVIEW;
+		curbp->b_mode |= MD_READ_ONLY;
 		upmode();
 	}
 #endif
@@ -536,7 +536,7 @@ int f,n;	/* prefix flag and argument */
 {
 	register int s;
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	if ((curbp->b_flag&BFCHG) == 0) 	/* Return, no changes.	*/
 		return(TRUE);
@@ -735,7 +735,7 @@ int f,n;	/* prefix flag and argument */
 		strcpy(curbp->b_fname, fname);
 	/* Update mode lines.	*/
 	upmode();
-	curbp->b_mode &= ~MDVIEW;      /* no longer read only mode */
+	curbp->b_mode &= ~MD_READ_ONLY;      /* no longer read only mode */
 	return(TRUE);
 }
 

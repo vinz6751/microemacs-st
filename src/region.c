@@ -60,7 +60,7 @@ int f,n;	/* prefix flag and argument */
 	REGION		region;
 
 	/* Don't do this command in read-only mode */
-	if (curbp->b_mode&MDVIEW)
+	if (curbp->b_mode&MD_READ_ONLY)
 		return(rdonly());
 
 	/* get the boundries of the region to kill */
@@ -141,7 +141,7 @@ int f,n;	/* prefix flag and argument */
 	REGION region;		/* region which is being used */
 
 	/* don't bother if we are in read only mode */
-	if (curbp->b_mode&MDVIEW)
+	if (curbp->b_mode&MD_READ_ONLY)
 		return(rdonly());
 
 	/* get the limits of the current region */
@@ -206,7 +206,7 @@ int f,n;	/* prefix flag and argument */
 	REGION region;		/* region which is being used */
 
 	/* don't bother if we are in read only mode */
-	if (curbp->b_mode&MDVIEW)
+	if (curbp->b_mode&MD_READ_ONLY)
 		return(rdonly());
 
 	/* get the limits of the current region */
@@ -556,7 +556,7 @@ int f,n;	/* default flag and numeric repeat count */
 	register int inc;	/* increment to next line [sgn(n)] */
 	int count;
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	if (f == FALSE)
@@ -571,7 +571,7 @@ int f,n;	/* default flag and numeric repeat count */
 		curwp->w_doto = 0;	/* start at the beginning */
 
 		/* shift current line using tabs */
-		if (!((curbp->b_mode & MDCMOD) &&
+		if (!((curbp->b_mode & MD_C_MODE) &&
 		     (lgetc(curwp->w_dotp, curwp->w_doto) == '#')) ) {
 				linsert(count, '\t');
 		}
@@ -595,7 +595,7 @@ int f,n;	/* default flag and numeric repeat count */
 	register int inc;	/* increment to next line [sgn(n)] */
 	int i, count;
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	if (f == FALSE)

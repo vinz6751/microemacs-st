@@ -627,7 +627,7 @@ int f, n;
 		return(FALSE);
 
 	/* make this window in VIEW mode, update all mode lines */
-	curwp->w_bufp->b_mode |= MDVIEW;
+	curwp->w_bufp->b_mode |= MD_READ_ONLY;
 	wp = wheadp;
 	while (wp != NULL) {
 		wp->w_flag |= WFMODE;
@@ -661,7 +661,7 @@ int f, n;
 	if (restflag)
 		return(resterr());
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	/* get the filter name and its args */

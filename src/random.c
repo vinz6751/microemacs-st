@@ -231,7 +231,7 @@ int f, n;				/* prefix flag and argument */
 	register int cl;		/* characters to swap! */
 	register int cr;
 
-	if (curbp->b_mode & MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode & MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	/* get the current position */
@@ -285,7 +285,7 @@ int f, n;				/* prefix flag and argument */
 	register int status;	/* return value to hold from linstr */
 	char key_name[10];	/* name of a keystroke for quoting */
 
-	if (curbp->b_mode & MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode & MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	ec = get_key();
 
@@ -345,7 +345,7 @@ int f, n;				/* default flag and numeric repeat count */
 	{
 	register int inc;	/* increment to next line [sgn(n)] */
 
-	if (curbp->b_mode & MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode & MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	if (tabsize == 0)
@@ -393,7 +393,7 @@ int f, n;				/* default flag and numeric repeat count */
 	register int ccol;	/* current cursor column */
 	register char cchar;	/* current character */
 
-	if (curbp->b_mode & MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode & MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	if (tabsize == 0)
@@ -470,7 +470,7 @@ int f, n;				/* default flag and numeric repeat count */
 	register int length;	/* current length */
 	register int inc;	/* increment to next line [sgn(n)] */
 
-	if (curbp->b_mode & MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode & MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	if (f == FALSE)
@@ -516,7 +516,7 @@ int f, n;				/* prefix flag and argument */
 	register int	i;
 	register int	s;
 
-	if (curbp->b_mode & MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode & MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	if (n < 0)
 		return(FALSE);
@@ -543,13 +543,13 @@ int f, n;				/* prefix flag and argument */
 	{
 	register int	s;
 
-	if (curbp->b_mode & MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode & MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	if (n < 0)
 		return(FALSE);
 
 	/* if we are in C mode and this is a default <NL> */
-	if (n == 1 && (curbp->b_mode & MDCMOD) &&
+	if (n == 1 && (curbp->b_mode & MD_C_MODE) &&
 		curwp->w_dotp != curbp->b_linep)
 		return(cinsert());
 
@@ -558,9 +558,9 @@ int f, n;				/* prefix flag and argument */
 	 * negative, wrap mode is enabled, and we are now past fill column,
 	 * and we are not read-only, perform word wrap.
 	 */
-	if ((curwp->w_bufp->b_mode & MDWRAP) && fillcol > 0 &&
+	if ((curwp->w_bufp->b_mode & MD_WORD_WRAP) && fillcol > 0 &&
 		getccol(FALSE) > fillcol &&
-		(curwp->w_bufp->b_mode & MDVIEW) == FALSE)
+		(curwp->w_bufp->b_mode & MD_READ_ONLY) == FALSE)
 		execkey(&wraphook, FALSE, 1);
 
 	/* insert some lines */
@@ -773,7 +773,7 @@ int f, n;				/* prefix flag and argument */
 	register LINE	*lp2;
 	long nld;
 
-	if (curbp->b_mode & MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode & MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	lp1 = curwp->w_dotp;
 	while (lused(lp1) == 0 && (lp2 = lback(lp1)) != curbp->b_linep)
@@ -806,7 +806,7 @@ int f, n;				/* prefix flag and argument */
 	register int	c;
 	register int	i;
 
-	if (curbp->b_mode & MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode & MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	if (n < 0)
 		return(FALSE);
@@ -852,7 +852,7 @@ int f, n;				/* prefix flag and argument */
 
 {
 	/* Don't allow this in read-only mode */
-	if (curbp->b_mode & MDVIEW)
+	if (curbp->b_mode & MD_READ_ONLY)
 		return(rdonly());
 
 	/* with a negative argument, this is a backwards delete */
@@ -883,7 +883,7 @@ int f, n;	/* prefix flag and argument */
 	register int status;
 
 	/* Don't do this command in read-only mode */
-	if (curbp->b_mode & MDVIEW)
+	if (curbp->b_mode & MD_READ_ONLY)
 		return(rdonly());
 
 	/* with a negative argument, this becomes a delete forward */
@@ -924,7 +924,7 @@ int f, n;	/* prefix flag and argument */
 	long chunk;
 
 	/* Don't do this command in read-only mode */
-	if (curbp->b_mode & MDVIEW)
+	if (curbp->b_mode & MD_READ_ONLY)
 		return(rdonly());
 
 	/* flag this as a kill */
@@ -1074,17 +1074,17 @@ int global;				/* true = global flag,	false = current buffer flag */
 				if (global)
 					{
 					gmode |= (1 << i);
-					if ((1 << i) == MDOVER)
-						gmode &= ~MDREPL;
-					else if ((1 << i) == MDREPL)
-						gmode &= ~MDOVER;
+					if ((1 << i) == MD_OVERWRITE)
+						gmode &= ~MD_REPLACE;
+					else if ((1 << i) == MD_REPLACE)
+						gmode &= ~MD_OVERWRITE;
 					}
 				else {
 					curbp->b_mode |= (1 << i);
-					if ((1 << i) == MDOVER)
-						curbp->b_mode &= ~MDREPL;
-					else if ((1 << i) == MDREPL)
-						curbp->b_mode &= ~MDOVER;
+					if ((1 << i) == MD_OVERWRITE)
+						curbp->b_mode &= ~MD_REPLACE;
+					else if ((1 << i) == MD_REPLACE)
+						curbp->b_mode &= ~MD_OVERWRITE;
 					}
 			else
 				if (global)

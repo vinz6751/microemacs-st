@@ -665,17 +665,17 @@ typedef struct	BUFFER {
 /*	mode flags	*/
 #define NUMMODES	11	       /* # of defined modes	       */
 
-#define MDWRAP	0x0001			/* word wrap			*/
-#define MDCMOD	0x0002			/* C indentation and fence match*/
-#define MDSPELL 0x0004			/* spell error parsing		*/
-#define MDEXACT 0x0008			/* Exact matching for searches	*/
-#define MDVIEW	0x0010			/* read-only buffer		*/
-#define MDOVER	0x0020			/* overwrite mode		*/
-#define MDMAGIC 0x0040			/* regular expresions in search */
-#define MDCRYPT 0x0080			/* encrytion mode active	*/
-#define MDASAVE 0x0100			/* auto-save mode		*/
-#define MDREPL	0x0200			/* replace mode 		*/
-#define MDABBR	0x0400			/* abbreviation expansion mode	*/
+#define MD_WORD_WRAP	0x0001		/* word wrap			*/
+#define MD_C_MODE	0x0002			/* C indentation and fence match*/
+#define MD_SPELL_CHECK 0x0004		/* spell error parsing		*/
+#define MD_EXACT_SEARCH 0x0008		/* Exact matching for searches	*/
+#define MD_READ_ONLY	0x0010		/* read-only buffer		*/
+#define MD_OVERWRITE	0x0020		/* overwrite mode		*/
+#define MD_SEARCH_REGEX 0x0040		/* regular expresions in search */
+#define MD_ENCRYPT 0x0080			/* encrytion mode active	*/
+#define MD_AUTO_SAVE 0x0100			/* auto-save mode		*/
+#define MD_REPLACE	0x0200			/* replace mode 		*/
+#define MD_ABBR_EXPANSION	0x0400	/* abbreviation expansion mode	*/
 
 /*
  * The starting position of a region, and the size of the region in

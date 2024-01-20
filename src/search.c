@@ -71,7 +71,7 @@ int forwhunt(int f, int n)
 	}
 
 #if MAGIC
-	if ((curwp->w_bufp->b_mode & MDMAGIC) && mcpat[0].mc_type == MCNIL) {
+	if ((curwp->w_bufp->b_mode & MD_SEARCH_REGEX) && mcpat[0].mc_type == MCNIL) {
 		if (!mcstr())
 			return FALSE;
 	}
@@ -90,12 +90,12 @@ int forwhunt(int f, int n)
 
 #if MAGIC
 #if 0
-	if (magical && (curwp->w_bufp->b_mode & MDMAGIC))
+	if (magical && (curwp->w_bufp->b_mode & MD_SEARCH_REGEX))
 		status = mcscanner(&mcpat[0], FORWARD, spoint, n);
 	else
 		status = mcscanner(&mcdeltapat[0], FORWARD, spoint, n);
 #else
-	status = mcscanner((magical && (curwp->w_bufp->b_mode & MDMAGIC))?
+	status = mcscanner((magical && (curwp->w_bufp->b_mode & MD_SEARCH_REGEX))?
 				&mcpat[0]: &mcdeltapat[0], FORWARD, spoint, n);
 #endif
 #else
@@ -164,7 +164,7 @@ int backhunt(int f, int n)
 	}
 
 #if MAGIC
-	if ((curwp->w_bufp->b_mode & MDMAGIC) && tapcm[0].mc_type == MCNIL) {
+	if ((curwp->w_bufp->b_mode & MD_SEARCH_REGEX) && tapcm[0].mc_type == MCNIL) {
 		if (!mcstr())
 			return FALSE;
 	}
@@ -183,12 +183,12 @@ int backhunt(int f, int n)
 
 #if MAGIC
 #if 0
-	if (magical && (curwp->w_bufp->b_mode & MDMAGIC))
+	if (magical && (curwp->w_bufp->b_mode & MD_SEARCH_REGEX))
 		status = mcscanner(&tapcm[0], REVERSE, spoint, n);
 	else
 		status = mcscanner(&tapatledcm[0], REVERSE, spoint, n);
 #else
-	status = mcscanner((magical && (curwp->w_bufp->b_mode & MDMAGIC))?
+	status = mcscanner((magical && (curwp->w_bufp->b_mode & MD_SEARCH_REGEX))?
 				&tapcm[0]: &tapatledcm[0], REVERSE, spoint, n);
 #endif
 #else
@@ -732,7 +732,7 @@ int eq(bc, pc)
 register unsigned char bc;
 register unsigned char pc;
 {
-	if ((curwp->w_bufp->b_mode & MDEXACT) == 0) {
+	if ((curwp->w_bufp->b_mode & MD_EXACT_SEARCH) == 0) {
 		if (is_lower(bc))
 			bc = chcase(bc);
 
@@ -783,7 +783,7 @@ int readpattern(char *prompt, char apat[], int srch)
 	 * pattern in question might have an invalid meta combination.
 	 */
 	if (status == TRUE)
-		if ((curwp->w_bufp->b_mode & MDMAGIC) == 0) {
+		if ((curwp->w_bufp->b_mode & MD_SEARCH_REGEX) == 0) {
 			mcclear();
 			rmcclear();
 		}
@@ -1227,7 +1227,7 @@ int mceq(unsigned char bc, MC *mt)
 
 		case CCL:
 			if (!(result = biteq(bc, mt->u.cclmap))) {
-				if ((curwp->w_bufp->b_mode & MDEXACT) == 0 &&
+				if ((curwp->w_bufp->b_mode & MD_EXACT_SEARCH) == 0 &&
 				    (is_letter(bc)))
 					result = biteq(chcase(bc), mt->u.cclmap);
 			}
@@ -1236,7 +1236,7 @@ int mceq(unsigned char bc, MC *mt)
 		case NCCL:
 			result = !biteq(bc, mt->u.cclmap);
 
-			if ((curwp->w_bufp->b_mode & MDEXACT) == 0 &&
+			if ((curwp->w_bufp->b_mode & MD_EXACT_SEARCH) == 0 &&
 			    (is_letter(bc)))
 				result &= !biteq(chcase(bc), mt->u.cclmap);
 
@@ -1475,7 +1475,7 @@ int mc_list(int f, int n)
 		return FALSE;
 	}
 
-	patbuf->b_mode |= MDVIEW;
+	patbuf->b_mode |= MD_READ_ONLY;
 	if ((status = bclear(patbuf)) != TRUE) 	/* Blow old text away	*/
 		return(status);
 
@@ -1586,7 +1586,7 @@ int rmc_list(int f, int n)
 		return FALSE;
 	}
 
-	patbuf->b_mode |= MDVIEW;
+	patbuf->b_mode |= MD_READ_ONLY;
 	if ((status = bclear(patbuf)) != TRUE) 	/* Blow old text away	*/
 		return(status);
 

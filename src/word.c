@@ -162,7 +162,7 @@ int f,n;	/* prefix flag and argument */
 {
 	int c;
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	if (n < 0)
 		return(FALSE);
@@ -199,7 +199,7 @@ int f,n;	/* prefix flag and argument */
 {
 	int c;
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	if (n < 0)
 		return(FALSE);
@@ -237,7 +237,7 @@ int f,n;	/* prefix flag and argument */
 {
 	int c;
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	if (n < 0)
 		return(FALSE);
@@ -291,7 +291,7 @@ int f,n;	/* prefix flag and argument */
 	long size;		/* # of chars to delete */
 
 	/* don't allow this command if we are in read only mode */
-	if (curbp->b_mode&MDVIEW)
+	if (curbp->b_mode&MD_READ_ONLY)
 		return(rdonly());
 
 	/* ignore the command if there is a negative argument */
@@ -380,7 +380,7 @@ int f,n;	/* prefix flag and argument */
 	long size;
 
 	/* don't allow this command if we are in read only mode */
-	if (curbp->b_mode&MDVIEW)
+	if (curbp->b_mode&MD_READ_ONLY)
 		return(rdonly());
 
 	/* ignore the command if there is a nonpositive argument */
@@ -473,7 +473,7 @@ int f, n;	/* Default flag and Numeric argument */
 	LINE *bop;		/* ptr to beg of paragraph */
 	LINE *eop;		/* pointer to line just past EOP */
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	if (fillcol == 0) {	/* no fill column set */
 		mlwrite(TEXT98);

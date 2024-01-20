@@ -1176,7 +1176,7 @@ char *fname;	/* file name to execute */
 	if ((bp = bfind(bname, TRUE, 0)) == NULL) /* get the needed buffer */
 		return(FALSE);
 
-	bp->b_mode = MDVIEW;	/* mark the buffer as read only */
+	bp->b_mode = MD_READ_ONLY;	/* mark the buffer as read only */
 	cb = curbp;		/* save the old buffer */
 	curbp = bp;		/* make this one current */
 	/* and try to read in the file to execute */

@@ -96,7 +96,7 @@ BUFFER *bp;
 	bp->last_access = access_time;
 	if (curbp->b_active != TRUE) {		/* buffer not active yet*/
 		/* read it in and activate it */
-		readin(curbp->b_fname, ((curbp->b_mode&MDVIEW) == 0));
+		readin(curbp->b_fname, ((curbp->b_mode&MD_READ_ONLY) == 0));
 		curbp->b_dotp = lforw(curbp->b_linep);
 		curbp->b_doto = 0;
 		curbp->b_active = TRUE;

@@ -19,7 +19,7 @@ char c;		/* character to add to current word buffer */
 	char *s;	/* ptr to cycle chars */
 
 	/* only in ABBREV mode */
-	if ((curbp->b_mode & MDABBR) == 0)
+	if ((curbp->b_mode & MD_ABBR_EXPANSION) == 0)
 		return;
 
 	/* is the buffer full? */
@@ -45,8 +45,8 @@ void ab_expand()
 	char c;		/* current character to insert */
 	
 	/* only in ABBREV mode, never in VIEW mode */
-	if ((curbp->b_mode & MDABBR) == 0 ||
-	    (curbp->b_mode & MDVIEW) == MDVIEW)
+	if ((curbp->b_mode & MD_ABBR_EXPANSION) == 0 ||
+	    (curbp->b_mode & MD_READ_ONLY) == MD_READ_ONLY)
 		return;
 
 	/* is the current buffer a symbol in the abbreviation table? */
@@ -65,7 +65,7 @@ void ab_expand()
 			 * argument is non-negative, wrap mode is enabled, and
 			 * we are now past fill column, perform word wrap.
 			 */
-			if (c == ' ' && (curwp->w_bufp->b_mode & MDWRAP) &&
+			if (c == ' ' && (curwp->w_bufp->b_mode & MD_WORD_WRAP) &&
 			    fillcol > 0 &&
 			    getccol(FALSE) > fillcol)
 				execkey(&wraphook, FALSE, 1);

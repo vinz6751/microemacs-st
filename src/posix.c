@@ -608,7 +608,7 @@ int n;					/* Argument count		*/
 		return(0);
 
 	/* Make this window in VIEW mode, update all mode lines */
-	curwp->w_bufp->b_mode |= MDVIEW;
+	curwp->w_bufp->b_mode |= MD_READ_ONLY;
 	wp = wheadp;
 	while (wp) {
 		wp->w_flag |= WFMODE;
@@ -637,7 +637,7 @@ int n;					/* Argument count		*/
 		return(resterr());
 
 	/* Don't allow filtering of VIEW mode buffer */
-	if (curbp->b_mode & MDVIEW)
+	if (curbp->b_mode & MD_READ_ONLY)
 		return(rdonly());
 
 	/* Get the filter name and its args */

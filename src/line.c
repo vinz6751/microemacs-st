@@ -209,7 +209,7 @@ linsert(int n, char c)
 	SCREEN *scrp;		/* screen to fix pointers in */
 	int cmark;		/* current mark */
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	/* a zero insert means do nothing! */
@@ -363,7 +363,7 @@ int lnewline()
 	SCREEN *scrp;		/* screen to fix pointers in */
 	int cmark;		/* current mark */
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	/* remember we did this! */
@@ -446,7 +446,7 @@ int kflag;	/* put killed text in kill buffer flag */
 	register EWINDOW *wp;
 	int cmark;		/* current mark */
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	/* going Forward? */
@@ -692,7 +692,7 @@ int ldelnewline()
 	SCREEN *scrp;		/* screen to fix pointers in */
 	int cmark;		/* current mark */
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	/* remember we did this! */
@@ -945,7 +945,7 @@ int f,n;	/* prefix flag and argument */
 	LINE *curline;
 	KILL *kptr;		/* pointer into kill buffer */
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 	if (n < 0)
 		return(FALSE);

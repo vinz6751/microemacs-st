@@ -252,7 +252,7 @@ pipecmd(f, n)
 		return(FALSE);
 
 	/* make this window in VIEW mode, update all mode lines */
-	curwp->w_bufp->b_mode |= MDVIEW;
+	curwp->w_bufp->b_mode |= MD_READ_ONLY;
 	upmode();
 
 	/* and get rid of the temporary file */
@@ -280,7 +280,7 @@ filter(f, n)
 	if (restflag)
 		return(resterr());
 
-	if (curbp->b_mode&MDVIEW)	/* don't allow this command if	*/
+	if (curbp->b_mode&MD_READ_ONLY)	/* don't allow this command if	*/
 		return(rdonly());	/* we are in read only mode	*/
 
 	/* get the filter name and its args */

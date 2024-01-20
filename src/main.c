@@ -365,10 +365,10 @@ int firstflag;			/* is this the first time in? */
 
 			/* set the modes appropriatly */
 			if (viewflag)
-				bp->b_mode |= MDVIEW;
+				bp->b_mode |= MD_READ_ONLY;
 #if	CRYPT
 			if (cryptflag) {
-				bp->b_mode |= MDCRYPT;
+				bp->b_mode |= MD_ENCRYPT;
 				ecrypt((char *) NULL, 0);
 				ecrypt(ekey, strlen(ekey));
 				bytecopy(bp->b_key, ekey, NPAT);
@@ -721,9 +721,9 @@ int n;					/* prefix value */
 	 * negative, wrap mode is enabled, and we are now past fill column,
 	 * and we are not read-only, perform word wrap.
 	 */
-	if (c == ' ' && (curwp->w_bufp->b_mode & MDWRAP) && fillcol > 0 &&
+	if (c == ' ' && (curwp->w_bufp->b_mode & MD_WORD_WRAP) && fillcol > 0 &&
 		n >= 0 && getccol(FALSE) > fillcol &&
-		(curwp->w_bufp->b_mode & MDVIEW) == FALSE)
+		(curwp->w_bufp->b_mode & MD_READ_ONLY) == FALSE)
 		execkey(&wraphook, FALSE, 1);
 
 	if ((c >= 0x20 && c <= 0xFF)) { /* Self inserting.	*/
@@ -734,12 +734,12 @@ int n;					/* prefix value */
 		thisflag = 0;	/* For the future.	*/
 
 		/* replace or overwrite mode, not at the end of a string */
-		if (curwp->w_bufp->b_mode & (MDREPL | MDOVER) &&
+		if (curwp->w_bufp->b_mode & (MD_REPLACE | MD_OVERWRITE) &&
 			curwp->w_doto < lused(curwp->w_dotp)) {
 			do {
 				/* if we are in replace mode, or
 				   (next char is not a tab or we are at a tab stop) */
-				if (curwp->w_bufp->b_mode & MDREPL ||
+				if (curwp->w_bufp->b_mode & MD_REPLACE ||
 					((lgetc(curwp->w_dotp, curwp->w_doto) != '\t' || tabsize == 0) ||
 					getccol(FALSE) % tabsize == (tabsize - 1))) {
 
@@ -751,9 +751,9 @@ int n;					/* prefix value */
 				}
 
 				/* do the appropriate insertion */
-				if (c == '}' && (curbp->b_mode & MDCMOD) != 0)
+				if (c == '}' && (curbp->b_mode & MD_C_MODE) != 0)
 					status = insbrace(1, c);
-				else if (c == '#' && (curbp->b_mode & MDCMOD) != 0)
+				else if (c == '#' && (curbp->b_mode & MD_C_MODE) != 0)
 					status = inspound();
 				else {
 					status = linsert(1, c);
@@ -763,9 +763,9 @@ int n;					/* prefix value */
 
 		/* do the appropriate insertion */
 		if (n > 0) {
-			if (c == '}' && (curbp->b_mode & MDCMOD) != 0)
+			if (c == '}' && (curbp->b_mode & MD_C_MODE) != 0)
 				status = insbrace(n, c);
-			else if (c == '#' && (curbp->b_mode & MDCMOD) != 0)
+			else if (c == '#' && (curbp->b_mode & MD_C_MODE) != 0)
 				status = inspound();
 			else
 				status = linsert(n, c);
@@ -774,18 +774,18 @@ int n;					/* prefix value */
 #if ABBREVIATIONS
 		/* In ABBREV mode, if we are doing aggressive expansion and
 		   the current buffer is a symbol in the abbreviation table */
-		if (((curbp->b_mode & MDABBR) != 0) &&
+		if (((curbp->b_mode & MD_ABBR_EXPANSION) != 0) &&
 			(ab_quick && (ab_lookup(ab_word) != NULL)))
 			ab_expand();
 #endif
 
 		/* check for CMODE fence matching */
 		if ((c == '}' || c == ')' || c == ']') &&
-			(curbp->b_mode & MDCMOD) != 0)
+			(curbp->b_mode & MD_C_MODE) != 0)
 			fmatch(c);
 
 		/* check auto-save mode */
-		if (curbp->b_mode & MDASAVE)
+		if (curbp->b_mode & MD_AUTO_SAVE)
 
 			if (--gacount == 0) {
 

@@ -351,8 +351,8 @@ int  retag;
 		gotoline(TRUE, 1);
 
 		/* Set-up for searching... use exact mode, not magic	*/
-		curbp->b_mode |= MDEXACT;
-		curbp->b_mode &= ~MDMAGIC;
+		curbp->b_mode |= MD_EXACT_SEARCH;
+		curbp->b_mode &= ~MD_SEARCH_REGEX;
 		setjtable();
 #if MAGIC
 		/*

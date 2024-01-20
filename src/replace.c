@@ -59,7 +59,7 @@ int	n;					/* # of repetitions wanted */
 	 * Don't allow this command if we are
 	 * in read only mode.
 	 */
-	if (curbp->b_mode & MDVIEW)
+	if (curbp->b_mode & MD_READ_ONLY)
 		return (rdonly());
 
 	/* Check for negative repetitions.
@@ -109,7 +109,7 @@ int	n;					/* # of repetitions wanted */
 		 * the matched string.
 		 */
 #if	MAGIC
-		if (magical && (curwp->w_bufp->b_mode & MDMAGIC)) {
+		if (magical && (curwp->w_bufp->b_mode & MD_SEARCH_REGEX)) {
 			if (!mcscanner(&mcpat[0], FORWARD, PTBEG, 1))
 				break;
 		}
@@ -308,7 +308,7 @@ void mlrquery()
 	tcol += strlen(TEXT88);
 
 #if	MAGIC
-	if (rmagical && (curwp->w_bufp->b_mode & MDMAGIC)) {
+	if (rmagical && (curwp->w_bufp->b_mode & MD_SEARCH_REGEX)) {
 		rmcptr = &rmcpat[0];
 
 		while (rmcptr->mc_type != MCNIL && tcol < NPAT - 8) {
@@ -355,7 +355,7 @@ int	use_rmc;
 /*			"%%ERROR while deleting" */
 	else
 #if	MAGIC
-		if (use_rmc && (curwp->w_bufp->b_mode & MDMAGIC)) {
+		if (use_rmc && (curwp->w_bufp->b_mode & MD_SEARCH_REGEX)) {
 			rmcptr = &rmcpat[0];
 			while (rmcptr->mc_type != MCNIL && status == TRUE) {
 				if (rmcptr->mc_type == LITSTRING)

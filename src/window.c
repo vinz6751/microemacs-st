@@ -603,7 +603,7 @@ setwin: wp = wheadp;
 				wp->w_marko[cmark] = 0;
 			}
 			wp->w_flag |= WFMODE|WFHARD;
-			popbuf->b_mode |= MDVIEW; /* put this buffer view mode */
+			popbuf->b_mode |= MD_READ_ONLY; /* put this buffer view mode */
 			upmode();
 		}
 		wp = wp->w_wndp;
