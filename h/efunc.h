@@ -25,7 +25,7 @@
 #endif
 	{"add-mode",			setmod},
 	{"append-file",			file_append},
-	{"apropos",			apro},
+	{"apropos",			a_propos},
 #if	CTAGS
 	{"back-from-tag-word",		backtagword},
 #endif
@@ -33,7 +33,7 @@
 	{"begin-macro",			ctlxlp},
 	{"beginning-of-file",		goto_begining_of_buffer},
 	{"beginning-of-line",		goto_begining_of_line},
-	{"bind-to-key",			bindtokey},
+	{"bind-to-key",			bind_to_key},
 	{"buffer-position",		showcpos},
 	{"case-region-lower",		lowerregion},
 	{"case-region-upper",		upperregion},
@@ -72,9 +72,9 @@
 #if ABBREVIATIONS
 	{"describe-abbrevs",		desc_abbrevs},
 #endif
-	{"describe-bindings",		desbind},
+	{"describe-bindings",		describe_bindings},
 	{"describe-functions",		desfunc},
-	{"describe-key",		deskey},
+	{"describe-key",		describe_key},
 	{"describe-variables",		desvars},
 	{"detab-region",		detab},
 	{"display",			dispvar},
@@ -133,7 +133,7 @@
 	{"list-screens",		list_screens},
 	{"list-undos",			undo_list},
 	{"local",			local_var},
-	{"macro-to-key",		macrotokey},
+	{"macro-to-key",		bind_macro_to_key},
 	{"meta-prefix", 		meta},
 #if	MOUSE
 	{"mouse-move",			mmove},
@@ -209,7 +209,7 @@
 #endif
 	{"transpose-characters",	twiddle},
 	{"trim-region",			trim},
-	{"unbind-key",			unbindkey},
+	{"unbind-key",			unbind_key},
 	{"undent-region",		undent_region},
 	{"undo",			undo},
 	{"universal-argument",		unarg},

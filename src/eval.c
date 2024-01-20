@@ -161,7 +161,7 @@ char *fname;		/* name of function to evaluate */
 		case UFEQUAL:	return(ltos(asc_int(arg1) == asc_int(arg2)));
 		case UFEXIST:	return(ltos(fexist(arg1)));
 		case UFFIND:
-				return(fixnull(flook(arg1, TRUE)));
+				return(fixnull(lookup_file(arg1, TRUE)));
 		case UFGREATER: return(ltos(asc_int(arg1) > asc_int(arg2)));
 		case UFGROUP:
 				arg = asc_int(arg1);
@@ -178,7 +178,7 @@ char *fname;		/* name of function to evaluate */
 					return(bytecopy(result, errorm, NSTRING * 2));
 				return(result);
 #endif
-		case UFGTCMD:	return(cmdstr(getcmd(), result));
+		case UFGTCMD:	return(command_key_sequence_to_string(getcmd(), result));
 		case UFGTKEY:	result[0] = tgetc();
 				result[1] = 0;
 				return(result);
@@ -390,7 +390,7 @@ char *vname;		/* name of environment variable to retrieve */
 		case EVHJUMP:	return(int_asc(hjump));
 		case EVHSCRLBAR: return(ltos(hscrollbar));
 		case EVHSCROLL: return(ltos(hscroll));
-		case EVISTERM:	return(cmdstr(isterm, result));
+		case EVISTERM:	return(command_key_sequence_to_string(isterm, result));
 		case EVKILL:	return(getkill());
 		case EVLANG:	return(LANGUAGE);
 		case EVLASTKEY: return(int_asc(lastkey));
@@ -435,7 +435,7 @@ char *vname;		/* name of environment variable to retrieve */
 		case EVSSAVE:	return(ltos(ssave));
 		case EVSSCROLL: return(ltos(sscroll));
 		case EVSTATUS:	return(ltos(cmdstatus));
-		case EVSTERM:	return(cmdstr(sterm, result));
+		case EVSTERM:	return(command_key_sequence_to_string(sterm, result));
 		case EVTARGET:	saveflag = lastflag;
 				return(int_asc(curgoal));
 		case EVTIME:	return(timeset());

@@ -25,7 +25,7 @@ int f,n;	/* prefix flag and argument */
 	bp = find_buffer("emacs.hlp", FALSE, BFINVS);
 
 	if (bp == NULL) {
-		fname = flook(pathname[1], FALSE);
+		fname = lookup_file(pathname[1], FALSE);
 		if (fname == NULL) {
 			mlwrite(TEXT12);
 /*				"[Help file is not online]" */
@@ -51,7 +51,7 @@ int f,n;	/* prefix flag and argument */
 	return(TRUE);
 }
 
-deskey(f, n)	/* describe the command for a certain key */
+describe_key(f, n)	/* describe the command for a certain key */
 
 int f,n;	/* prefix flag and argument */
 
@@ -67,7 +67,7 @@ int f,n;	/* prefix flag and argument */
 	/* get the command sequence to describe
 	   change it to something we can print as well */
 	/* and dump it out */
-	ostring(cmdstr(c = getckey(FALSE), &outseq[0]));
+	ostring(command_key_sequence_to_string(c = get_command_key_sequence(FALSE), &outseq[0]));
 	ostring(" ");
 
 	/* find the right ->function */
@@ -79,16 +79,16 @@ int f,n;	/* prefix flag and argument */
 	return(TRUE);
 }
 
-/* bindtokey:	add a new key to the key binding table		*/
+/* bind_to_key:	add a new key to the key binding table		*/
 
-bindtokey(f, n)
+bind_to_key(f, n)
 
 int f, n;	/* command arguments [IGNORED] */
 
 {
 	register unsigned int c;/* command key to bind */
 	register int (*kfunc)();/* ptr to the requested function to bind to */
-	register KEYTAB *ktp;	/* pointer into the command table */
+	register KEY_BINDING *ktp;	/* pointer into the command table */
 	register int found;	/* matched command flag */
 	char outseq[80];	/* output buffer for keystroke sequence */
 
@@ -107,14 +107,14 @@ int f, n;	/* command arguments [IGNORED] */
 	}
 
 	/* get the command sequence to bind */
-	c = getckey((kfunc == meta) || (kfunc == cex) ||
+	c = get_command_key_sequence((kfunc == meta) || (kfunc == cex) ||
 		    (kfunc == unarg) || (kfunc == ctrlg));
 
 	if (clexec == FALSE) {
 
 		/* change it to something we can print as well */
 		/* and dump it out */
-		ostring(cmdstr(c, &outseq[0]));
+		ostring(command_key_sequence_to_string(c, &outseq[0]));
 	}
 
 	/* if the function is a unique prefix key */
@@ -124,7 +124,7 @@ int f, n;	/* command arguments [IGNORED] */
 		ktp = &keytab[0];
 		while (ktp->k_type != BINDNUL) {
 			if (ktp->k_type == BINDFNC && ktp->k_ptr.fp == kfunc)
-				unbindchar(ktp->k_code);
+				unbind_char(ktp->k_code);
 			++ktp;
 		}
 
@@ -178,16 +178,16 @@ int f, n;	/* command arguments [IGNORED] */
 	return(TRUE);
 }
 
-/* macrotokey:	Bind a key to a macro in the key binding table */
+/* bind_macro_to_key:	Bind a key to a macro in the key binding table */
 
-macrotokey(f, n)
+bind_macro_to_key(f, n)
 
 int f, n;	/* command arguments [IGNORED] */
 
 {
 	register unsigned int c;/* command key to bind */
 	register BUFFER *kmacro;/* ptr to buffer of macro to bind to key */
-	register KEYTAB *ktp;	/* pointer into the command table */
+	register KEY_BINDING *ktp;	/* pointer into the command table */
 	register int found;	/* matched command flag */
 	register int status;	/* error return */
 	char outseq[80];	/* output buffer for keystroke sequence */
@@ -216,11 +216,11 @@ int f, n;	/* command arguments [IGNORED] */
 	mlwrite(outseq);
 
 	/* get the command sequence to bind */
-	c = getckey(FALSE);
+	c = get_command_key_sequence(FALSE);
 
 	/* change it to something we can print as well */
 	/* and dump it out */
-	ostring(cmdstr(c, &outseq[0]));
+	ostring(command_key_sequence_to_string(c, &outseq[0]));
 
 	/* search the table to see if it exists */
 	ktp = &keytab[0];
@@ -256,9 +256,9 @@ int f, n;	/* command arguments [IGNORED] */
 	return(TRUE);
 }
 
-/* unbindkey:	delete a key from the key binding table */
+/* unbind_key:	delete a key from the key binding table */
 
-unbindkey(f, n)
+unbind_key(f, n)
 
 int f, n;	/* command arguments [IGNORED] */
 
@@ -271,14 +271,14 @@ int f, n;	/* command arguments [IGNORED] */
 /*		": unbind-key " */
 
 	/* get the command sequence to unbind */
-	c = getckey(FALSE);		/* get a command sequence */
+	c = get_command_key_sequence(FALSE);		/* get a command sequence */
 
 	/* change it to something we can print as well */
 	/* and dump it out */
-	ostring(cmdstr(c, &outseq[0]));
+	ostring(command_key_sequence_to_string(c, &outseq[0]));
 
 	/* if it isn't bound, bitch */
-	if (unbindchar(c) == FALSE) {
+	if (unbind_char(c) == FALSE) {
 		mlwrite(TEXT19);
 /*			"[Key not bound]" */
 		return(FALSE);
@@ -286,13 +286,13 @@ int f, n;	/* command arguments [IGNORED] */
 	return(TRUE);
 }
 
-unbindchar(c)
+unbind_char(c)
 
 int c;		/* command key to unbind */
 
 {
-	register KEYTAB *ktp;	/* pointer into the command table */
-	register KEYTAB *sktp;	/* saved pointer into the command table */
+	register KEY_BINDING *ktp;	/* pointer into the command table */
+	register KEY_BINDING *sktp;	/* saved pointer into the command table */
 	register int found;	/* matched command flag */
 
 	/* search the table to see if the key exists */
@@ -331,21 +331,21 @@ int c;		/* command key to unbind */
 	return(TRUE);
 }
 
-/* unbind all the keys bound to a buffer (which we can then delete */
+/* unbind all the keys bound to a buffer (which we can then delete) */
 
 void unbind_buf(bp)
 
 BUFFER *bp;	/* buffer to unbind all keys connected to */
 
 {
-	register KEYTAB *ktp;	/* pointer into the command table */
+	register KEY_BINDING *ktp;	/* pointer into the command table */
 
 	/* search the table to see if the key exists */
 	ktp = &keytab[0];
 	while (ktp->k_type != BINDNUL) {
 		if (ktp->k_type == BINDBUF) {
 			if (ktp->k_ptr.buf == bp) {
-				unbindchar(ktp->k_code);
+				unbind_char(ktp->k_code);
 				--ktp;
 			}
 		}
@@ -359,15 +359,15 @@ BUFFER *bp;	/* buffer to unbind all keys connected to */
 	   into it with view mode
 */
 
-desbind(f, n)
+describe_bindings(f, n)
 
 int f,n;	/* prefix flag and argument */
 
 {
-	return(buildlist(TRUE, ""));
+	return(build_list_of_bindings(TRUE, ""));
 }
 
-apro(f, n)	/* Apropos (List functions that match a substring) */
+a_propos(f, n)	/* Apropos (List functions that match a substring) */
 
 int f,n;	/* prefix flag and argument */
 
@@ -380,16 +380,16 @@ int f,n;	/* prefix flag and argument */
 	if (status != TRUE)
 		return(status);
 
-	return(buildlist(FALSE, mstring));
+	return(build_list_of_bindings(FALSE, mstring));
 }
 
-buildlist(type, mstring)  /* build a binding list (limited or full) */
+build_list_of_bindings(type, mstring)  /* build a binding list (limited or full) */
 
 int type;	/* true = full list,   false = partial list */
 char *mstring;	/* match string if a partial list */
 
 {
-	register KEYTAB *ktp;	/* pointer into the command table */
+	register KEY_BINDING *ktp;	/* pointer into the command table */
 	register NBIND *nptr;	/* pointer into the name binding table */
 	register BUFFER *listbuf;/* buffer to put binding list into */
 	register BUFFER *bp;	/* buffer ptr for function scan */
@@ -421,7 +421,7 @@ char *mstring;	/* match string if a partial list */
 		/* if we are executing an apropos command..... */
 		if (type == FALSE &&
 		    /* and current string doesn't include the search string */
-		    strinc(outseq, mstring) == FALSE)
+		    string_contains(outseq, mstring) == FALSE)
 			goto fail;
 
 		/* search down any keys bound to this */
@@ -434,7 +434,7 @@ char *mstring;	/* match string if a partial list */
 					outseq[cpos++] = ' ';
 
 				/* add in the command sequence */
-				cmdstr(ktp->k_code, &outseq[cpos]);
+				command_key_sequence_to_string(ktp->k_code, &outseq[cpos]);
 
 				/* and add it as a line into the buffer */
 				if (addline(listbuf, outseq) != TRUE)
@@ -472,7 +472,7 @@ fail:		/* and on to the next name */
 		/* if we are executing an apropos command..... */
 		if (type == FALSE &&
 		    /* and current string doesn't include the search string */
-		    strinc(outseq, mstring) == FALSE)
+		    string_contains(outseq, mstring) == FALSE)
 			goto bfail;
 
 		/* search down any keys bound to this macro */
@@ -485,7 +485,7 @@ fail:		/* and on to the next name */
 					outseq[cpos++] = ' ';
 
 				/* add in the command sequence */
-				cmdstr(ktp->k_code, &outseq[cpos]);
+				command_key_sequence_to_string(ktp->k_code, &outseq[cpos]);
 
 				/* and add it as a line into the buffer */
 				if (addline(listbuf, outseq) != TRUE)
@@ -519,7 +519,7 @@ bfail:		/* and on to the next buffer */
 	return(TRUE);
 }
 
-strinc(source, sub) /* does source include sub? */
+string_contains(source, sub) /* does source include sub? */
 
 char *source;	/* string to search in */
 char *sub;	/* substring to look for */
@@ -555,7 +555,7 @@ char *sub;	/* substring to look for */
 
 /* get a command key sequence from the keyboard */
 
-unsigned int getckey(mflag)
+unsigned int get_command_key_sequence(mflag)
 
 int mflag;	/* going for a meta sequence? */
 
@@ -579,7 +579,7 @@ int mflag;	/* going for a meta sequence? */
 
 /* execute the startup file */
 
-startup(sfname)
+execute_startup_file(sfname)
 
 char *sfname;	/* name of startup file (null if default) */
 
@@ -595,9 +595,9 @@ char *sfname;	/* name of startup file (null if default) */
 		if (sindex(name, ".") == 0)
 			strcat(name, ".cmd");
 
-		fname = flook(name, TRUE);
+		fname = lookup_file(name, TRUE);
 	} else
-		fname = flook(pathname[0], TRUE);
+		fname = lookup_file(pathname[0], TRUE);
 
 	/* if it isn't around, don't sweat it */
 	if (fname == NULL)
@@ -623,7 +623,7 @@ char *sfname;	/* name of startup file (null if default) */
 			directories in table from EPATH.H
 */
 
-char *flook(fname, hflag)
+char *lookup_file(fname, hflag)
 
 char *fname;	/* base file name to search for */
 int hflag;	/* Look in the HOME environment variable first? */
@@ -675,11 +675,7 @@ int hflag;	/* Look in the HOME environment variable first? */
 
 #if	ENVFUNC
 	/* get the PATH variable */
-#if OS2
-	path = getenv("DPATH");
-#else
 	path = getenv("PATH");
-#endif
 	if (path != NULL)
 		while (*path) {
 
@@ -731,7 +727,7 @@ int hflag;	/* Look in the HOME environment variable first? */
 /* Change a key command to a string we can print out.
  * Return the string passed in.
  */
-char *cmdstr(c, seq)
+char *command_key_sequence_to_string(c, seq)
 
 int c;		/* sequence to translate */
 char *seq;	/* destination string for sequence */
@@ -797,12 +793,12 @@ char *seq;	/* destination string for sequence */
 
 /*	This function looks a key binding up in the binding table	*/
 
-KEYTAB *getbind(c)
+KEY_BINDING *getbind(c)
 
 register int c;	/* key to find what is bound to it */
 
 {
-	register KEYTAB *ktp;
+	register KEY_BINDING *ktp;
 
 	/* scan through the binding table, looking for the key's entry */
 	ktp = &keytab[0];
@@ -813,16 +809,16 @@ register int c;	/* key to find what is bound to it */
 	}
 
 	/* no such binding */
-	return((KEYTAB *)NULL);
+	return((KEY_BINDING *)NULL);
 }
 
-/* getfname:	This function takes a ptr to KEYTAB entry and gets the name
+/* getfname:	This function takes a ptr to KEY_BINDING entry and gets the name
 		associated with it
 */
 
 char *getfname(key)
 
-KEYTAB *key;	/* key binding to return a name of */
+KEY_BINDING *key;	/* key binding to return a name of */
 
 {
 	int (*func)(); /* ptr to the requested function */
@@ -994,7 +990,7 @@ char *skey;	/* name of key to get binding for */
 
 int execkey(key, f, n)	/* execute a function bound to a key */
 
-KEYTAB *key;	/* key to execute */
+KEY_BINDING *key;	/* key to execute */
 int f, n;	/* agruments to C function */
 
 {
@@ -1014,12 +1010,12 @@ int f, n;	/* agruments to C function */
 	return(TRUE);
 }
 
-/* set a KEYTAB to the given name of the given type
+/* set a KEY_BINDING to the given name of the given type
  * key: ptr to key to set
  * name: name of function or buffer
  */
 
-int set_key(KEYTAB *key, char *name)
+int set_key(KEY_BINDING *key, char *name)
 {
 	int (*ktemp)();	/* temp function pointer to assign */
 	register BUFFER *kmacro;	/* ptr to buffer of macro to bind to key */

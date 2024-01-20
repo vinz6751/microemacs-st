@@ -820,7 +820,7 @@ typedef struct	{
 	short k_code;		/* Key code			*/
 	short k_type;		/* binding type (C function or EMACS buffer) */
 	ETYPE EPOINTER k_ptr;	/* ptr to thing to execute */
-}	KEYTAB;
+}	KEY_BINDING;
 
 /*	structure for the name binding table		*/
 
@@ -841,7 +841,7 @@ typedef struct KILL {
 	char d_chunk[KBLOCK];	/* deleted text */
 } KILL;
 
-/*	When emacs's command interpetor needs to get a variable's name,
+/*	When emacs's command interpretor needs to get a variable's name,
 	rather than it's value, it is passed back as a VDESC variable
 	description structure. The v_num field is a index into the
 	appropriate variable table.

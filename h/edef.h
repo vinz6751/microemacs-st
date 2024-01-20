@@ -179,13 +179,13 @@ const char falsem[] = "FALSE";		/* false litereal		*/
 
 /*	Various "Hook" execution variables	*/
 
- KEYTAB readhook;	/* executed on all file reads */
- KEYTAB wraphook;	/* executed when wrapping text */
- KEYTAB cmdhook;		/* executed before looking for a command */
- KEYTAB writehook;	/* executed on all file writes */
- KEYTAB exbhook;		/* executed when exiting a buffer */
- KEYTAB bufhook;		/* executed when entering a buffer */
-	KEYTAB exithook;	/* executed when exiting emacs */
+ KEY_BINDING readhook;	/* executed on all file reads */
+ KEY_BINDING wraphook;	/* executed when wrapping text */
+ KEY_BINDING cmdhook;		/* executed before looking for a command */
+ KEY_BINDING writehook;	/* executed on all file writes */
+ KEY_BINDING exbhook;		/* executed when exiting a buffer */
+ KEY_BINDING bufhook;		/* executed when entering a buffer */
+	KEY_BINDING exithook;	/* executed when exiting emacs */
 
 /* The variables matchline and matchoff hold the line
  * and offset position of the *start* of the match.
@@ -263,7 +263,7 @@ const short int dname_len[NUMDIRS] = {2, 4, 5, 4, 6, 4, 5, 7, 5, 5};
 const extern char *modename[DUMMYSZ];	/* text names of modes		*/
 const extern char modecode[DUMMYSZ];	/* letters to represent modes	*/
  extern int numfunc;	/* number of bindable functions */
- extern KEYTAB keytab[DUMMYSZ];	/* key bind to functions table	*/
+ extern KEY_BINDING keytab[DUMMYSZ];	/* key bind to functions table	*/
  extern NBIND names[DUMMYSZ];	/* name to function table	*/
  extern int gmode;		/* global editor mode		*/
  extern int gflags;	/* global control flag		*/
@@ -403,13 +403,13 @@ const extern char falsem[DUMMYSZ];	/* false litereal		*/
 
 /*	Various "Hook" execution variables	*/
 
- extern KEYTAB readhook;		/* executed on all file reads */
- extern KEYTAB wraphook;		/* executed when wrapping text */
- extern KEYTAB cmdhook;		/* executed before looking for a cmd */
- extern KEYTAB writehook;	/* executed on all file writes */
- extern KEYTAB exbhook;		/* executed when exiting a buffer */
- extern KEYTAB bufhook;		/* executed when entering a buffer */
-	extern KEYTAB exithook;		/* executed when exiting emacs */
+ extern KEY_BINDING readhook;		/* executed on all file reads */
+ extern KEY_BINDING wraphook;		/* executed when wrapping text */
+ extern KEY_BINDING cmdhook;		/* executed before looking for a cmd */
+ extern KEY_BINDING writehook;	/* executed on all file writes */
+ extern KEY_BINDING exbhook;		/* executed when exiting a buffer */
+ extern KEY_BINDING bufhook;		/* executed when entering a buffer */
+	extern KEY_BINDING exithook;		/* executed when exiting emacs */
 
  extern int matchlen;
  extern int matchoff;

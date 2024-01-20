@@ -300,7 +300,7 @@ int f, n;				/* prefix flag and argument */
 	/* if this is a mouse event or function key, put its name in */
 	if ((ec & MOUS) || (ec & SPEC))
 		{
-		cmdstr(ec, key_name);
+		command_key_sequence_to_string(ec, key_name);
 		while (n--)
 		{
 			status = linstr(key_name);

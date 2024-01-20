@@ -328,7 +328,7 @@ undolist()
 	
 			case OP_DELC:
 				strcpy(cp1, "DELC  ");
-				cmdstr(up->undo_obj.obj_char, cp1 + 6);
+				command_key_sequence_to_string(up->undo_obj.obj_char, cp1 + 6);
 				break;
 
 			case OP_DSTR:
@@ -342,7 +342,7 @@ undolist()
 
 			case OP_INSC:
 				strcpy(cp1, "INSC  ");
-				cmdstr(up->undo_obj.obj_char, cp1 + 6);
+				command_key_sequence_to_string(up->undo_obj.obj_char, cp1 + 6);
 				break;
 
 			case OP_ISTR:
@@ -351,7 +351,7 @@ undolist()
 
 			case OP_REPC:
 				strcpy(cp1, "REPC  ");
-				cmdstr(up->undo_obj.obj_char, cp1 + 6);
+				command_key_sequence_to_string(up->undo_obj.obj_char, cp1 + 6);
 				break;		
 		}
 

@@ -67,14 +67,14 @@ int f, n;	/* default Flag and Numeric argument */
 
 {
 	register int status;		/* status return */
-	char cmdstr[NSTRING];		/* string holding command to execute */
+	char command_key_sequence_to_string[NSTRING];		/* string holding command to execute */
 
 	/* get the line wanted */
-	if ((status = mlreply(": ", cmdstr, NSTRING)) != TRUE)
+	if ((status = mlreply(": ", command_key_sequence_to_string, NSTRING)) != TRUE)
 		return(status);
 
 	execlevel = 0;
-	return(docmd(cmdstr));
+	return(docmd(command_key_sequence_to_string));
 }
 
 /*	docmd:	take a passed string as a command line and translate
@@ -982,7 +982,7 @@ int *skipflag;	/* are we skipping debugging? */
 	register int oldinp;		/* original connamd input flag */
 	register int oldstatus;		/* status of last command */
 	register int c;			/* temp character */
-	register KEYTAB *key;		/* ptr to a key entry */
+	register KEY_BINDING *key;		/* ptr to a key entry */
 	static char track[NSTRING] = "";/* expression to track value of */
 	char temp[NSTRING];		/* command or expression */
 
@@ -1121,7 +1121,7 @@ int f, n;	/* default flag and numeric arg to pass on to file */
 
 #if WINDOW_MSWIN
 	/* special case: we want filenamedlg to refrain from stuffing a
-	   full pathname so that flook() can be put to use a few lines
+	   full pathname so that lookup_file() can be put to use a few lines
 	   down the road... */
 	if ((status = filenamedlg(TEXT129, fname, NSTRING -1, FALSE)) != TRUE)
 #else
@@ -1130,7 +1130,7 @@ int f, n;	/* default flag and numeric arg to pass on to file */
 		return(status);
 
 	/* look up the path for the file */
-	fspec = flook(fname, TRUE);
+	fspec = lookup_file(fname, TRUE);
 
 	/* if it isn't around */
 	if (fspec == NULL) {
@@ -1138,7 +1138,7 @@ int f, n;	/* default flag and numeric arg to pass on to file */
 		/* try to default the extension */
 		if (sindex(fname, ".") == 0) {
 			strcat(fname, ".cmd");
-			fspec = flook(fname, TRUE);
+			fspec = lookup_file(fname, TRUE);
 			if (fspec != NULL)
 				goto exec1;
 		}

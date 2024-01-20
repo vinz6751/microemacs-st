@@ -811,10 +811,10 @@ char *cmd;	/*  Incoming command line to execute  */
 	strcat(&tail[1], "\r");
 
 	/* look up the program on the path trying various extentions */
-	if ((sp = flook(prog, TRUE)) == NULL)
-		if ((sp = flook(strcat(prog, ".exe"), TRUE)) == NULL) {
+	if ((sp = lookup_file(prog, TRUE)) == NULL)
+		if ((sp = lookup_file(strcat(prog, ".exe"), TRUE)) == NULL) {
 			strcpy(&prog[strlen(prog)-4], ".com");
-			if ((sp = flook(prog, TRUE)) == NULL)
+			if ((sp = lookup_file(prog, TRUE)) == NULL)
 				return(FALSE);
 		}
 	strcpy(prog, sp);

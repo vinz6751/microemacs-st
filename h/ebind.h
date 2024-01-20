@@ -9,7 +9,7 @@
  * keystrokes and the &bind function. Thus I am placing more frequent
  * keys at the top . . .
  */
- KEYTAB	keytab[NBINDS] = {
+ KEY_BINDING	keytab[NBINDS] = {
 
 #if	MOUSE
 	{MOUS|'m',		BINDFNC,	mmove},
@@ -60,7 +60,7 @@
 	{CTLX|CTRL|'E', 	BINDFNC,	entab},
 	{CTLX|CTRL|'F', 	BINDFNC,	find_file},
 	{CTLX|CTRL|'I', 	BINDFNC,	insert_file},
-	{CTLX|CTRL|'K',		BINDFNC,	macrotokey},
+	{CTLX|CTRL|'K',		BINDFNC,	bind_macro_to_key},
 	{CTLX|CTRL|'L', 	BINDFNC,	lowerregion},
 	{CTLX|CTRL|'M', 	BINDFNC,	delmode},
 	{CTLX|CTRL|'N', 	BINDFNC,	mvdnwind},
@@ -75,7 +75,7 @@
 	{CTLX|CTRL|'X', 	BINDFNC,	swap_mark},
 	{CTLX|CTRL|'Z', 	BINDFNC,	shrinkwind},
 	{CTLX|CTRL|'\\', 	BINDFNC,	filesave},
-	{CTLX|'?',		BINDFNC,	deskey},
+	{CTLX|'?',		BINDFNC,	describe_key},
 	{CTLX|'!',		BINDFNC,	spawn},
 	{CTLX|'@',		BINDFNC,	pipecmd},
 	{CTLX|'#',		BINDFNC,	filter},
@@ -117,7 +117,7 @@
 	{META|CTRL|'F', 	BINDFNC,	getfence},
 	{META|CTRL|'G', 	BINDFNC,	goto_mark},
 	{META|CTRL|'H', 	BINDFNC,	delbword},
-	{META|CTRL|'K', 	BINDFNC,	unbindkey},
+	{META|CTRL|'K', 	BINDFNC,	unbind_key},
 	{META|CTRL|'L', 	BINDFNC,	reposition},
 	{META|CTRL|'M', 	BINDFNC,	delgmode},
 	{META|CTRL|'N', 	BINDFNC,	namebuffer},
@@ -139,7 +139,7 @@
 	{META|'>',		BINDFNC,	goto_end_of_buffer},
 	{META|'<',		BINDFNC,	goto_begining_of_buffer},
 	{META|'~',		BINDFNC,	unmark},
-	{META|'A',		BINDFNC,	apro},
+	{META|'A',		BINDFNC,	a_propos},
 	{META|'B',		BINDFNC,	backword},
 	{META|'C',		BINDFNC,	capword},
 	{META|'D',		BINDFNC,	delfword},
@@ -148,7 +148,7 @@
 #endif
 	{META|'F',		BINDFNC,	forwword},
 	{META|'G',		BINDFNC,	goto_line},
-	{META|'K',		BINDFNC,	bindtokey},
+	{META|'K',		BINDFNC,	bind_to_key},
 	{META|'L',		BINDFNC,	lowerword},
 	{META|'M',		BINDFNC,	setgmode},
 	{META|'N',		BINDFNC,	goto_end_of_paragraph},

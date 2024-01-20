@@ -127,7 +127,7 @@ int dir;
 	LINE		*curline;	/* Current line on entry		  */
 	int 		curoff;	/* Current offset on entry		  */
 	int 		init_direction;	/* The initial search direction 	  */
-	KEYTAB		*ktp;	/* The command bound to the key 	  */
+	KEY_BINDING		*ktp;	/* The command bound to the key 	  */
 	register int (*kfunc)();	/* ptr to the requested function to bind to */
 
 	/* Set up the starting conditions */
@@ -408,7 +408,7 @@ int dir;				/* Search direction 		*/
 int get_char()
 {
 	int	c;
-	KEYTAB	*key;
+	KEY_BINDING	*key;
 
 	/* See if we're re-executing: */
 

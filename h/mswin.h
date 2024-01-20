@@ -161,7 +161,7 @@ int FAR GetInput (void);
 int FAR TakeANap (int t);
 
 void FAR GenerateMenuSeq (UINT ID);
-KEYTAB * FAR FindKeyBinding (void *Func);
+KEY_BINDING * FAR FindKeyBinding (void *Func);
 void FAR InitMenuPopup (HMENU hMenu, LONG lParam);
 BOOL FAR MenuCommand (UINT wParam, LONG lParam);
 HMENU FAR GetScreenMenuHandle (void);

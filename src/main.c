@@ -326,7 +326,7 @@ int firstflag;			/* is this the first time in? */
 		} else if (argv[carg][0] == '@') {
 
 			/* Process Startup macroes */
-			if (startup(&argv[carg][1]) == TRUE)
+			if (execute_startup_file(&argv[carg][1]) == TRUE)
 				/* don't execute emacs.rc */
 				startflag = TRUE;
 
@@ -377,14 +377,14 @@ int firstflag;			/* is this the first time in? */
 
 	/* if we are C error parsing... run it! */
 	if (errflag) {
-		if (startup("error.cmd") == TRUE)
+		if (execute_startup_file("error.cmd") == TRUE)
 			startflag = TRUE;
 	}
 
 	/* if invoked with no other startup files,
 	   run the system startup file here */
 	if (firstflag && startflag == FALSE)
-		startup("");
+		execute_startup_file("");
 
 	/* if there are any files to read, read the first one! */
 	if (firstflag) {
@@ -680,7 +680,7 @@ int n;					/* prefix value */
 
 {
 	register int status;
-	KEYTAB *key;		/* key entry to execute */
+	KEY_BINDING *key;		/* key entry to execute */
 
 	/* if the keystroke is a bound function...do it */
 	key = getbind(c);

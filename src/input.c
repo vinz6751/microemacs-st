@@ -927,7 +927,7 @@ int getcmd()
 
 {
 	int c;		/* fetched keystroke */
-	KEYTAB *key;	/* ptr to a key entry */
+	KEY_BINDING *key;	/* ptr to a key entry */
 
 	/* get initial character */
 	c = get_key();
@@ -1074,7 +1074,7 @@ int eolchar;
 		/* if it is from the mouse, or is a function key,
 		   insert it's name since it was quoted */
 		if ((ec & MOUS) || (ec & SPEC)) {
-			cmdstr(ec, key_name);
+			command_key_sequence_to_string(ec, key_name);
 			kp = key_name;
 			while (*kp) {
 				if (cpos < nbuf - 1) {
@@ -1167,7 +1167,7 @@ int iterm;
 		case CTRL | 'M':
 			mlputs("NL"); tcol += 6; break;
 		default:
-			mlputs(cmdstr(iterm, buf));
+			mlputs(command_key_sequence_to_string(iterm, buf));
 			tcol += strlen(buf) + 4;
 	}
 	mlputs(">: ");

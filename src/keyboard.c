@@ -342,7 +342,7 @@ int rec_seq(char *buf, char *bufstart, KEYENT *node)
 		*(buf + 1) = '"';
 		*(buf + 2) = '\0';
 		pad(bufstart, 20);
-		cmdstr(node->code, bufstart + 20);
+		command_key_sequence_to_string(node->code, bufstart + 20);
 		if (addline(seqbuf, bufstart) != TRUE)
 			return FALSE;
 	}
